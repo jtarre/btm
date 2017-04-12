@@ -13,6 +13,7 @@ vox.com/dept/year/month/day/unique-id/slug
 nationalreview.com/dept/unique-id/slug
 breitbart.com/dept/year/month/day/slug
 politico.com/dept/year/month/slug-id
+nytimes.com/year/month/date/region/dept/slug
 
 News article clean string functions: 
 
@@ -60,6 +61,7 @@ https://developers.google.com/apis-explorer/#p/customsearch/v1/
 https://console.developers.google.com/apis/credentials/key/285?project=bridge-the-media-1488660654197&pli=1
 https://cse.google.com/cse/setup/basic?cx=013013877924597244999:tbq0ixuctim
 https://developers.google.com/custom-search/json-api/v1/overview
+https://developer.chrome.com/extensions/contentSecurityPolicy#relaxing
 
 
 Sample custom search response: 

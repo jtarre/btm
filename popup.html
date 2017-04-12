@@ -7,10 +7,15 @@
 <html>
   <head>
     <title>Getting Started Extension's Popup</title>
+    <script
+  src="https://code.jquery.com/jquery-3.2.0.js"
+  integrity="sha256-wPFJNIFlVY49B+CuAIrDr932XSb6Jk3J1M22M3E2ylQ="
+  crossorigin="anonymous"></script>
     <style>
       body {
         font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
         font-size: 100%;
+        width: 400px;
       }
       #status {
         /* avoid an excessively wide status text */
@@ -18,7 +23,6 @@
         text-overflow: ellipsis;
         overflow: hidden;
         width: 400px;
-        max-width: 400px;
       }
     </style>
     <!--
@@ -27,20 +31,14 @@
       -
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
      -->
-    <script src="popup.js"></script>
   </head>
+  
   <body>
     <h1>Bridge the Media</h1>
     <h4>Coming soon!</h4>
     <p>Bridge the Media is a new media & technology company. </p>
     
-    <p>Gone are the days when informed citizens could retreat to their respective political world. In a globally connected world, you need to understand the views of others better than you understand yours.</p>
-    
-    <p>Bridge the Media can help you better inform yourself, broaden your horizons, and access information from across the political spectrum.</p>
-    
-    <p>Stay tuned for updates!</p>
-    <div id="status"></div>
-    <img id="image-result" hidden>
+    <script src="search.js"></script>
   </body>
 </html>
 
