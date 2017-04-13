@@ -1,12 +1,6 @@
 $(function() {
 	console.log('loaded jquery stuff');
-	$("a").on("click", function(event) {
-		console.log("clicked");
-	})
-
-	$("a").mouseover(function(event) {
-		console.log("hovered over link");
-	})
+	
 
 	var links = $("a");
 	links.each(function(index, link) {
@@ -19,38 +13,49 @@ $(function() {
 			article_segments = href.split("/");
 			if(article_segments[7] == "politics") {
 				searchQuery = article_segments[8].replace(".html", "");
-				google_search("nytimes.com", searchQuery);
-				// get results of google search
-				// add to html popup
-				// this is like a react jsx situation
-				// not really
-				// just need to create the skeleton of the div
-				// would be helpful to have a promise to continue control flow out here
-				// otherwise, google_search is asynchronous
-				$("<a href='#'><i class='fa fa-camera-retro fa-lg'></i></a>").insertAfter( $(this) );	
+				var self = this;
+				google_search("nytimes.com", searchQuery, self);
+
+
+				// $("<a href='#'><i class='fa fa-camera-retro fa-lg'></i></a>").insertAfter( $(this) );	
 			}
 		}
 			
 	})
 
-	function createPopup(args) {
-		// args = search_results
-		var html = "<div></div>";
-		return html;
+	function createIcon(search) {
+
+		var icon = '<a id="' + search + '" href="#"><i class="fa fa-camera-retro fa-lg"></i></a>';
+		return icon;
 	}
 
-	/** next stage: attaching modal / popup to camera **/
-	// how to
-	// within the links each loop 
-	// i have to search google (i already do)
-	// get the query back, 
-	// and display within a pop up
-	// i have to add the pop up as html to the font awesome
-	// also, have to have it work for the hover
+	function createPopup(items) {
+			// args = search_results
+			var html = "<div></div>";
+			// for (var i = 0; i < items.length; ++i) {
+			// 	html += item_template(items[i]);
+			// }
+			return html;
 
-	/** don't think about the results, just do your job like you know how to do **/
+			function item_template(item) {
+				var html = "<div class='modal'> " + 
+					"<a href='" + item.site + "'>" + item.site_name + ": " +
+					"<a href='" + item.article_link + "'>" + article_title + "</br>"
+					"<a data-cache='" + item.cache_id + "' href='javascript:void(0);'>Read more... | " + item.article_description + "</br>"
+					"div id='see-more-" + item.cache_id + "' class='row'>" + item.article_body + " </div>"
+					// site: article title (link)
+					// Read more | Article		
+				"</div>";
+			}
+		}
 
-	function google_search(url, search) {
+	function createUnit(icon, popup) {
+			console.log('unit', icon + popup);
+			return $(icon);
+	}
+		
+
+	function google_search(url, search, self) {
 		var opposite_news_sites = {
 			"nytimes.com": '(site:nationalreview.com)', 
 			"cnn.com": '(site:breitbart.com or site:politico.com or site:nationalreview.com)'
@@ -65,20 +70,67 @@ $(function() {
 		x.responseType = 'json';
 		
 		x.onload = function () {
-			console.log("search:", searchQuery, "response:", x.response);
+			console.log("search:", searchQuery);
 			if(x.response) {
-				console.log('items:', x.response.items);
+				// console.log('items:', x.response.items);
+				// var icon = createIcon(search);
+				// console.log('icon html:', icon);
+				// var popup = createPopup(x.response.items);
+				// console.log('popup html:', popup);
+				// var $unit = createUnit(icon, popup);
+				// console.log('$unit', $unit);
+				// $('<a href="#"><i class="fa fa-camera-retro fa-lg"></i></a>').insertAfter( $(self) );
+				
+				// var html = "<a data-search='" + search + "' class='btm-button' href='#'><i class='fa fa-camera-retro fa-lg'></i></a>";
+				var html = "<button class='btm'>Hiii</button>"
+				// var popup = "<div id='modal-" + search + "' class='modal'><div class='modal-content'><p>Test</p></div></div>";
+	var popup =	'<div id="modal-"' + search + '" class="modal">' +
+
+   '<!-- Modal content -->' +
+  '<div class="modal-content">'
+    '<span class="close">&times;</span>' +
+    '<p>Some text in the Modal..</p>' +
+  '</div>' + 
+
+'</div>';
+ var script = 
+ "<script>"
+	"$('.btm').on('click', function(event) {"+
+"		console.log('test');" +
+	"}) " +
+	"</script>";
+				var unit = html+popup+script;
+				console.log('this', self, '$this', $(self), 'html:', unit);
+				$(unit).insertAfter( $(self) );	
 				return x.response;
 			}
-			// console.log(x.response.items);
 			return;
 		}
 
 		x.onerror = function() {
-			console.error('request error');
+			console.log('error', x.response);
+
 			return "error";
 		}
 
 		x.send()
 	}
+
+	// $("a").on("click", function(event) {
+	// 	console.log("clicked");
+	// })
+
+	// $("a").mouseover(function(event) {
+	// 	console.log("hovered over link");
+	// })
+
+
+	function manageModal(event) {
+		event.preventDefault();
+		console.log('manage modal');
+		var search = $(this).data('search');
+		$('#modal-' + search).toggle();
+
+	}
+
 });
