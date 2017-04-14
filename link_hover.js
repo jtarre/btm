@@ -1,136 +1,115 @@
 $(function() {
 	console.log('loaded jquery stuff');
-	
-
-	var links = $("a");
-	links.each(function(index, link) {
-		// if(index < 50) console.log('link:', $(this).attr("href"));
-		var href = $(this).attr("href");
-		var article_segments;
-		var searchQuery;
-		if(href && href.includes("nytimes.com")) {
-			// console.log($(this).attr("href"));
-			article_segments = href.split("/");
-			if(article_segments[7] == "politics") {
-				searchQuery = article_segments[8].replace(".html", "");
-				var self = this;
-				google_search("nytimes.com", searchQuery, self);
-
-
-				// $("<a href='#'><i class='fa fa-camera-retro fa-lg'></i></a>").insertAfter( $(this) );	
-			}
-		}
-			
+	$("a").on("click", function(event) {
+		console.log("clicked");
 	})
 
-	function createIcon(search) {
+	$("a").mouseover(function(event) {
+		console.log("hovered over link");
+	})	
 
-		var icon = '<a id="' + search + '" href="#"><i class="fa fa-camera-retro fa-lg"></i></a>';
-		return icon;
-	}
-
-	function createPopup(items) {
-			// args = search_results
-			var html = "<div></div>";
-			// for (var i = 0; i < items.length; ++i) {
-			// 	html += item_template(items[i]);
-			// }
-			return html;
-
-			function item_template(item) {
-				var html = "<div class='modal'> " + 
-					"<a href='" + item.site + "'>" + item.site_name + ": " +
-					"<a href='" + item.article_link + "'>" + article_title + "</br>"
-					"<a data-cache='" + item.cache_id + "' href='javascript:void(0);'>Read more... | " + item.article_description + "</br>"
-					"div id='see-more-" + item.cache_id + "' class='row'>" + item.article_body + " </div>"
-					// site: article title (link)
-					// Read more | Article		
-				"</div>";
-			}
-		}
-
-	function createUnit(icon, popup) {
-			console.log('unit', icon + popup);
-			return $(icon);
-	}
-		
-
-	function google_search(url, search, self) {
-		var opposite_news_sites = {
+	var links = $("a");
+	
+	var urls = [];
+	var opposite_news_sites = {
 			"nytimes.com": '(site:nationalreview.com)', 
 			"cnn.com": '(site:breitbart.com or site:politico.com or site:nationalreview.com)'
 		};
-
-		var searchQuery = opposite_news_sites[url] + " " + search;
-
-		var searchUrl ='https://www.googleapis.com/customsearch/v1?q=' + searchQuery + ' &cx=013013877924597244999%3Atbq0ixuctim&key=AIzaSyBS3sgS67eZkQRC_A7LZZG82AFeyBt8FW8';
-		x = new XMLHttpRequest();
-
-		x.open('GET', searchUrl);
-		x.responseType = 'json';
+	links.each(function(index, link) {
+		// if(index < 50) console.log('link:', $(this).attr("href"));
 		
-		x.onload = function () {
-			console.log("search:", searchQuery);
-			if(x.response) {
-				// console.log('items:', x.response.items);
-				// var icon = createIcon(search);
-				// console.log('icon html:', icon);
-				// var popup = createPopup(x.response.items);
-				// console.log('popup html:', popup);
-				// var $unit = createUnit(icon, popup);
-				// console.log('$unit', $unit);
-				// $('<a href="#"><i class="fa fa-camera-retro fa-lg"></i></a>').insertAfter( $(self) );
-				
-				// var html = "<a data-search='" + search + "' class='btm-button' href='#'><i class='fa fa-camera-retro fa-lg'></i></a>";
-				var html = "<button class='btm'>Hiii</button>"
-				// var popup = "<div id='modal-" + search + "' class='modal'><div class='modal-content'><p>Test</p></div></div>";
-	var popup =	'<div id="modal-"' + search + '" class="modal">' +
-
-   '<!-- Modal content -->' +
-  '<div class="modal-content">'
-    '<span class="close">&times;</span>' +
-    '<p>Some text in the Modal..</p>' +
-  '</div>' + 
-
-'</div>';
- var script = 
- "<script>"
-	"$('.btm').on('click', function(event) {"+
-"		console.log('test');" +
-	"}) " +
-	"</script>";
-				var unit = html+popup+script;
-				console.log('this', self, '$this', $(self), 'html:', unit);
-				$(unit).insertAfter( $(self) );	
-				return x.response;
+			var href = $(this).attr("href");
+			var article_segments;
+			var searchQuery;
+			var search;
+			var url;
+			if(href && href.includes("nytimes.com")) {
+				// console.log($(this).attr("href"));
+				article_segments = href.split("/");
+				if(article_segments[7] == "politics") {
+					searchQuery = article_segments[8].replace(".html", "");
+					var self = this;
+					var search = opposite_news_sites["nytimes.com"] + " " + searchQuery;
+					var google_url ='https://www.googleapis.com/customsearch/v1?q=' + search + ' &cx=013013877924597244999%3Atbq0ixuctim&key=AIzaSyBS3sgS67eZkQRC_A7LZZG82AFeyBt8FW8';
+					urls.push({self: self, search: searchQuery, url: google_url});
+					 // google_search("nytimes.com", searchQuery, self); 
+				}
 			}
-			return;
-		}
+			
+	});
+	console.log('urls:', urls);
+	for(var i = 0; i < urls.length; ++i) {
+		(function (lockedIndex) {
+			$.ajax({
+				type: 'get',
+				url: urls[lockedIndex]["url"],
+				dataType: 'json'
+			})
 
-		x.onerror = function() {
-			console.log('error', x.response);
-
-			return "error";
-		}
-
-		x.send()
+			.done(function(response) {
+				console.log('search: ', urls[lockedIndex]["search"], 'response pre if:', response);
+				if(response.items) {
+					var items = response.items.slice();
+					var links = createPopup(items);
+					// console.log('search query', searchQuery, 'items:');
+					var html = "<button id='" + urls[lockedIndex]["search"] + "' data-search='" + urls[lockedIndex]["search"] + "' class='btm' >BTM</button>";
+					var popup =	'<div id="modal-' + urls[lockedIndex]["search"] + '" class="modal" style="display: none; position: fixed; z-index: 1; padding-top: 100px; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgb(0,0,0); background-color: rgba(0,0,0,0,0.05)">' +
+					   '<!-- Modal content -->' +
+					  '<div class="modal-content" style="background-color:#fefefe; margin: auto; padding: 20px; border: 1px solid #888; width: 80%;">' + 
+					    '<span id="close-modal-' + urls[lockedIndex]["search"] + '" data-search="' + urls[lockedIndex]["search"] + '"class="close" style="color:#aaaaaa; float: right; font-size: 28px; font-weight: bold">&times;</span>' +
+					    links +
+					  '</div>' + 
+					'</div>';
+					var unit = html+popup;
+					// console.log('this', self, '$this', $(self), 'html:', unit);
+					$(unit).insertAfter( $(urls[lockedIndex]["self"]) );	
+					$('#' + urls[lockedIndex]["search"]).on('click', openModal);
+					$('#close-modal-' + urls[lockedIndex]["search"]).on('click', closeModal);
+				}
+			});
+		})(i);
 	}
 
-	// $("a").on("click", function(event) {
-	// 	console.log("clicked");
-	// })
+	function createPopup(items_cp) {
+			// args = search_results
+			var items = items_cp.slice();
+			var html = "<div><ul>";
+			for (var i = 0; i < 4; ++i) {
+				html += item_template(items[i]);
+			}
+			html += "</ul></div>";
+			return html;
 
-	// $("a").mouseover(function(event) {
-	// 	console.log("hovered over link");
-	// })
+			function item_template(item) {
+				// return "<li><a href='" + item.displayLink + "'>" + item.displayLink + "</a></li>";
+				var html = "<div class='link'> " + 
+					"<a href='" + item.displayLink + "'>" + item.pagemap.metatags[0]["og:site_name"] + ": " +
+					"<a href='" + item.link + "'>" + item.title + "</br>" +
+					"<a data-cache='" + item.cacheId + "' href='javascript:void(0);'>Read more...</a> | " + item.snippet + "</br></p>";
+				return html;
+			}
+		}
 
+		function openModal(event) {
+			event.preventDefault();
+			// console.log('manage modal');
+			var search = $(this).data('search');
+			// console.log('search:', search);
+			var modal = document.getElementById('modal-' + search);
+			// console.log('modal', modal);
+			modal.style.display = "block";
+			window.onclick = function(event) {
+			    if (event.target == modal) {
+			        modal.style.display = "none";
+			    }
+			}
+		}
 
-	function manageModal(event) {
-		event.preventDefault();
-		console.log('manage modal');
-		var search = $(this).data('search');
-		$('#modal-' + search).toggle();
-
-	}
-
+		function closeModal(event) {
+			event.preventDefault();
+			// console.log('close modal');
+			var search = $(this).data('search');
+			var modal = document.getElementById('modal-' + search);
+			modal.style.display = "none";
+		}
 });
