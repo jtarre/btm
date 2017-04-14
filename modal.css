@@ -1,0 +1,17 @@
+.modal {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.modal-content {
+    width: 400px;
+    background-color: #fefefe;
+    border-radius: 6px;
+    border-color: black;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}

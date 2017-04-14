@@ -17,8 +17,9 @@ $(function() {
 		};
 	links.each(function(index, link) {
 		// if(index < 50) console.log('link:', $(this).attr("href"));
-		
+			// console.log('link:', link);
 			var href = $(this).attr("href");
+
 			var article_segments;
 			var searchQuery;
 			var search;
@@ -26,7 +27,7 @@ $(function() {
 			if(href && href.includes("nytimes.com")) {
 				// console.log($(this).attr("href"));
 				article_segments = href.split("/");
-				if(article_segments[7] == "politics") {
+				if(article_segments[7] == "politics" || article_segments[6] == "world") {
 					searchQuery = article_segments[8].replace(".html", "");
 					var self = this;
 					var search = opposite_news_sites["nytimes.com"] + " " + searchQuery;
@@ -37,7 +38,7 @@ $(function() {
 			}
 			
 	});
-	console.log('urls:', urls);
+	// console.log('urls:', urls);
 	for(var i = 0; i < urls.length; ++i) {
 		(function (lockedIndex) {
 			$.ajax({
@@ -47,22 +48,24 @@ $(function() {
 			})
 
 			.done(function(response) {
-				console.log('search: ', urls[lockedIndex]["search"], 'response pre if:', response);
+				// console.log('search: ', urls[lockedIndex]["search"], 'response pre if:', response);
 				if(response.items) {
 					var items = response.items.slice();
 					var links = createPopup(items);
 					// console.log('search query', searchQuery, 'items:');
 					var html = "<button id='" + urls[lockedIndex]["search"] + "' data-search='" + urls[lockedIndex]["search"] + "' class='btm' >BTM</button>";
-					var popup =	'<div id="modal-' + urls[lockedIndex]["search"] + '" class="modal" style="display: none; position: fixed; z-index: 1; padding-top: 100px; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgb(0,0,0); background-color: rgba(0,0,0,0,0.05)">' +
+					var popup =	'<div id="modal-' + urls[lockedIndex]["search"] + '" class="modal">' +
 					   '<!-- Modal content -->' +
-					  '<div class="modal-content" style="background-color:#fefefe; margin: auto; padding: 20px; border: 1px solid #888; width: 80%;">' + 
+					  '<div class="modal-content">' + 
 					    '<span id="close-modal-' + urls[lockedIndex]["search"] + '" data-search="' + urls[lockedIndex]["search"] + '"class="close" style="color:#aaaaaa; float: right; font-size: 28px; font-weight: bold">&times;</span>' +
 					    links +
 					  '</div>' + 
 					'</div>';
 					var unit = html+popup;
 					// console.log('this', self, '$this', $(self), 'html:', unit);
-					$(unit).insertAfter( $(urls[lockedIndex]["self"]) );	
+					// $(unit).after( $(urls[lockedIndex]["self"]) );
+					console.log($(urls[lockedIndex]["self"]));
+					$(urls[lockedIndex]["self"]).after(unit);	
 					$('#' + urls[lockedIndex]["search"]).on('click', openModal);
 					$('#close-modal-' + urls[lockedIndex]["search"]).on('click', closeModal);
 				}
@@ -92,12 +95,9 @@ $(function() {
 
 		function openModal(event) {
 			event.preventDefault();
-			// console.log('manage modal');
 			var search = $(this).data('search');
-			// console.log('search:', search);
 			var modal = document.getElementById('modal-' + search);
-			// console.log('modal', modal);
-			modal.style.display = "block";
+			modal.style.display = "inline-	block";
 			window.onclick = function(event) {
 			    if (event.target == modal) {
 			        modal.style.display = "none";
