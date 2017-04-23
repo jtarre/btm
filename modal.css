@@ -1,14 +1,16 @@
-.modal {
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px dotted black;
-}
-
-.modal-content {
+.popup {
+    visibility:hidden;
     width: 400px;
     background-color: #fefefe;
-    border-radius: 6px;
+    
+    border-radius: 10px;
+    border-style: solid;
     border-color: black;
+    border-width: 2px;
+    
+    font-size:14px !important; 
+    font-style:normal !important;
+    
     padding: 5px 0;
 
     /* Position the tooltip */

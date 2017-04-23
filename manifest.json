@@ -3,7 +3,7 @@
 
   "name": "Bridge the Media",
   "description": "Get outside your bubble. Expand your horizons. Read across the political spectrum",
-  "version": "1.1",
+  "version": "1.1.13",
 
   "browser_action": {
     "default_icon": "icon.png",
@@ -12,9 +12,12 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*"],
-      "css": ["font-awesome-4.7.0/css/font-awesome.css", "modal.css"], 
-      "js": ["jquery-3.2.0.js", "link_hover.js"]
+      "matches": ["http://www.nytimes.com/*", "https://www.nytimes.com/*"],
+      "css": ["font-awesome-4.7.0/css/font-awesome.css", 
+        "modal.css", 
+        "bootstrap-3.3.7-dist/css/bootstrap-theme.css",
+        "bootstrap-3.3.7-dist/css/bootstrap.css"], 
+      "js": ["jquery-3.2.0.js", "link_hover.js", "bootstrap-3.3.7-dist/js/bootstrap.js"]
     }
   ],
   "permissions": [
