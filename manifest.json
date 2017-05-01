@@ -3,21 +3,37 @@
 
   "name": "Bridge the Media",
   "description": "Get outside your bubble. Expand your horizons. Read across the political spectrum",
-  "version": "1.1.13",
+  "version": "1.2.12",
+  
+  "icons": { "16": "btm16.png",
+           "48": "btm48.png",
+          "128": "btm128.png" },
 
   "browser_action": {
     "default_icon": "icon.png",
     "default_popup": "popup.html",
     "default_title": "Click here!"
   },
+
   "content_scripts": [
     {
-      "matches": ["http://www.nytimes.com/*", "https://www.nytimes.com/*"],
-      "css": ["font-awesome-4.7.0/css/font-awesome.css", 
-        "modal.css", 
-        "bootstrap-3.3.7-dist/css/bootstrap-theme.css",
-        "bootstrap-3.3.7-dist/css/bootstrap.css"], 
-      "js": ["jquery-3.2.0.js", "link_hover.js", "bootstrap-3.3.7-dist/js/bootstrap.js"]
+      "matches": ["http://www.nytimes.com/*", 
+      "https://www.nytimes.com/*",
+      "http://www.cnn.com/*",
+      "https://www.cnn.com/*",
+      "http://www.nbcnews.com/*",
+      "https://www.nbcnews.com/*",
+      "http://www.foxnews.com/*",
+      "https://www.foxnews.com/*",
+      "http://www.nypost.com/*",
+      "https://www.nypost.com/*",
+      "http://www.politico.com/*",
+      "https://www.politico.com/*",
+      "http://www.vox.com/*",
+      "https://www.vox.com/*"
+      ],
+      "css": ["font-awesome-4.7.0/css/font-awesome.css", "popup.css"], 
+      "js": ["jquery-3.2.0.js", "link_hover_v3.js", "bootstrap-3.3.7-dist/js/bootstrap.js"]
     }
   ],
   "permissions": [

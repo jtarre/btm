@@ -102,6 +102,10 @@ $(function() {
 				return;
 			}
 
+			console.log('fn:', fox_news_results[0].items);
+			console.log('nr:', national_review_results[0].items);
+			console.log('nyp:', ny_post_results[0].items);
+			console.log('wsj_results:', wsj_results[0].items);
 
 			var popup = createNewsPopup(fox_news_results, national_review_results, wsj_results);
 			$button.after(popup);
