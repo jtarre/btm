@@ -225,7 +225,7 @@ $(function() {
 			var search_results = Array.prototype.slice.call(arguments);
 			var popup = createPopup(search_results, slug);
 			// add popup to page
-			
+			console.log('popup:', popup);
 			$popover_body.after(popup);
 			createUrlEvents();
 			createCollapseEvents();
@@ -284,12 +284,20 @@ $(function() {
 		}
 
 		function item_template(publisher, item, slug) {
+
 			var popup_details = getPopupDetails(publisher, item);
 			return createItemHtml(popup_details.site_title, 
 				popup_details.link, 
 				popup_details.headline, 
 				popup_details.description, 
 				popup_details.date, slug);
+			// function compare_date(items, article_date, args) {
+			// 	for( var i = 0; i < args.length; ++i ) {
+			// 		if(!args[i]) return;
+			// 	}
+			// 	var compare_date = new Date("August 31 2017");
+			// 	var date = new Date(article_date);
+			// }
 		}
 
 		function createItemHtml(site, link, title, description, date) {
@@ -339,7 +347,7 @@ $(function() {
 					link = item.link;
 					headline= item.title;
 					
-					if(item.pagemap.metatags && item.pagemap.metatags[0]["dc.description"]) description = item.pagemap.metatags[0]["dc.description"];
+					if(item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["dc.description"]) description = item.pagemap.metatags[0]["dc.description"];
 					else description = item.snippet;
 
 					if(item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]['dc.date']) {
@@ -353,11 +361,11 @@ $(function() {
 					link = item.link;
 					
 					/** headline**/
-					if(item.pagemap.article && item.pagemap.article[0].headline) headline= item.pagemap.article[0].headline;
+					if(item && item.pagemap && item.pagemap.article && item.pagemap.article[0].headline) headline= item.pagemap.article[0].headline;
 					else headline= item.title;
 
 					/** Description **/
-					if(item.pagemap.article && item.pagemap.article[0].articlebody) description = item.pagemap.article[0].articlebody;
+					if(item && item.pagemap && item.pagemap.article && item.pagemap.article[0].articlebody) description = item.pagemap.article[0].articlebody;
 					else description = item.snippet;
 
 					/** Date **/

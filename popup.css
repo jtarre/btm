@@ -1,3 +1,19 @@
+/* The Close Button */
+.btm-close {
+    color: black;
+    float: right;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.btm-close:hover,
+.btm-close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
 .collapse {
   display: none;
 }
@@ -489,6 +505,15 @@ fieldset[disabled] .btn-link:focus {
 
 .btn-block + .btn-block {
   margin-top: 5px;
+}
+
+.list-unstyled {
+  padding-left: 0;
+  list-style: none;
+}
+
+.btm-pull-right {
+  float: right !important;
 }
 
 
