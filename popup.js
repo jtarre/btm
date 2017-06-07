@@ -124,6 +124,8 @@
 
 var _AnalyticsCode = 'UA-XXXXXX-X';
 
+var buttonName = "Show Alternatives";
+
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', _AnalyticsCode]);
 
@@ -141,10 +143,13 @@ _gaq.push(['_setAccount', _AnalyticsCode]);
 
 /**
  * Track a click on a button using the asynchronous tracking API.
- *
- *
+ * Track two pieces of info:
+ * 1) Total number of times Show alternatives button is clicked
+ * 2) The slug (and therefore headline) associated with the Show Alternatives button which gives some idea about topic
  */
 
-function trackButtonClick(e) {
-  _gaq.push(['_trackEvent', e.target.id, 'clicked']);
-}
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    _gaq.push(['_trackEvent', buttonName, 'clicked']);
+    _gaq.push(['_trackEvent', request.slug, 'clicked']);
+});
