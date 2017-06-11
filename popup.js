@@ -117,29 +117,24 @@
 //   });
 // });
 
+ var _TrackingID = 'UA-100825621-1';
 
-/**
- * Insert Analytics Tracking ID once GA account is created
- */
+ var buttonClickEventDescription = "Show Alternatives Clicks on ";
 
-var _AnalyticsCode = 'UA-XXXXXX-X';
+ var outBoundLinkEventDescription = "Outbound Link from ";
 
-var buttonName = "Show Alternatives";
+ var hitType = "event";
 
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', _AnalyticsCode]);
+ var eventAction = "click";
 
-// pull https version of ga.js
+// Include Javascript Tracking Snippet
 
-(function() {
-  var ga = document.createElement('script');
-  ga.type = 'text/javascript';
-  ga.async = true;
-  ga.src = 'https://ssl.google-analytics.com/ga.js';
-  var s = document.getElementsByTagName('script')[0];
-  s.parentNode.insertBefore(ga, s);
-})();
+ (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://ssl.google-analytics.com/analytics.js','ga');
 
+ga('create', _TrackingID, 'auto');
 
 /**
  * Track a click on a button using the asynchronous tracking API.
@@ -150,6 +145,16 @@ _gaq.push(['_setAccount', _AnalyticsCode]);
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    _gaq.push(['_trackEvent', buttonName, 'clicked']);
-    _gaq.push(['_trackEvent', request.slug, 'clicked']);
+    ga('send', {
+      hitType: hitType,
+      eventCategory: buttonClickEventDescription.concat(request.source),
+      eventAction: eventAction
+    });
+
+    ga('send', {
+      hitType: hitType,
+      eventCategory: outBoundLinkEventDescription.concat(request.source),
+      eventAction: eventAction,
+      eventLabel: request.targetUrl
+    });
 });
