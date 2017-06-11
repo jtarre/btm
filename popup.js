@@ -117,6 +117,7 @@
 //   });
 // });
 
+// BTM Tracking ID
  var _TrackingID = 'UA-100825621-1';
 
  var buttonClickEventDescription = "Show Alternatives Clicks on ";
@@ -128,33 +129,35 @@
  var eventAction = "click";
 
 // Include Javascript Tracking Snippet
-
  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','https://ssl.google-analytics.com/analytics.js','ga');
 
+// Create Google Analytics Tracker
 ga('create', _TrackingID, 'auto');
 
 /**
- * Track a click on a button using the asynchronous tracking API.
- * Track two pieces of info:
- * 1) Total number of times Show alternatives button is clicked
- * 2) The slug (and therefore headline) associated with the Show Alternatives button which gives some idea about topic
- */
-
+  Add Listener that handles incoming the following events:
+  1) Show Alternatives Click - Register click to GA when Show Alternatives Button is selected
+  2) Outbound Link Click - Register click when GA when user clicks on a recommendation link
+*/
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    ga('send', {
-      hitType: hitType,
-      eventCategory: buttonClickEventDescription.concat(request.source),
-      eventAction: eventAction
-    });
-
-    ga('send', {
-      hitType: hitType,
-      eventCategory: outBoundLinkEventDescription.concat(request.source),
-      eventAction: eventAction,
-      eventLabel: request.targetUrl
-    });
+    if(request.type === "Show Alternatives Click") {
+      ga('send', {
+        hitType: hitType,
+        eventCategory: buttonClickEventDescription.concat(request.source),
+        eventAction: eventAction
+      });
+    }
+    else if(request.type === "Outbound Link Click") {
+      ga('send', {
+        hitType: hitType,
+        eventCategory: outBoundLinkEventDescription.concat(request.source),
+        eventAction: eventAction,
+        eventLabel: request.targetUrl
+      });
+    }
+    else {}
 });
