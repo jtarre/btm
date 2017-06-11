@@ -1,5 +1,50 @@
 	$(function() {
-	
+	/*
+	thoughts: need to narrow the btm focus
+	create more visual UI on a webpage that highlights which links are BTMed
+	otherwise user doesn't have good indication of what they're using
+	not a good luck. 
+
+	product and engineering. difficult to do both unless you work on a lot of projects
+	and build up polymath skills
+	but fuck it. why not mother fucker. 
+
+	facebook may be achievable. create a specific facebook data structure. 
+
+	first. capture all links A 
+	turn any nytimes/politics etc. links into btm hovers
+	then store links in a {} Dictionary
+
+	then, at set intervals, capture new links B
+	then, check b in B in the dictionary
+	if b is not in dictionary, check whether it is bubble enabled, enable if necessary
+	then, add b to the dictionary. 
+	rinse and repeat.
+
+	to enable: do the google search, load it up. maybe do an animation. 
+
+	how to test. i'm getting stressed out. and hungry. 
+
+	how to test. 
+
+	use console log statements 
+	don't track specific urls. see if mechanics work
+
+	need a special event handler that gets called every 5 seconds. 
+
+	how to call an event every 5 seconds. 
+
+	take a poll. 
+
+	setTimeout(checkNews, 5000)
+	function checkNews() {
+		// check for new entries
+		checkNews(); // recursive
+	}
+	 // is there a better way
+	 setInterval(func, delay)...bam
+
+	*/	
 
 	// if(chrome && chrome.runtime && chrome.runtime.onUpdateAvailble) {
 	// 	chrome.runtime.onUpdateAvailable.addListener(function(details) {
@@ -107,6 +152,158 @@
 		"telegraph.co.uk": "The Telegraph"
 	}
 
+	var facebook_links = {};
+	function facebookInit() {
+		switch(window.location.hostname) {
+			case "www.facebook.com":
+				break;
+			default:
+				break;
+		}
+		checkFacebookLinks();
+	}
+
+	function facebookInterval() {
+		setInterval(checkFacebookLinks, 5000);
+	}
+
+	function checkFacebookLinks() {
+		$links = $('a');
+		$links = $links.filter(function(index, element) {
+			var href = element.href;
+			return href.indexOf('www.nytimes.com') > 0;
+		})
+		var href;
+		var href_split;
+		var slug;
+		var $element;
+		var pathname;
+		var $newsfeed_post;
+		var $post_text;
+		$links.each(function(index, element) { // this is for nytimes only. not general
+			$element = $(element);
+			href = $element.attr('href');
+			href_split = href.split('%2F');
+			href_split.forEach(function(element) { // this is for nytimes
+				if(element.indexOf('.html') > 0) {
+					slug = element.split(".html")[0];
+				}
+			});
+			if(!facebook_links.hasOwnProperty(href)) {
+				facebook_links[href] = 1;
+				if(href.indexOf('www.nytimes.com') > 0 ) {
+					// console.log(href);
+					$newsfeed_post = $element.closest('.fbUserContent').first(); // this is wrong level of abstraction. where to start. let's make the thing work. 
+					$post_text = $newsfeed_post.find('.userContent');
+					var $btm_button = $('<button type="button" data-pathname="' + pathname + '" class="btm-nytimes btm-parent-parent">BRIDGE THE MEDIA</button>');
+					var popover_html = getPopoverHtml(slug);
+					console.log('sluggggg:', slug);
+					var content = '<button id="btm-btn-' + slug + '" style="' + btn_primary_style + '" class="google-search btn btn-primary" href="javascript:void(0);" data-slug="' + slug + '">' +
+						'SHOW ALTERNATIVES' +
+					'</button><div id="btm-popover-body-' + slug + '"></div>';
+					console.log(content);
+					// console.log(slug);
+					var title_style =
+						"color: black;" + 
+					  // "padding: 1px;" +
+					  "font-family: Josefin Sans, serif;" +
+					  "font-size: 16px;" +
+					  "font-style: normal;" +
+					  "font-weight: bolder;" +
+					  "line-height: 1.42857143;" +
+					  "text-align: left;" +
+					  "text-align: start;";
+					$btm_button.popover({trigger: "click",
+							html: "true",
+							template: popover_html,
+							title: "<span style='" + title_style +"'>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>",
+							content: content
+						})
+
+					$post_text.first().append($btm_button);
+					$btm_button.on('shown.bs.popover', function(){
+
+				        $('.google-search[data-slug="' + slug + '"]').on('click', displayArticlesOnFacebook.bind($popover, slug));
+				        console.log(slug);
+				        console.log($('.google-search[data-slug="' + slug + '"]'));
+				    });
+					var $popover = $('.popover[data-slug="' + slug + '"]');
+					$('.popover[data-slug="' + slug + '"]').on('shown.bs.popover', function () {
+					  console.log('POPOVER');
+					})
+					// var $popovers = $('.popover');
+					// console.log($popovers);
+					// console.log('$popover', $popover, slug);
+					
+				}
+			}
+		})
+	}
+
+	function popoverClicked (slug) {
+		var $link = this;
+		setTimeout(function setupPopover () {
+			if($link.is(':hover')) {
+				$('.popover:not([data-slug="' + slug + '"])').hide();
+				setTimeout(function showPopover() {
+					$link.popover("show");	
+					var $popover = $('.popover[data-slug="' + slug + '"]');
+					$('.google-search').on('click', displayArticles.bind($popover, slug));
+					$('.btm-close').on('click', function() { $link.popover('hide') });
+					$(window).on('click', function (event) {
+						// event.preventDefault();
+						if($popover.filter(':hover').length < 1) $link.popover('hide');
+				 	});		
+				}, 500)
+			}
+		}, 900);
+	}
+
+	function displayArticlesOnFacebook(slug, event) {
+		var sites = spectrum_sites["www.nytimes.com"];
+		var site_promises = siteSearches(sites, slug);
+		$.when.apply($, site_promises)
+		.then(function() { // this is the promise part of the site 
+			$('#btm-btn-' + slug).hide();
+			var search_results = Array.prototype.slice.call(arguments);
+			var popup = createPopup(search_results, slug);
+			// add popup to page
+			$('#btm-popover-body-' + slug).after(popup);
+			$('.collapse-link').on('click', toggleSummary);
+			$('.popup-link').on('click', openArticleLink);
+		})
+	}
+
+	function createPopover($link, slug) {
+			var popover_html = getPopoverHtml(slug);
+			var content = '<button id="btm-btn-' + slug + '" style="' + btn_primary_style + '" class="google-search btn btn-primary" href="javascript:void(0);" data-slug="' + slug + '">' +
+				'SHOW ALTERNATIVES' +
+			'</button><div id="btm-popover-body-' + slug + '"></div>';
+			var title_style =
+			"color: black;" + 
+		  // "padding: 1px;" +
+		  "font-family: Josefin Sans, serif;" +
+		  "font-size: 16px;" +
+		  "font-style: normal;" +
+		  "font-weight: bolder;" +
+		  "line-height: 1.42857143;" +
+		  "text-align: left;" +
+		  "text-align: start;";
+			$link.popover({trigger: "click",
+						html: "true",
+						template: popover_html,
+						title: "<span style='" + title_style +"'>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>",
+						placement: placement,
+						content: content
+					})
+			$('.google-search').on('click', displayArticles.bind($popover, slug));
+					// .on("mouseenter", popoverEnter.bind($link, slug))
+		} 
+
+
+	// facebookInit();
+	facebookInterval();
+
 	function getPopoverHtml(slug) {
 		return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popover_style + '">' + 
 		'<div class="arrow"></div>' + 
@@ -121,6 +318,8 @@
 		var slug = ""; 
 		var last;
 		switch(window.location.hostname){
+			case "www.facebook.com":
+				break;
 			case "www.nytimes.com":
 				href_segments = href.split("/");
 				slug = href_segments[href_segments.length-1];
@@ -147,6 +346,25 @@
 				
 				slug = slug.split(".", 1);
 				slug = slug[0];
+				break;
+			case "www.washingtonpost.com":
+				// different endpoints
+				/*
+				/blogs/compost/wp/year/month/day/slug/utm-term
+				/world/?utm-term
+				/world/slug/year/month/day/unique-id
+				/world/region/slug/year/month/day/id
+
+				on the homepage:
+				https://www.washingtonpost.com/world/follow-up-on-london-bridge-attack/2017/06/04/5216bbb2-48c5-11e7-8de1-cec59a9bf4b1_story.html
+				https://www.washingtonpost.com/world/europe/london-bridge-will-never-fall-down/2017/06/04/fc197476-7bad-4903-9164-6d0befbe8a07_story.html
+				https://www.washingtonpost.com/investigations/how-a-shadow-universe-of-charities-joined-with-political-warriors-to-fuel-trumps-rise/2017/06/03/ff5626ac-3a77-11e7-a058-ddbb23c75d82_story.html
+				https://www.washingtonpost.com/lifestyle/magazine/why-are-african-americans-so-much-more-likely-than-whites-to-develop-alzheimers/2017/05/31/9bfbcccc-3132-11e7-8674-437ddb6e813e_story.html
+				https://www.washingtonpost.com/graphics/opinions/israel-settlements/
+				https://www.washingtonpost.com/news/democracy-post/wp/2017/06/04/egypt-is-in-dire-shape-yet-how-i-wish-i-could-go-back/
+				https://www.washingtonpost.com/news/grade-point/wp/2017/06/04/the-papa-johns-pizza-admissions-essay-that-yale-loved/
+				https://www.washingtonpost.com/national/health-science/how-to-teach-kids-about-climate-change-where-most-parents-are-skeptics/2017/06/03/1ad4b67a-47a0-11e7-98cd-af64b4fe2dfc_story.html
+				*/
 				break;
 			default:
 				break;
@@ -361,6 +579,21 @@
 		}, 900);
 	}
 
+	function displayArticles(slug, event) {
+		var sites = spectrum_sites[window.location.hostname];
+		var site_promises = siteSearches(sites, slug);
+		$.when.apply($, site_promises)
+		.then(function() { // this is the promise part of the site 
+			$('#btm-btn-' + slug).hide();
+			var search_results = Array.prototype.slice.call(arguments);
+			var popup = createPopup(search_results, slug);
+			// add popup to page
+			$('#btm-popover-body-' + slug).after(popup);
+			$('.collapse-link').on('click', toggleSummary);
+			$('.popup-link').on('click', openArticleLink);
+		})
+	}
+
 	function hidePopover(event) {
 		$link = this;
 	}
@@ -480,21 +713,6 @@
 				"</div>"+
 			"</div>";	
 		return html;
-	}
-
-	function displayArticles(slug, event) {
-		var sites = spectrum_sites[window.location.hostname];
-		var site_promises = siteSearches(sites, slug);
-		$.when.apply($, site_promises)
-		.then(function() { // this is the promise part of the site 
-			$('#btm-btn-' + slug).hide();
-			var search_results = Array.prototype.slice.call(arguments);
-			var popup = createPopup(search_results, slug);
-			// add popup to page
-			$('#btm-popover-body-' + slug).after(popup);
-			$('.collapse-link').on('click', toggleSummary);
-			$('.popup-link').on('click', openArticleLink);
-		})
 	}
 	
 	function getPopupDetails(publisher, item) {
