@@ -104,7 +104,8 @@
 		"huffingtonpost.com": "Huffington Post",
 		"thedailybeast.com": "Daily Beast",
 		"reason.com": "Reason",
-		"telegraph.co.uk": "The Telegraph"
+		"telegraph.co.uk": "The Telegraph",
+		"nytimes.com": "NY Times"
 	}
 
 	function getPopoverHtml(slug) {
@@ -496,8 +497,9 @@
 			$('.collapse-link').on('click', toggleSummary);
 			$('.popup-link').on('click', openArticleLink);
 
-			// broadcast slug when
-			chrome.runtime.sendMessage({slug: slug}, function(response) {});
+			// Get current news publication and send it to popup.js when Show Alternatives is clicked
+			var source_title = get_site_title[window.location.hostname.split('www.')][1];
+			chrome.runtime.sendMessage({source: source_title}, function(response) {});
 
 		})
 	}
