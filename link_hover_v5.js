@@ -108,6 +108,9 @@
 		"nytimes.com": "NY Times"
 	}
 
+	var domain = window.location.hostname.split('www.')[1];
+	var source_title = (get_site_title[domain] != undefined ? get_site_title[domain] : domain);
+
 	function getPopoverHtml(slug) {
 		return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popover_style + '">' +
 		'<div class="arrow"></div>' +
@@ -402,7 +405,6 @@
 		event.preventDefault();
 		var $link = $(event.target);
 		var href = $link.attr('href');
-		var source_title = get_site_title[window.location.hostname.split('www.')][1];
 		chrome.runtime.sendMessage({targetUrl: href, type: "Outbound Link Click", source: source_title}, function(response) {});
 		window.open(href);
 		$('.popup-link').on('click', openArticleLink)
@@ -500,7 +502,6 @@
 			$('.popup-link').on('click', openArticleLink);
 
 			// Get current news publication and send it to popup.js when Show Alternatives is clicked
-			var source_title = get_site_title[window.location.hostname.split('www.')][1];
 			chrome.runtime.sendMessage({source: source_title, type: "Show Alternatives Click"}, function(response) {});
 
 		})
