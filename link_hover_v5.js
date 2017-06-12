@@ -241,6 +241,9 @@
 			toggleInvisible($('#btm-popover-body-' + slug), $('#btm-btn-' + slug));
 
 		function toggleVisible($container, $button) {
+			chrome.runtime.sendMessage({source: source_title, type: "Show Alternatives Click"}, function(response) {
+				console.log(response);
+			});
 			$button.text('HIDE');
 			$container.fadeIn();
 		}
@@ -350,9 +353,9 @@
 
 	function popoverEnter (slug) {
 		var $link = this;
+		originUrl = $link.attr("href");
 		setTimeout(function setupPopover () {
 			if($link.is(':hover')) {
-				originUrl = $link.attr("href");
 				$('.popover:not([data-slug="' + slug + '"])').hide();
 				setTimeout(function showPopover() {
 					$link.popover("show");
@@ -404,15 +407,17 @@
 	}
 
 	function openArticleLink(event) {
-		console.log(href);
 		event.preventDefault();
 		var $link = $(event.target);
 		var href = $link.attr('href');
+		originUrl = (originUrl != undefined ? originUrl : window.location.hostname + window.location.pathname);
 		chrome.runtime.sendMessage({targetUrl: href,
 															  type: "Outbound Link Click",
 		                            source: source_title,
 															  originUrl: originUrl},
-		                            function(response) {});
+		                            function(response) {
+																	console.log(response);
+																});
 		window.open(href);
 		$('.popup-link').on('click', openArticleLink)
 	}
@@ -509,8 +514,9 @@
 			$('.popup-link').on('click', openArticleLink);
 
 			// Get current news publication and send it to popup.js when Show Alternatives is clicked
-			chrome.runtime.sendMessage({source: source_title, type: "Show Alternatives Click"}, function(response) {});
-
+			chrome.runtime.sendMessage({source: source_title, type: "Show Alternatives Click"}, function(response) {
+				console.log(response);
+			});
 		})
 	}
 
