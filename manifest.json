@@ -16,7 +16,8 @@
   },
 
   "background": {
-    "page" : "popup.html"
+    "page" : "popup.html",
+    "persistent": false
   },
 
   "content_scripts": [
