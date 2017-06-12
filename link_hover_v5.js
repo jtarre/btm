@@ -110,6 +110,7 @@
 
 	var domain = window.location.hostname.split('www.')[1];
 	var source_title = (get_site_title[domain] != undefined ? get_site_title[domain] : domain);
+	var originUrl;
 
 	function getPopoverHtml(slug) {
 		return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popover_style + '">' +
@@ -351,6 +352,7 @@
 		var $link = this;
 		setTimeout(function setupPopover () {
 			if($link.is(':hover')) {
+				originUrl = $link.attr("href");
 				$('.popover:not([data-slug="' + slug + '"])').hide();
 				setTimeout(function showPopover() {
 					$link.popover("show");
@@ -402,10 +404,15 @@
 	}
 
 	function openArticleLink(event) {
+		console.log(href);
 		event.preventDefault();
 		var $link = $(event.target);
 		var href = $link.attr('href');
-		chrome.runtime.sendMessage({targetUrl: href, type: "Outbound Link Click", source: source_title}, function(response) {});
+		chrome.runtime.sendMessage({targetUrl: href,
+															  type: "Outbound Link Click",
+		                            source: source_title,
+															  originUrl: originUrl},
+		                            function(response) {});
 		window.open(href);
 		$('.popup-link').on('click', openArticleLink)
 	}
