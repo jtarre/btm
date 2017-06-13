@@ -109,8 +109,9 @@
 	}
 
 	var domain = window.location.hostname.split('www.')[1];
-	var source_title = (get_site_title[domain] != undefined ? get_site_title[domain] : domain);
-	var originUrl;
+	// use the title of current website (eg. NY Times) to help categorize click eventd
+	var originTitle = (get_site_title[domain] != undefined ? get_site_title[domain] : domain);
+	var originUrl; // Url of current website that gets defined when user clicks on a recommendation link
 
 	function getPopoverHtml(slug) {
 		return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popover_style + '">' +
@@ -241,7 +242,7 @@
 			toggleInvisible($('#btm-popover-body-' + slug), $('#btm-btn-' + slug));
 
 		function toggleVisible($container, $button) {
-			chrome.runtime.sendMessage({source: source_title, type: "Show Alternatives Click"}, function(response) {
+			chrome.runtime.sendMessage({source: originTitle, type: "Show Alternatives Click"}, function(response) {
 				console.log(response);
 			});
 			$button.text('HIDE');
@@ -413,11 +414,9 @@
 		originUrl = (originUrl != undefined ? originUrl : window.location.hostname + window.location.pathname);
 		chrome.runtime.sendMessage({targetUrl: href,
 															  type: "Outbound Link Click",
-		                            source: source_title,
+		                            source: originTitle,
 															  originUrl: originUrl},
-		                            function(response) {
-																	console.log(response);
-																});
+		                            function(response) {});
 		window.open(href);
 		$('.popup-link').on('click', openArticleLink)
 	}
@@ -514,7 +513,7 @@
 			$('.popup-link').on('click', openArticleLink);
 
 			// Get current news publication and send it to popup.js when Show Alternatives is clicked
-			chrome.runtime.sendMessage({source: source_title, type: "Show Alternatives Click"}, function(response) {
+			chrome.runtime.sendMessage({source: originTitle, type: "Show Alternatives Click"}, function(response) {
 				console.log(response);
 			});
 		})
