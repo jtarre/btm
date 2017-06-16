@@ -38,7 +38,8 @@ chrome.runtime.onMessage.addListener(
         hitType: hitType,
         eventCategory: outBoundLinkEventDescription.concat(request.source),
         eventAction: eventAction,
-        eventLabel: request.originUrl + " : " +  request.targetUrl
+        eventLabel: request.originUrl + " : " +  request.targetUrl,
+        eventValue: request.elapsedTime
       });
     }
     else {}
