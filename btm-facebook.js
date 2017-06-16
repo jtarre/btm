@@ -1,70 +1,4 @@
-	$(function() {
-	/*
-	thoughts: need to narrow the btm focus
-	create more visual UI on a webpage that highlights which links are BTMed
-	otherwise user doesn't have good indication of what they're using
-	not a good luck. 
-
-	product and engineering. difficult to do both unless you work on a lot of projects
-	and build up polymath skills
-	but fuck it. why not mother fucker. 
-
-	facebook may be achievable. create a specific facebook data structure. 
-
-	first. capture all links A 
-	turn any nytimes/politics etc. links into btm hovers
-	then store links in a {} Dictionary
-
-	then, at set intervals, capture new links B
-	then, check b in B in the dictionary
-	if b is not in dictionary, check whether it is bubble enabled, enable if necessary
-	then, add b to the dictionary. 
-	rinse and repeat.
-
-	to enable: do the google search, load it up. maybe do an animation. 
-
-	how to test. i'm getting stressed out. and hungry. 
-
-	how to test. 
-
-	use console log statements 
-	don't track specific urls. see if mechanics work
-
-	need a special event handler that gets called every 5 seconds. 
-
-	how to call an event every 5 seconds. 
-
-	take a poll. 
-
-	setTimeout(checkNews, 5000)
-	function checkNews() {
-		// check for new entries
-		checkNews(); // recursive
-	}
-	 // is there a better way
-	 setInterval(func, delay)...bam
-
-	*/	
-
-	// if(chrome && chrome.runtime && chrome.runtime.onUpdateAvailble) {
-	// 	chrome.runtime.onUpdateAvailable.addListener(function(details) {
-	// 	  chrome.runtime.reload();
-	// 	});
-	// }
-
-
-	/** Current Algorithm **/
-	/** on a per site basis **/
-	/*
-	Switch statements abound
-	1. Identify the links - initAnchor (switch)
-	2. Identify the slugs - getSlug (switch)
-	displayPopup
-	3. Google search based on site searches - siteSearches 
-	4. Create Popup - createPopup / create_item_template (getPopupDetails (switch)) / createItemHtml
-	
-	 */
-
+$(function() {
 	var popover_style = 
 	  "width: 250px;" + 
 	  "max-width: 276px;" +
@@ -152,6 +86,134 @@
 		"telegraph.co.uk": "The Telegraph"
 	}
 
+	var facebook_links = {};
+	var slug_list = {};
+	function facebookInit() {
+		switch(window.location.hostname) {
+			case "www.facebook.com":
+				break;
+			default:
+				break;
+		}
+		checkFacebookLinks();
+	}
+
+	function facebookInterval() {
+		setInterval(checkFacebookLinks, 5000);
+	}
+
+	function checkFacebookLinks() {
+		$links = $('a');
+		$links = $links.filter(function(index, element) {
+			var href = element.href;
+			return href.indexOf('www.nytimes.com') > 0;
+		})
+		var href;
+		var href_split;
+		var slug;
+		var $element;
+		var pathname;
+		var $newsfeed_post;
+		var $post_text;
+		$links.each(function(index, element) { // this is for nytimes only. not general
+			$element = $(element);
+			href = $element.attr('href');
+			if(href.indexOf('%2F') > 0) {
+				href_split = href.split('%2F');
+				href_split.forEach(function(element) { // this is for nytimes
+					if(element.indexOf('.html') > 0) {
+						slug = element.split(".html")[0];
+					}
+				});	
+
+				if(!facebook_links.hasOwnProperty(href)) {
+					facebook_links[href] = 1;
+					if(href.indexOf('www.nytimes.com') > 0 && !slug_list.hasOwnProperty(slug)) {
+						slug_list[slug] = 1;
+						$newsfeed_post = $element.closest('.fbUserContent').first(); // this is wrong level of abstraction. where to start. let's make the thing work. 
+						$post_text = $newsfeed_post.find('.userContent');
+						var $btm_button = $('<button type="button" data-pathname="' + pathname + '" class="btm-nytimes btm-parent-parent">BRIDGE THE MEDIA</button>');
+						var popover_html = getPopoverHtml(slug);
+						var content = '<div id="btm-popover-body-' + slug + '"><div id="btm-loading-' + slug + '"><p>Loading...</p></div></div>';
+						var title_style =
+							"color: black;" + 
+						  // "padding: 1px;" +
+						  "font-family: Josefin Sans, serif;" +
+						  "font-size: 16px;" +
+						  "font-style: normal;" +
+						  "font-weight: bolder;" +
+						  "line-height: 1.42857143;" +
+						  "text-align: left;" +
+						  "text-align: start;";
+						$btm_button.popover({trigger: "click",
+								container: "body",
+								html: "true",
+								template: popover_html,
+								title: "<span style='" + title_style +"'>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>",
+								content: content
+							})
+						$post_text.first().append($btm_button);
+						$btm_button.on('shown.bs.popover', initPopover.bind($btm_button, slug));
+						$btm_button.on('shown.bs.popover', hidePopoverIfUnused.bind($btm_button, slug));
+
+						function initPopover(slug) {
+							$btm_button = this;
+							var sites = spectrum_sites["www.nytimes.com"];
+							var site_promises = siteSearches(sites, slug);
+							$('.btm-close').on('click', function() { $btm_button.popover('hide') });
+							$.when.apply($, site_promises)
+							.then(function() { // this is the promise part of the site 
+								// $('#btm-btn-' + slug).hide();
+								$('#btm-loading-' + slug).hide();
+								var search_results = Array.prototype.slice.call(arguments);
+								var popup = createPopup(search_results, slug);
+								// add popup to page
+								
+								$('#btm-popover-body-' + slug).after(popup);
+								$('.collapse-link').on('click', toggleSummary);
+								$('.popup-link').on('click', openArticleLink);
+							})
+						}
+
+						function hidePopoverIfUnused(slug) {
+							var $btm_button = this;
+							var interval = setInterval(btmHidePopover.bind($btm_button, slug),5000);
+							function btmHidePopover (slug) {
+								$popover = $('.popover[data-slug="' + slug + '"]');
+								if(!$popover.is(':hover')) {
+									$btm_button.popover('hide');
+									$btm_button.on('hidden.bs.popover', function() {
+										clearInterval(interval);
+									});
+								}
+							}
+						}
+					}
+				}
+			}
+			
+				
+		})
+	}
+
+	function toggleSummary(event) {
+		event.preventDefault();
+		var $link = $(event.target);
+		console.log('(createCollapseEvents) link:', $link);
+		// if($link.hasClass('fa-user-circle') || $link.hasClass('fa-meetup')) $link = $link.parent();
+		
+		var cache = $link.data('cache');
+		var $cache = $('#' + cache);
+		var $caret = $('#btm-span-' + cache);
+		$cache.collapse('toggle');
+
+		// if($caret.hasClass('fa-meetup')) $caret.addClass('fa-user-circle').removeClass('fa-meetup');
+		// else $caret.addClass('fa-meetup').removeClass('fa-user-circle');
+	}
+
+	// facebookInit();
+	facebookInterval();
+
 	function getPopoverHtml(slug) {
 		return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popover_style + '">' + 
 		'<div class="arrow"></div>' + 
@@ -159,134 +221,6 @@
 		'<div data-slug="' + slug + '" class="popover-content">' +
 		'</div>' +
 		'</div>';
-	}
-
-	function getSlug(href) {
-		var href_segments;
-		var slug = ""; 
-		var last;
-		switch(window.location.hostname){
-			case "www.facebook.com":
-				break;
-			case "www.nytimes.com":
-				href_segments = href.split("/");
-				slug = href_segments[href_segments.length-1];
-				slug = slug.replace(/\d+/g, "");
-				slug = slug.split(".", 1);
-				slug = slug[0];
-				break;
-			case "www.cnn.com":
-				href_segments = href.split("/");
-				
-				last = href_segments[href_segments.length-1];
-				if(last == "index.html"){
-					slug = href_segments[href_segments.length-2];
-					slug = slug.split(".", 1);
-					slug = slug[0];
-				} else {
-					break;
-				}
-				break;
-			case "www.foxnews.com":
-				href_segments = href.split("/");
-				slug = href_segments[href_segments.length-1];
-				slug = slug.replace(/\d+/g, "");
-				
-				slug = slug.split(".", 1);
-				slug = slug[0];
-				break;
-			case "www.washingtonpost.com":
-				// different endpoints
-				/*
-				/blogs/compost/wp/year/month/day/slug/utm-term
-				/world/?utm-term
-				/world/slug/year/month/day/unique-id
-				/world/region/slug/year/month/day/id
-
-				on the homepage:
-				https://www.washingtonpost.com/world/follow-up-on-london-bridge-attack/2017/06/04/5216bbb2-48c5-11e7-8de1-cec59a9bf4b1_story.html
-				https://www.washingtonpost.com/world/europe/london-bridge-will-never-fall-down/2017/06/04/fc197476-7bad-4903-9164-6d0befbe8a07_story.html
-				https://www.washingtonpost.com/investigations/how-a-shadow-universe-of-charities-joined-with-political-warriors-to-fuel-trumps-rise/2017/06/03/ff5626ac-3a77-11e7-a058-ddbb23c75d82_story.html
-				https://www.washingtonpost.com/lifestyle/magazine/why-are-african-americans-so-much-more-likely-than-whites-to-develop-alzheimers/2017/05/31/9bfbcccc-3132-11e7-8674-437ddb6e813e_story.html
-				https://www.washingtonpost.com/graphics/opinions/israel-settlements/
-				https://www.washingtonpost.com/news/democracy-post/wp/2017/06/04/egypt-is-in-dire-shape-yet-how-i-wish-i-could-go-back/
-				https://www.washingtonpost.com/news/grade-point/wp/2017/06/04/the-papa-johns-pizza-admissions-essay-that-yale-loved/
-				https://www.washingtonpost.com/national/health-science/how-to-teach-kids-about-climate-change-where-most-parents-are-skeptics/2017/06/03/1ad4b67a-47a0-11e7-98cd-af64b4fe2dfc_story.html
-				*/
-				break;
-			default:
-				break;
-		}
-				
-		return slug;
-	}
-	
-	function initNewsPageHover() {
-		var btmHover;
-		var btmButton;
-		var slug;
-		var pathname = window.location.pathname;
-		var pathname_split = pathname.split('/');
-		if(pathname_split.length > 5) { // it's a news page, at least for fox news, need to add hover to bottom left of page
-			switch(window.location.hostname) {
-				case "www.foxnews.com":
-					console.log('(init page news hover) pathname:', pathname_split);
-					slug = pathname_split[pathname_split.length - 1];
-					slug = slug.replace('.html', '');
-					console.log('(init page hover (switch)) slug:', slug);
-					break;
-				case "www.nytimes.com":
-					slug = pathname_split[pathname_split.length - 1];
-					slug = slug.replace('.html', '');
-					break;
-				default:
-					break;
-			}
-			var side; 
-			switch(window.location.hostname) {
-				case "www.nytimes.com":
-					side = "right";
-					break;
-				case "www.foxnews.com":
-					side = "left";
-					break;
-				default:
-					side = "right";
-					break;
-			}
-
-			btmButton = '<button id="btm-btn-' + slug + '" style="' + btn_primary_style + '" class="google-search btn btn-primary" href="javascript:void(0);" data-slug="' + slug + '">' +
-				'SHOW ALTERNATIVES' +
-				'</button>';
-			btmHover = 
-				'<div data-slug="' + slug + '" style="' + popover_style + ';position:fixed;' + side + ':50px;bottom:10px;">' + 
-					'<h3 style="' + popover_title_style + '">' +
-				 		'BRIDGE THE MEDIA' +
-			 		'</h3>' + 
-						'<div id="btm-hover-' + slug + '">' + 
-							"<div style='max-height:450px;overflow:scroll;'id='btm-popover-body-" + slug + "'></div>" + btmButton + 
-						"</div>" + 
-				'</div>';
-		} 
-
-		$('body').append($(btmHover));
-		var sites = spectrum_sites[window.location.hostname];
-		var site_promises = siteSearches(sites, slug);
-		$.when.apply($, site_promises)
-		.then(function() { // this is the promise part of the site 
-			var search_results = Array.prototype.slice.call(arguments);
-			console.log('(init page hover) search results:', search_results);
-			var popup = createPopup(search_results, slug);
-			console.log('(btmHover) popup:', popup)
-			// // add popup to page
-			$('#btm-popover-body-' + slug).css('display', 'none');
-			$('#btm-popover-body-' + slug).append(popup);
-			$('.collapse-link').on('click', toggleSummary);
-			$('.popup-link').on('click', openArticleLink);
-			$('.btm-close').on('click', closeHover.bind($('#btm-hover-' + slug)));
-			
-		})
-		$('.google-search').on('click', toggleArticles.bind($(btmHover), slug));
 	}
 
 	function closeHover(event) {
@@ -314,99 +248,6 @@
 	initNewsPageHover();
 	
 
-	function initAnchor() {
-		var $a;
-		switch(window.location.hostname) {
-			case "www.nytimes.com":
-				var pathname = window.location.pathname;
-				var pathname_split = pathname.split('/');
-				if(pathname_split[1] == "") 
-					$a = $('.lede-package-region a, .first-column-region a, .second-column-region a, .opinion-c-col-left-region a, .opinion-c-col-right-region a, .well-region a, .inside-nyt-browser a'); // means we're on the nyt home page	
-				else if(pathname_split.length >= 3 && pathname_split[1] == "section") 
-					$a = $('.story-menu a'); // section/world or section/world/africas (or another country) or section/us	
-				else if(pathname_split.length >= 3 && pathname_split[2] == "opinion") 
-					$a = $('.abColumn a, .bColumn a, .cColumn a'); // pages/opinion section	
-				else if(pathname_split.length >= 3 && pathname_split[2] == "politics") 
-					$a = $('.aColumn a, .bColumn a, .cColumn .videoDetails a, .cColumn .extVidPlayerThumbsContainer a'); // pages/politics section
-				else 
-					$a = $("#nolinks");
-				console.log('(initAnchor) pathname_split:', pathname_split);
-				
-				break;
-			case "www.foxnews.com":
-				var pathname = window.location.pathname;
-				var pathname_split = pathname.split('/');
-				if(pathname_split.length > 2) // it's a individual page
-					$a = $('.ob-last a'); // this class is associated with a bar called "More from Fox News"
-				else if(pathname_split[1] == "") // it's the homepage
-					$a = $('#col a, .rail a, #opinion a');
-				else {
-					// header page - i.e. Politics, Opinion, World
-					var header = pathname_split[1]; 
-					switch(header) {
-						case "opinion.html":
-							$a = $('.row-1 a, .row-2 .mod-2 a, .row-2 .mod-3 a, .row-3 .mod-4 a, .row-4 a, .row-5 a, .row-6 .mod-7 a');
-							break;
-						case "us.html":
-							$a = $('.row-1 a, .row-2 a, .row-3 a, .row-4 .bkt-4 a, .row-5 .bkt-5 a, .row-6 a, .row-7 a, .row-8 a, .row-9 a, .row-10 a')
-							break;
-						case "politics.html":
-							$a = $('.mod-1 a, .mod-2 a, .in-house a, .mod-4 a, .video-ct a, .article-ct a, .mod-5 a, .mod-7 a');
-							break;
-						case "world.html":
-							$a = $('.row-1 a, .row-2 a, .row-3 .video-ct a, .row-4 .left a, .row-4 .right a, .row-5, .row-6 .right .video-ct a, .row-6 .right .article-ct a, .row-7 .js-infinite-scroll-list a');
-							break;
-						default:
-							$a = $('#nolinks');
-							break;
-					}	
-				} 
-				break;
-			default:
-				$a = $('a');
-		}
-		console.log('(init before return) a links:', $a);
-		return $a;
-	}
-
-	var $a = initAnchor(); 
-	
-	$a.each(function(index, link) {
-		$link = $(link);
-		$link.attr('data-container', 'body');
-		href = $link.attr("href");
-		
-		var placement = "right";
-		// var pathname = window.location.pathname;
-		// var pathname_split = pathname.split('/');
-		// if(pathname_split[1] == "") placement = "bottom";
-
-		if(href) {
-			var slug = getSlug(href);
-			var popover_html = getPopoverHtml(slug);
-			var content = '<button id="btm-btn-' + slug + '" style="' + btn_primary_style + '" class="google-search btn btn-primary" href="javascript:void(0);" data-slug="' + slug + '">' +
-				'SHOW ALTERNATIVES' +
-			'</button><div id="btm-popover-body-' + slug + '"></div>';
-			var title_style =
-			"color: black;" + 
-		  // "padding: 1px;" +
-		  "font-family: Josefin Sans, serif;" +
-		  "font-size: 16px;" +
-		  "font-style: normal;" +
-		  "font-weight: bolder;" +
-		  "line-height: 1.42857143;" +
-		  "text-align: left;" +
-		  "text-align: start;";
-			$link.popover({trigger: "manual",
-						html: "true",
-						template: popover_html,
-						title: "<span style='" + title_style +"'>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>",
-						placement: placement,
-						content: content
-					})
-					.on("mouseenter", popoverEnter.bind($link, slug))
-		}
-	})	
 	
 	function popoverEnter (slug) {
 		var $link = this;
@@ -460,21 +301,6 @@
 			url: google_url,
 			dataType: 'json'
 		})
-	}
-
-	function toggleSummary(event) {
-		event.preventDefault();
-		var $link = $(event.target);
-		console.log('(createCollapseEvents) link:', $link);
-		if($link.hasClass('fa-caret-down') || $link.hasClass('fa-caret-up')) $link = $link.parent();
-		
-		var cache = $link.data('cache');
-		var $cache = $('#' + cache);
-		var $caret = $('#btm-span-' + cache);
-		$cache.collapse('toggle');
-
-		if($caret.hasClass('fa-caret-up')) $caret.addClass('fa-caret-down').removeClass('fa-caret-up');
-		else $caret.addClass('fa-caret-up').removeClass('fa-caret-down');
 	}
 
 	function openArticleLink(event) {
@@ -552,7 +378,7 @@
 		var cache = slug + "-" + site_id + "-collapse";
 		var html = 
 			"<p style='" + html_style + "'><strong style='font-family: PT Serif, serif;'>" + site + date + "</strong></br>" +
-			"<a style='" + anchor_style + "' class='collapse-link' data-toggle='collapse' data-cache='" + cache + "' href='javascript:void(0);'>" + title +"<span id='btm-span-" + cache + "' class='fa fa-caret-down'></span></a></p>" +
+			"<a style='" + anchor_style + "' class='collapse-link' data-toggle='collapse' data-cache='" + cache + "' href='javascript:void(0);'>" + title + "</a></p>" +
 			"<div class='collapse' id='" + slug + "-" + site_id + "-collapse'>" + 
 				"<div class='well'>" +
 				"<h4 style='font-family: PT Serif, serif;color:black;font-size:12px' +><a class='popup-link' href='" + link + "'>" + "Read entire article</a>" +
