@@ -112,6 +112,8 @@
 	// use the title of current website (eg. NY Times) to help categorize click eventd
 	var originTitle = (get_site_title[domain] != undefined ? get_site_title[domain] : domain);
 	var originUrl; // Url of current website that gets defined when user clicks on a recommendation link
+	var startTime = new Date(); //start tracking time spent on web page
+	var endTime; // set this when a user clicks on a recommendation
 
 	function getPopoverHtml(slug) {
 		return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popover_style + '">' +
@@ -412,10 +414,14 @@
 		var $link = $(event.target);
 		var href = $link.attr('href');
 		originUrl = (originUrl != undefined ? originUrl : window.location.hostname + window.location.pathname);
+		endTime = new Date();
+		elapsedTime = Math.round((endTime - startTime)/60000); // calculate elapsedTime in minutes
+		startTime = new Date(); // reset startTime
 		chrome.runtime.sendMessage({targetUrl: href,
 															  type: "Outbound Link Click",
 		                            source: originTitle,
-															  originUrl: originUrl},
+															  originUrl: originUrl,
+															 	elapsedTime: elapsedTime},
 		                            function(response) {});
 		window.open(href);
 		$('.popup-link').on('click', openArticleLink)
