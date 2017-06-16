@@ -422,7 +422,7 @@
 		                            source: originTitle,
 															  originUrl: originUrl,
 															 	elapsedTime: elapsedTime},
-		                            function(response) {console.log(elapsedTime)});
+		                            function(response) {});
 		window.open(href);
 		$('.popup-link').on('click', openArticleLink)
 	}
