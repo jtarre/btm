@@ -1,27 +1,30 @@
+Version 1.4 - Added Google Analytics capabilities to BTM
+
+
 approach.readme
 
 Ok, so what would i do
 
 onmousehover
 
-if link 
+if link
 	if hrefHasNewsUrl
 		get string <-- this is a thing
 
-News articles extensions: 
-vox.com/dept/year/month/day/unique-id/slug	
+News articles extensions:
+vox.com/dept/year/month/day/unique-id/slug
 nationalreview.com/dept/unique-id/slug
 breitbart.com/dept/year/month/day/slug
 politico.com/dept/year/month/slug-id
 nytimes.com/year/month/date/region/dept/slug
 
-News article clean string functions: 
+News article clean string functions:
 
 var base = 'https://www.googleapis.com/customsearch/v1?q=site%3Anationalreview.com+trumps-obama-obsession
 var cx_string = '&cx=013013877924597244999%3Atbq0ixuctim&key={YOUR_API_KEY}''
 
 opposite_news_sites = {
-	newyorktimes.com: '(site:breitbart.com or site:politico.com or site:nationalreview.com) ', 
+	newyorktimes.com: '(site:breitbart.com or site:politico.com or site:nationalreview.com) ',
 	cnn.com: '(site:breitbart.com or site:politico.com or site:nationalreview.com) '
 }
 
@@ -43,7 +46,7 @@ function search_url(slug) {
 }
 
 function clean_slug(url, siteFn) {
-	var slug = siteFn(url);	
+	var slug = siteFn(url);
 	return slug;
 }
 
@@ -64,7 +67,7 @@ https://developers.google.com/custom-search/json-api/v1/overview
 https://developer.chrome.com/extensions/contentSecurityPolicy#relaxing
 
 
-Sample custom search response: 
+Sample custom search response:
 
 
  "kind": "customsearch#search",
