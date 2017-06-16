@@ -40,7 +40,12 @@
     "https://cse.google.com/*"
   ],
 
-  "web_accessible_resources": ["font-awesome-4.7.0/fonts/fontawesome*"],
+  "web_accessible_resources": ["font-awesome-4.7.0/fonts/fontawesome*", 
+  "btm16.png", 
+  "btm48.png",
+  "btm_logo_24.png",
+  "btm_logo_32.png",
+  "btm_logo.png"],
   "content_security_policy": "script-src 'self' https://cse.google.com https://www.google.com https://code.jquery.com https://ssl.google-analytics.com; object-src 'self'"
 
 }

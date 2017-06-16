@@ -106,7 +106,8 @@ $(function() {
 		$links = $('a');
 		$links = $links.filter(function(index, element) {
 			var href = element.href;
-			return href.indexOf('www.nytimes.com') > 0;
+			// console.log($(element).text());
+			return href.indexOf('www.nytimes.com') > 0 || $(element).text() == "Fox News";
 		})
 		var href;
 		var href_split;
@@ -118,7 +119,8 @@ $(function() {
 		$links.each(function(index, element) { // this is for nytimes only. not general
 			$element = $(element);
 			href = $element.attr('href');
-			if(href.indexOf('%2F') > 0) {
+			console.log(href, $element);
+			if(href.indexOf('%2F') > 0 && href.indexOf('politics') > 0) {
 				href_split = href.split('%2F');
 				href_split.forEach(function(element) { // this is for nytimes
 					if(element.indexOf('.html') > 0) {
@@ -132,7 +134,8 @@ $(function() {
 						slug_list[slug] = 1;
 						$newsfeed_post = $element.closest('.fbUserContent').first(); // this is wrong level of abstraction. where to start. let's make the thing work. 
 						$post_text = $newsfeed_post.find('.userContent');
-						var $btm_button = $('<button type="button" data-pathname="' + pathname + '" class="btm-nytimes btm-parent-parent">BRIDGE THE MEDIA</button>');
+						var btmimg = chrome.runtime.getURL('btm_logo.png');
+						var $btm_button = $('<p><a href="javascript:void(0);"><img src="' + btmimg + '" height="24" width="26"></a></p>');
 						var popover_html = getPopoverHtml(slug);
 						var content = '<div id="btm-popover-body-' + slug + '"><div id="btm-loading-' + slug + '"><p>Loading...</p></div></div>';
 						var title_style =
@@ -199,7 +202,7 @@ $(function() {
 	function toggleSummary(event) {
 		event.preventDefault();
 		var $link = $(event.target);
-		console.log('(createCollapseEvents) link:', $link);
+		// console.log('(createCollapseEvents) link:', $link);
 		// if($link.hasClass('fa-user-circle') || $link.hasClass('fa-meetup')) $link = $link.parent();
 		
 		var cache = $link.data('cache');
@@ -228,7 +231,7 @@ $(function() {
 	}
 
 	function toggleArticles(slug, event) {
-		console.log('(toggleArticles) display:', $('#btm-popover-body-' + slug).attr('display'));
+		// console.log('(toggleArticles) display:', $('#btm-popover-body-' + slug).attr('display'));
 		if($('#btm-popover-body-' + slug + ':hidden').length > 0) 
 			toggleVisible($('#btm-popover-body-' + slug), $('#btm-btn-' + slug));
 		else
@@ -243,29 +246,6 @@ $(function() {
 			$button.text('SHOW ALTERNATIVES');
 			$container.fadeOut();
 		}
-	}
-
-	initNewsPageHover();
-	
-
-	
-	function popoverEnter (slug) {
-		var $link = this;
-		setTimeout(function setupPopover () {
-			if($link.is(':hover')) {
-				$('.popover:not([data-slug="' + slug + '"])').hide();
-				setTimeout(function showPopover() {
-					$link.popover("show");	
-					var $popover = $('.popover[data-slug="' + slug + '"]');
-					$('.google-search').on('click', displayArticles.bind($popover, slug));
-					$('.btm-close').on('click', function() { $link.popover('hide') });
-					$(window).on('click', function (event) {
-						// event.preventDefault();
-						if($popover.filter(':hover').length < 1) $link.popover('hide');
-				 	});		
-				}, 500)
-			}
-		}, 900);
 	}
 
 	function displayArticles(slug, event) {
