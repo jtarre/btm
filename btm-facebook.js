@@ -107,7 +107,7 @@ $(function() {
 		$links = $links.filter(function(index, element) {
 			var href = element.href;
 			// console.log($(element).text());
-			return href.indexOf('www.nytimes.com') > 0 || $(element).text() == "Fox News";
+			return href.indexOf('www.nytimes.com') > 0;
 		})
 		var href;
 		var href_split;
@@ -120,7 +120,7 @@ $(function() {
 			$element = $(element);
 			href = $element.attr('href');
 			console.log(href, $element);
-			if(href.indexOf('%2F') > 0 && href.indexOf('politics') > 0) {
+			if(href.indexOf('%2F') > 0) {
 				href_split = href.split('%2F');
 				href_split.forEach(function(element) { // this is for nytimes
 					if(element.indexOf('.html') > 0) {
