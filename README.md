@@ -1,4 +1,5 @@
 Version 1.4 - Added Google Analytics capabilities to BTM
+Version 1.5 - Added Facebook for nytimes
 
 
 approach.readme

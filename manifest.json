@@ -3,8 +3,7 @@
 
   "name": "Bridge the Media",
   "description": "Get outside your bubble. Expand your horizons. Read across the political spectrum",
-  "version": "1.4",
-
+  "version": "1.5",
   "icons": { "16": "btm_logo_v2.png",
            "48": "btm_48_v2.png",
           "128": "btm128.png" },
@@ -25,10 +24,13 @@
       "matches": ["http://www.nytimes.com/*",
       "https://www.nytimes.com/*",
       "http://www.foxnews.com/*",
-      "https://www.foxnews.com/*"
+      "https://www.foxnews.com/*",
+      "https://www.facebook.com/*",
+      "http://www.facebook.com/*"
+
       ],
       "css": ["font-awesome-4.7.0/css/font-awesome.css", "popup.css"],
-      "js": ["jquery-3.2.0.js", "link_hover.js", "bootstrap-3.3.7-dist/js/bootstrap.js"]
+      "js": ["jquery-3.2.0.js", "link_hover.js", "btm-facebook.js", "bootstrap-3.3.7-dist/js/bootstrap.js"]
     }
   ],
   "permissions": [
@@ -38,7 +40,12 @@
     "https://cse.google.com/*"
   ],
 
-  "web_accessible_resources": ["font-awesome-4.7.0/fonts/fontawesome*"],
+  "web_accessible_resources": ["font-awesome-4.7.0/fonts/fontawesome*", 
+  "btm16.png", 
+  "btm48.png",
+  "btm_logo_24.png",
+  "btm_logo_32.png",
+  "btm_logo.png"],
   "content_security_policy": "script-src 'self' https://cse.google.com https://www.google.com https://code.jquery.com https://ssl.google-analytics.com; object-src 'self'"
 
 }

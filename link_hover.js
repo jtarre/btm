@@ -1,4 +1,4 @@
-	$(function() {
+$(function() {
 
 
 	// if(chrome && chrome.runtime && chrome.runtime.onUpdateAvailble) {
@@ -259,7 +259,9 @@
 
 	initNewsPageHover();
 
-
+	// initialization for a home page such as nytimes.com or foxnews.com
+	// this is the place where we specify what parts of the page have the btm 
+	// hover made active. if you want to change, come here.
 	function initAnchor() {
 		var $a;
 		switch(window.location.hostname) {
@@ -267,7 +269,7 @@
 				var pathname = window.location.pathname;
 				var pathname_split = pathname.split('/');
 				if(pathname_split[1] == "")
-					$a = $('.lede-package-region a, .first-column-region a, .second-column-region a, .opinion-c-col-left-region a, .opinion-c-col-right-region a, .well-region a, .inside-nyt-browser a'); // means we're on the nyt home page
+					$a = $('.TemplateUtils-column--2kfG7 a, .lede-package-region a, .first-column-region a, .second-column-region a, .opinion-c-col-left-region a, .opinion-c-col-right-region a, .well-region a, .inside-nyt-browser a'); // means we're on the nyt home page
 				else if(pathname_split.length >= 3 && pathname_split[1] == "section")
 					$a = $('.story-menu a'); // section/world or section/world/africas (or another country) or section/us
 				else if(pathname_split.length >= 3 && pathname_split[2] == "opinion")
@@ -317,6 +319,9 @@
 
 	var $a = initAnchor();
 
+	// todo: wrap in a function call
+	// this each loop 1) turns each link into a popover enabled link and 
+	// 2) it specifies the html and code for the popover.
 	$a.each(function(index, link) {
 		$link = $(link);
 		$link.attr('data-container', 'body');
@@ -343,17 +348,22 @@
 		  "line-height: 1.42857143;" +
 		  "text-align: left;" +
 		  "text-align: start;";
-			$link.popover({trigger: "manual",
+			// todo: this should be its own function for clarity
+			$link.popover({trigger: "manual", // this code right here initializes the popover. 
+
 						html: "true",
 						template: popover_html,
 						title: "<span style='" + title_style +"'>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>",
 						placement: placement,
 						content: content
 					})
-					.on("mouseenter", popoverEnter.bind($link, slug))
+					.on("mouseenter", popoverEnter.bind($link, slug)) 
 		}
 	})
-
+	
+	// this function defines how the popover interacts with the mouse
+	// e.g. how long you have to hover over a link before the bubble pops up
+	// this is 
 	function popoverEnter (slug) {
 		var $link = this;
 		originUrl = $link.attr("href");
@@ -371,7 +381,8 @@
 				 	});
 				}, 500)
 			}
-		}, 900);
+		}, 900); // this is how long the hover waits before displaying
+		// todo: 
 	}
 
 	function hidePopover(event) {
@@ -427,6 +438,7 @@
 		$('.popup-link').on('click', openArticleLink)
 	}
 
+	// css and html for each news snippet
 	function createPopup(search_results, slug, style_addition) {
 		if(!style_addition) style_addition = "";
 		var html = "<div style='margin:10px;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;" + style_addition +"'><ul class='list-unstyled'>";
@@ -453,6 +465,7 @@
 		return html;
 	}
 
+	// css and html for each news snippet
 	function item_template(publisher, item, slug) {
 
 		var popup_details = getPopupDetails(publisher, item);
@@ -470,6 +483,7 @@
 		// }
 	}
 
+	// css and html for each news snippet
 	function createItemHtml(site, link, title, description, date, slug) {
 		var site_id = site.replace(/\s/g, "");
 		var random = Math.random() * 100;
@@ -525,6 +539,7 @@
 		})
 	}
 
+	// this is where we extract article info. embedly or mercury may make this unnecessary
 	function getPopupDetails(publisher, item) {
 		var site_title = get_site_title[publisher];
 		var link;
