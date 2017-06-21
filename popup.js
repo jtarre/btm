@@ -33,6 +33,15 @@ chrome.runtime.onMessage.addListener(
         eventAction: eventAction
       });
     }
+
+    else if(request.type === "Facebook BTM Icon Click") {
+      ga('send', {
+        hitType: hitType,
+        eventCategory: "BTM Icon Clicks on Facebook",
+        eventAction: eventAction
+      });
+    }
+
     else if(request.type === "Outbound Link Click") {
       ga('send', {
         hitType: hitType,
