@@ -299,7 +299,7 @@ $(function() {
 		                            source: "Facebook",
 															  originUrl: originUrl,
 															  elapsedTime: 0},
-		                            function(response) {console.log(response);});
+		                            function(response) {});
 		window.open(href);
 		$('.popup-link').on('click', openArticleLink)
 	}
