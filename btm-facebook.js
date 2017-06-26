@@ -1,8 +1,8 @@
 $(function() {
-	var popover_style = 
-	  "width: 250px;" + 
+	var popover_style =
+	  "width: 250px;" +
 	  "max-width: 276px;" +
-	  "color: black;" + 
+	  "color: black;" +
 	  "padding: 1px;" +
 	  "font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;" +
 	  "font-size: 14px;" +
@@ -36,7 +36,7 @@ $(function() {
   	// adn the development will proceed at its own pace
 
   	var popover_title_style =
-		"color: black;" + 
+		"color: black;" +
 		  // "padding: 1px;" +
 		  "font-family: Josefin Sans, serif;" +
 		  "font-size: 16px;" +
@@ -44,18 +44,18 @@ $(function() {
 		  "font-weight: bolder;" +
 		  "line-height: 1.42857143;" +
 		  "text-align: left;" +
-		  "text-align: start;" + 
+		  "text-align: start;" +
 		"padding: 8px 14px;" +
 		"margin: 0;" +
 		"background-color: #f7f7f7;" +
 		"border-bottom: 1px solid #ebebeb;" +
 		"border-radius: 5px 5px 0 0;";
 
-  	var btn_primary_style = 
+  	var btn_primary_style =
 		"color: #4665B0;" +
 		"background-color: #FECC08;" +
-		"font-size:14px" + 
-		"font-family: PT Serif, serif" + 
+		"font-size:14px" +
+		"font-family: PT Serif, serif" +
 		"border-color: black;" +
 		"margin: 10px";
 
@@ -85,6 +85,8 @@ $(function() {
 		"reason.com": "Reason",
 		"telegraph.co.uk": "The Telegraph"
 	}
+
+	var originUrl;
 
 	var facebook_links = {};
 	var slug_list = {};
@@ -119,27 +121,26 @@ $(function() {
 		$links.each(function(index, element) { // this is for nytimes only. not general
 			$element = $(element);
 			href = $element.attr('href');
-			console.log(href, $element);
 			if(href.indexOf('%2F') > 0) {
 				href_split = href.split('%2F');
 				href_split.forEach(function(element) { // this is for nytimes
 					if(element.indexOf('.html') > 0) {
 						slug = element.split(".html")[0];
 					}
-				});	
+				});
 
 				if(!facebook_links.hasOwnProperty(href)) {
 					facebook_links[href] = 1;
 					if(href.indexOf('www.nytimes.com') > 0 && !slug_list.hasOwnProperty(slug)) {
 						slug_list[slug] = 1;
-						$newsfeed_post = $element.closest('.fbUserContent').first(); // this is wrong level of abstraction. where to start. let's make the thing work. 
+						$newsfeed_post = $element.closest('.fbUserContent').first(); // this is wrong level of abstraction. where to start. let's make the thing work.
 						$post_text = $newsfeed_post.find('.userContent');
 						var btmimg = chrome.runtime.getURL('btm_logo.png');
 						var $btm_button = $('<p><a href="javascript:void(0);"><img src="' + btmimg + '" height="24" width="26"></a></p>');
 						var popover_html = getPopoverHtml(slug);
 						var content = '<div id="btm-popover-body-' + slug + '"><div id="btm-loading-' + slug + '"><p>Loading...</p></div></div>';
 						var title_style =
-							"color: black;" + 
+							"color: black;" +
 						  // "padding: 1px;" +
 						  "font-family: Josefin Sans, serif;" +
 						  "font-size: 16px;" +
@@ -156,22 +157,25 @@ $(function() {
 								content: content
 							})
 						$post_text.first().append($btm_button);
-						$btm_button.on('shown.bs.popover', initPopover.bind($btm_button, slug));
+						$btm_button.on('shown.bs.popover', initPopover.bind($btm_button, slug, href_split));
 						$btm_button.on('shown.bs.popover', hidePopoverIfUnused.bind($btm_button, slug));
 
-						function initPopover(slug) {
+						function initPopover(slug, href_split) {
+							originUrl = href_split.slice(2, href_split.length-1).join("/") + "/" + slug + ".html";
+							chrome.runtime.sendMessage({source: "Facebook", type: "Facebook BTM Icon Click"}, function(response) {
+							});
 							$btm_button = this;
 							var sites = spectrum_sites["www.nytimes.com"];
 							var site_promises = siteSearches(sites, slug);
 							$('.btm-close').on('click', function() { $btm_button.popover('hide') });
 							$.when.apply($, site_promises)
-							.then(function() { // this is the promise part of the site 
+							.then(function() { // this is the promise part of the site
 								// $('#btm-btn-' + slug).hide();
 								$('#btm-loading-' + slug).hide();
 								var search_results = Array.prototype.slice.call(arguments);
 								var popup = createPopup(search_results, slug);
 								// add popup to page
-								
+
 								$('#btm-popover-body-' + slug).after(popup);
 								$('.collapse-link').on('click', toggleSummary);
 								$('.popup-link').on('click', openArticleLink);
@@ -194,8 +198,8 @@ $(function() {
 					}
 				}
 			}
-			
-				
+
+
 		})
 	}
 
@@ -204,7 +208,7 @@ $(function() {
 		var $link = $(event.target);
 		// console.log('(createCollapseEvents) link:', $link);
 		// if($link.hasClass('fa-user-circle') || $link.hasClass('fa-meetup')) $link = $link.parent();
-		
+
 		var cache = $link.data('cache');
 		var $cache = $('#' + cache);
 		var $caret = $('#btm-span-' + cache);
@@ -218,9 +222,9 @@ $(function() {
 	facebookInterval();
 
 	function getPopoverHtml(slug) {
-		return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popover_style + '">' + 
-		'<div class="arrow"></div>' + 
-		'<h3 style="' + popover_title_style + '" class="popover-title"><span>&times;</span></h3>' + 
+		return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popover_style + '">' +
+		'<div class="arrow"></div>' +
+		'<h3 style="' + popover_title_style + '" class="popover-title"><span>&times;</span></h3>' +
 		'<div data-slug="' + slug + '" class="popover-content">' +
 		'</div>' +
 		'</div>';
@@ -232,7 +236,7 @@ $(function() {
 
 	function toggleArticles(slug, event) {
 		// console.log('(toggleArticles) display:', $('#btm-popover-body-' + slug).attr('display'));
-		if($('#btm-popover-body-' + slug + ':hidden').length > 0) 
+		if($('#btm-popover-body-' + slug + ':hidden').length > 0)
 			toggleVisible($('#btm-popover-body-' + slug), $('#btm-btn-' + slug));
 		else
 			toggleInvisible($('#btm-popover-body-' + slug), $('#btm-btn-' + slug));
@@ -252,7 +256,7 @@ $(function() {
 		var sites = spectrum_sites[window.location.hostname];
 		var site_promises = siteSearches(sites, slug);
 		$.when.apply($, site_promises)
-		.then(function() { // this is the promise part of the site 
+		.then(function() { // this is the promise part of the site
 			$('#btm-btn-' + slug).hide();
 			var search_results = Array.prototype.slice.call(arguments);
 			var popup = createPopup(search_results, slug);
@@ -287,15 +291,24 @@ $(function() {
 		event.preventDefault();
 		var $link = $(event.target);
 		var href = $link.attr('href');
-		window.open(href); 
+		console.log("clicking article!");
+		console.log(href);
+		console.log(originUrl);
+		chrome.runtime.sendMessage({targetUrl: href,
+															  type: "Outbound Link Click",
+		                            source: "Facebook",
+															  originUrl: originUrl,
+															  elapsedTime: 0},
+		                            function(response) {});
+		window.open(href);
 		$('.popup-link').on('click', openArticleLink)
 	}
 
 	function createPopup(search_results, slug, style_addition) {
-		if(!style_addition) style_addition = ""; 
+		if(!style_addition) style_addition = "";
 		var html = "<div style='margin:10px;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;" + style_addition +"'><ul class='list-unstyled'>";
-		var html_style = 
-		"color: black;" + 
+		var html_style =
+		"color: black;" +
 		  // "padding: 1px;" +
 		  "font-family: Helvetica Neue, Helvetica, Arial, sans-serif;" +
 		  "font-size: 14px;" +
@@ -308,11 +321,11 @@ $(function() {
 		search_results.forEach(function(search_result) {
 			if(search_result && search_result[0].items) html += "<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>" + item_template(search_result[0]["queries"]["request"][0]["siteSearch"], search_result[0].items[0], slug) + "</li>";
 			else {
-				site_title = get_site_title[search_result[0]["queries"]["request"][0]["siteSearch"]];	
+				site_title = get_site_title[search_result[0]["queries"]["request"][0]["siteSearch"]];
 
 				html += "<li><p style='" + html_style + "'><strong style='font-family: PT Serif;color:black;font-size:12px'>" + site_title + "</strong></br><span style='font-family: PT Serif;color:black;font-size:12px'>No Results</span></li>"
-			} 
-		});	
+			}
+		});
 		html += "<ul></div>";
 		return html;
 	}
@@ -320,10 +333,10 @@ $(function() {
 	function item_template(publisher, item, slug) {
 
 		var popup_details = getPopupDetails(publisher, item);
-		return createItemHtml(popup_details.site_title, 
-			popup_details.link, 
-			popup_details.headline, 
-			popup_details.description, 
+		return createItemHtml(popup_details.site_title,
+			popup_details.link,
+			popup_details.headline,
+			popup_details.description,
 			popup_details.date, slug);
 		// function compare_date(items, article_date, args) {
 		// 	for( var i = 0; i < args.length; ++i ) {
@@ -340,8 +353,8 @@ $(function() {
 		random = random.toString();
 		if (date) date = " | " + date;
 		else date = "| date unavailable";
-		var html_style = 
-		"color: black;" + 
+		var html_style =
+		"color: black;" +
 		  // "padding: 1px;" +
 		  "font-family: PT serif, serif;" +
 		  "font-size: 12px;" +
@@ -356,19 +369,19 @@ $(function() {
 		  "font-size: 12px;";
 
 		var cache = slug + "-" + site_id + "-collapse";
-		var html = 
+		var html =
 			"<p style='" + html_style + "'><strong style='font-family: PT Serif, serif;'>" + site + date + "</strong></br>" +
 			"<a style='" + anchor_style + "' class='collapse-link' data-toggle='collapse' data-cache='" + cache + "' href='javascript:void(0);'>" + title + "</a></p>" +
-			"<div class='collapse' id='" + slug + "-" + site_id + "-collapse'>" + 
+			"<div class='collapse' id='" + slug + "-" + site_id + "-collapse'>" +
 				"<div class='well'>" +
 				"<h4 style='font-family: PT Serif, serif;color:black;font-size:12px' +><a class='popup-link' href='" + link + "'>" + "Read entire article</a>" +
-				"</h4>" +  
+				"</h4>" +
 					"<p style='font-family: PT Serif, serif;color:black;font-size:12px' +>" + description + "</p>" +
 				"</div>"+
-			"</div>";	
+			"</div>";
 		return html;
 	}
-	
+
 	function getPopupDetails(publisher, item) {
 		var site_title = get_site_title[publisher];
 		var link;
@@ -380,7 +393,7 @@ $(function() {
 			case "foxnews.com":
 				link = item.link;
 				headline= item.title;
-				
+
 				if(item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["dc.description"]) description = item.pagemap.metatags[0]["dc.description"];
 				else description = item.snippet;
 
@@ -390,10 +403,10 @@ $(function() {
 					date = date.toDateString();
 				}
 				break;
-			
+
 			case "nationalreview.com":
 				link = item.link;
-				
+
 				/** headline**/
 				if(item && item.pagemap && item.pagemap.article && item.pagemap.article[0].headline) headline= item.pagemap.article[0].headline;
 				else headline= item.title;
@@ -438,11 +451,11 @@ $(function() {
 					date = item.pagemap.webpage[0].datecreated;
 					date = new Date(date);
 					date = date.toDateString();
-				} 
+				}
 				break;
 			case "thehill.com":
 				break;
-			case "thefiscaltimes.com": 
+			case "thefiscaltimes.com":
 				break;
 			case "forbes.com":
 				break;
@@ -453,12 +466,12 @@ $(function() {
 				headline = item.title;
 				if(item && item.pagemap && item.pagemap.newsarticle && item.pagemap.newsarticle[0].description) description = item.pagemap.newsarticle[0].description;
 				else description = item.snippet;
-				
+
 				if(item && item.pagemap && item.pagemap.newsarticle && item.pagemap.newsarticle[0].datepublished) {
 					date = item.pagemap.newsarticle[0].datepublished;
 					date = new Date(date);
 					date = date.toDateString();
-				} 
+				}
 				break;
 			case "vice.com":
 				link = item.link;
@@ -494,19 +507,18 @@ $(function() {
 				break;
 			case "telegraph.co.uk":
 				break;
-			default: 
+			default:
 				break;
 		}
-		
-		var details = { 
-			site_title: site_title, 
-			link: link, 
+
+		var details = {
+			site_title: site_title,
+			link: link,
 			headline: headline,
-			description: description, 
-			date: date 
+			description: description,
+			date: date
 		};
 
 		return details;
 	}
 })
-
