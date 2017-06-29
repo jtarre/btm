@@ -9,6 +9,42 @@ describe('RecommendationFetcher', function(){
   });
 });
 
+describe('#extractTitle()', function() {
+  it('should parse the title from a recommendation', function(){
+    var input = {
+        "title": "'Moonlight' won best picture because of Oscars' version of Electoral ...",
+        "pagemap":{
+        "article": [
+            {
+              "headline": "Why the Clinton Mental-Health Plan Won’t Succeed",
+            }
+          ]
+        }
+      };
+    var expected = "'Moonlight' won best picture because of Oscars' version of Electoral ...";
+    var actual = RecommendationFetcher.extractTitle(input);
+    expect(actual).to.equal(expected);
+
+    expected = "Why the Clinton Mental-Health Plan Won’t Succeed";
+    actual = RecommendationFetcher.extractTitle(input, "nationalreview.com");
+    expect(actual).to.equal(expected);
+
+    input = {
+        "title": "'Moonlight' won best picture because of Oscars' version of Electoral ...",
+        "pagemap":{
+        "article": [
+            {
+
+            }
+          ]
+        }
+      };
+    expected = "'Moonlight' won best picture because of Oscars' version of Electoral ...";
+    actual = RecommendationFetcher.extractTitle(input, "nationalreview.com");
+    expect(actual).to.equal(expected);
+  });
+});
+
 describe('#transformRecommendation()', function(){
   it('should take a recommendation and return an object with link, headline, description, and date',
     function(){
