@@ -14,6 +14,8 @@ Important files in production:
 
 Refactoring Effort:
 
+- Branch: dev/master/embed-icon
+
 The goal is to separate the logic for embedding the BTM icon/Show Alternatives button from obtaining recommendations into separate modules.
 
 - recommendation-fetcher.js
