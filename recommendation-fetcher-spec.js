@@ -149,10 +149,12 @@ describe('#extractDate()', function(){
 
  it("should parse nothing if there's nothing to parse", function(){
    var input = {
-       "pagemap": {}
+       "pagemap": {
+         "newsarticle": []
+       }
      };
-    var expected = "Tue, 19 Apr 2016";
-    var actual = RecommendationFetcher.extractDate(input, "theatlantic.com");
+    var expected = "";
+    var actual = RecommendationFetcher.extractDate(input);
     expect(actual).to.equal(expected);
  });
 
