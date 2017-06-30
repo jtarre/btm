@@ -151,8 +151,8 @@ describe('#extractDate()', function(){
    var input = {
        "pagemap": {}
      };
-    var expected = "";
-    var actual = RecommendationFetcher.extractDate(input);
+    var expected = "Tue, 19 Apr 2016";
+    var actual = RecommendationFetcher.extractDate(input, "theatlantic.com");
     expect(actual).to.equal(expected);
  });
 
