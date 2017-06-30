@@ -9,26 +9,31 @@ describe('RecommendationFetcher', function(){
   });
 });
 
-describe('#extractTitle()', function() {
+describe('#extractHeadline()', function() {
+  var input = {
+      "title": "'Moonlight' won best picture because of Oscars' version of Electoral ...",
+      "pagemap":{
+      "article": [
+          {
+            "headline": "Why the Clinton Mental-Health Plan Won’t Succeed",
+          }
+        ]
+      }
+    };
+
   it('should parse the title from a recommendation', function(){
-    var input = {
-        "title": "'Moonlight' won best picture because of Oscars' version of Electoral ...",
-        "pagemap":{
-        "article": [
-            {
-              "headline": "Why the Clinton Mental-Health Plan Won’t Succeed",
-            }
-          ]
-        }
-      };
     var expected = "'Moonlight' won best picture because of Oscars' version of Electoral ...";
-    var actual = RecommendationFetcher.extractTitle(input);
+    var actual = RecommendationFetcher.extractHeadline(input);
     expect(actual).to.equal(expected);
+  });
 
-    expected = "Why the Clinton Mental-Health Plan Won’t Succeed";
-    actual = RecommendationFetcher.extractTitle(input, "nationalreview.com");
+  it('should parse the headline from the nationalreview', function(){
+    var expected = "Why the Clinton Mental-Health Plan Won’t Succeed";
+    var actual = RecommendationFetcher.extractHeadline(input, "nationalreview.com");
     expect(actual).to.equal(expected);
+  });
 
+  it('should parse the title from a nationalreview recommendation if no headline', function(){
     input = {
         "title": "'Moonlight' won best picture because of Oscars' version of Electoral ...",
         "pagemap":{
@@ -39,11 +44,120 @@ describe('#extractTitle()', function() {
           ]
         }
       };
-    expected = "'Moonlight' won best picture because of Oscars' version of Electoral ...";
-    actual = RecommendationFetcher.extractTitle(input, "nationalreview.com");
+    var expected = "'Moonlight' won best picture because of Oscars' version of Electoral ...";
+    var actual = RecommendationFetcher.extractHeadline(input, "nationalreview.com");
+    expect(actual).to.equal(expected);
+  });
+
+});
+
+describe('#extractLink()', function(){
+  it('should parse the link from a recommendation', function(){
+    var input = {
+      "link": "http://www.foxnews.com/entertainment/2017/02/28/moonlight-won-best-picture-because-oscars-version-electoral-college.html"
+    };
+    var expected = "http://www.foxnews.com/entertainment/2017/02/28/moonlight-won-best-picture-because-oscars-version-electoral-college.html";
+    var actual = RecommendationFetcher.extractLink(input);
     expect(actual).to.equal(expected);
   });
 });
+
+describe('#formatDate()', function(){
+  it('should return a date string that contains day, month, year in UTC and GMT', function(){
+    var expected = "Thu, 28 Jul 2016";
+    var actual = RecommendationFetcher.formatDate("2016-07-28");
+    expect(actual).to.equal(expected);
+  });
+});
+
+describe('#extractDate()', function(){
+  it('should parse the date from Foxnews', function(){
+    var input = {
+        "pagemap": {
+        "metatags": [
+            {
+              "dc.date": "2016-07-28"
+            }
+          ]
+        }
+      };
+
+   var expected = "Thu, 28 Jul 2016";
+   var actual = RecommendationFetcher.extractDate(input, "foxnews.com");
+   expect(actual).to.equal(expected);
+ });
+
+ it('should parse the date from the national review', function(){
+   var input = {
+       "pagemap": {
+       "article": [
+           {
+             "datepublished": "2016-01-21T22:00:50-05:00"
+           }
+         ]
+       }
+     };
+    var expected = "Fri, 22 Jan 2016";
+    var actual = RecommendationFetcher.extractDate(input, "nationalreview.com");
+    expect(actual).to.equal(expected);
+ });
+
+ it('should parse the date from the NY Post', function(){
+   var input = {
+       "pagemap": {
+       "metatags": [
+           {
+             "article:published_time": "2016-08-10T17:12:44+00:00"
+           }
+         ]
+       }
+     };
+    var expected = "Wed, 10 Aug 2016";
+    var actual = RecommendationFetcher.extractDate(input, "nypost.com");
+    expect(actual).to.equal(expected);
+ });
+
+ it('should parse the date from the WSJ', function(){
+   var input = {
+       "pagemap": {
+       "webpage": [
+           {
+             "datecreated": "2012-01-31T23:27:00.000Z"
+           }
+         ]
+       }
+     };
+    var expected = "Tue, 31 Jan 2012";
+    var actual = RecommendationFetcher.extractDate(input, "wsj.com");
+    expect(actual).to.equal(expected);
+ });
+
+ it('should parse the date from the Atlantic', function(){
+   var input = {
+       "pagemap": {
+       "newsarticle": [
+           {
+             "datepublished": "2016-04-19T06:30:00"
+           }
+         ]
+       }
+     };
+    var expected = "Tue, 19 Apr 2016";
+    var actual = RecommendationFetcher.extractDate(input, "theatlantic.com");
+    expect(actual).to.equal(expected);
+ });
+
+ it("should parse nothing if there's nothing to parse", function(){
+   var input = {
+       "pagemap": {}
+     };
+    var expected = "";
+    var actual = RecommendationFetcher.extractDate(input);
+    expect(actual).to.equal(expected);
+ });
+
+});
+
 
 describe('#transformRecommendation()', function(){
   it('should take a recommendation and return an object with link, headline, description, and date',
@@ -111,7 +225,7 @@ describe('#transformRecommendation()', function(){
           headline: "'Moonlight' won best picture because of Oscars' version of Electoral ...",
           link: "http://www.foxnews.com/entertainment/2017/02/28/moonlight-won-best-picture-because-oscars-version-electoral-college.html",
           description: "The 89th annual Academy Awards have come and gone faster than those sweet treats that floated from the rafters during the fun-filled ceremony.",
-          date: "Tue Feb 28 2017"
+          date: "Tue, 28 Feb 2017"
        };
       expect(actual).to.eql(expected);
   });
