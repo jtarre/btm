@@ -20,19 +20,28 @@ RecommendationFetcher = {
     return date != undefined ? new Date(date).toUTCString().slice(0, cutoffIndex) : "";
   },
 
+  handlePropertyLookup: function(collection, field){
+    try {
+      return collection[0][field];
+    }
+    catch(err){
+      return undefined;
+    }
+  },
+
   extractDate: function(recommendation, publisher){
     var pagemap = recommendation.pagemap;
     var date;
     if (publisher === "foxnews.com"){
-      date = pagemap.metatags[0]['dc.date'];
+      date = this.handlePropertyLookup(pagemap.metatags, 'dc.date');
     } else if (publisher === "nationalreview.com"){
-      date = pagemap.article[0]['datepublished'];
+      date = this.handlePropertyLookup(pagemap.article, 'datepublished');
     } else if (publisher === "nypost.com"){
-      date = pagemap.metatags[0]['article:published_time'];
+      date = this.handlePropertyLookup(pagemap.metatags, 'article:published_time');
     } else if (publisher === "wsj.com"){
-      date = pagemap.webpage[0]['datecreated'];
+      date = this.handlePropertyLookup(pagemap.webpage, 'datecreated');
     } else if (publisher === "theatlantic.com"){
-      date = pagemap.newsarticle[0]['datepublished'];
+      date = this.handlePropertyLookup(pagemap.newsarticle, 'datepublished');
     }
     return this.formatDate(date);
   }

@@ -156,10 +156,23 @@ describe('#extractDate()', function(){
     var expected = "";
     var actual = RecommendationFetcher.extractDate(input);
     expect(actual).to.equal(expected);
+
+    input = {
+      "pagemap": {
+        "metatags": []
+      }
+    };
+
+    actual = RecommendationFetcher.extractDate(input, "foxnews.com")
+    expect(actual).to.equal(expected);
+
  });
 
 });
 
+describe('#extractDescription()', function(){
+
+});
 
 describe('#transformRecommendation()', function(){
   it('should take a recommendation and return an object with link, headline, description, and date',
