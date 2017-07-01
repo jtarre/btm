@@ -70,6 +70,15 @@ describe('#formatDate()', function(){
   });
 });
 
+describe('#handlePropertyLookup()', function(){
+  it('should return undefined if the input property does not exist', function(){
+    var input = [{"foo":"foo"},{"bar":"bar"}]
+    var expected = undefined;
+    var actual = RecommendationFetcher.handlePropertyLookup(input, "hello");
+    expect(actual).to.equal(expected);
+  });
+});
+
 describe('#extractDate()', function(){
   it('should parse the date from Foxnews', function(){
     var input = {
