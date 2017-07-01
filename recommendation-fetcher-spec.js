@@ -180,6 +180,117 @@ describe('#extractDate()', function(){
 });
 
 describe('#extractDescription()', function(){
+  it('should parse the description from Foxnews', function(){
+    var input = {
+        "pagemap": {
+        "metatags": [
+            {
+              "dc.description": "foo"
+            }
+          ]
+        }
+      };
+
+   var expected = "foo";
+   var actual = RecommendationFetcher.extractDescription(input, "foxnews.com");
+   expect(actual).to.equal(expected);
+  });
+
+  it('should parse the description from the national review', function(){
+    var input = {
+        "pagemap": {
+        "article": [
+            {
+              "articlebody": "foo"
+            }
+          ]
+        }
+      };
+
+   var expected = "foo";
+   var actual = RecommendationFetcher.extractDescription(input, "nationalreview.com");
+   expect(actual).to.equal(expected);
+  });
+
+  it('should parse the description from the ny post', function(){
+    var input = {
+        "pagemap": {
+        "metatags": [
+            {
+              "og:description": "foo"
+            }
+          ]
+        }
+      };
+
+   var expected = "foo";
+   var actual = RecommendationFetcher.extractDescription(input, "nypost.com");
+   expect(actual).to.equal(expected);
+  });
+
+  it('should parse the description from the WSJ', function(){
+    var input = {
+        "pagemap": {
+        "webpage": [
+            {
+              "description": "foo"
+            }
+          ]
+        }
+      };
+
+   var expected = "foo";
+   var actual = RecommendationFetcher.extractDescription(input, "wsj.com");
+   expect(actual).to.equal(expected);
+  });
+
+  it('should parse the description from the Atlantic', function(){
+    var input = {
+        "pagemap": {
+        "newsarticle": [
+            {
+              "description": "foo"
+            }
+          ]
+        }
+      };
+
+   var expected = "foo";
+   var actual = RecommendationFetcher.extractDescription(input, "theatlantic.com");
+   expect(actual).to.equal(expected);
+  });
+
+  it('should parse the description from vice', function(){
+    var input = {
+        "pagemap": {
+        "metatags": [
+            {
+              "og:description": "foo"
+            }
+          ]
+        }
+      };
+
+   var expected = "foo";
+   var actual = RecommendationFetcher.extractDescription(input, "vice.com");
+   expect(actual).to.equal(expected);
+  });
+
+  it('should parse the description from slate', function(){
+    var input = {
+        "pagemap": {
+        "metatags": [
+            {
+              "og:description": "foo"
+            }
+          ]
+        }
+      };
+
+   var expected = "foo";
+   var actual = RecommendationFetcher.extractDescription(input, "slate.com");
+   expect(actual).to.equal(expected);
+  });
 
 });
 

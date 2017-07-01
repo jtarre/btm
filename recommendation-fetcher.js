@@ -44,6 +44,27 @@ RecommendationFetcher = {
       date = this.handlePropertyLookup(pagemap.newsarticle, 'datepublished');
     }
     return this.formatDate(date);
+  },
+
+  extractDescription: function(recommendation, publisher){
+    var pagemap = recommendation.pagemap;
+    var description;
+    if (publisher === "foxnews.com"){
+      description = this.handlePropertyLookup(pagemap.metatags, 'dc.description');
+    } else if (publisher === "nationalreview.com"){
+      description = this.handlePropertyLookup(pagemap.article, 'articlebody');
+    } else if (publisher == "nypost.com"){
+      description = this.handlePropertyLookup(pagemap.metatags, 'og:description');
+    } else if (publisher === "wsj.com"){
+      description = this.handlePropertyLookup(pagemap.webpage, 'description');
+    } else if (publisher === "theatlantic.com"){
+      description = this.handlePropertyLookup(pagemap.newsarticle, 'description');
+    } else if (publisher === "vice.com"){
+      description = this.handlePropertyLookup(pagemap.metatags, 'og:description');
+    } else if (publisher === "slate.com"){
+      description = this.handlePropertyLookup(pagemap.metatags, 'og:description');
+    }
+    return description;
   }
 
   };
