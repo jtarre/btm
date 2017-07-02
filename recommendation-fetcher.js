@@ -65,6 +65,15 @@ RecommendationFetcher = {
       description = this.handlePropertyLookup(pagemap.metatags, 'og:description');
     }
     return description;
+  },
+
+  transformRecommendation: function(recommendation, publisher){
+    return {
+      headline: this.extractHeadline(recommendation, publisher),
+      link: this.extractLink(recommendation, publisher),
+      description: this.extractDescription(recommendation, publisher),
+      date: this.extractDate(recommendation, publisher)
+    };
   }
 
   };

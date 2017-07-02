@@ -355,7 +355,7 @@ describe('#transformRecommendation()', function(){
           ]
          }
        };
-      var actual = RecommendationFetcher.transformRecommendation(input);
+      var actual = RecommendationFetcher.transformRecommendation(input, "foxnews.com");
       var expected = {
           headline: "'Moonlight' won best picture because of Oscars' version of Electoral ...",
           link: "http://www.foxnews.com/entertainment/2017/02/28/moonlight-won-best-picture-because-oscars-version-electoral-college.html",
