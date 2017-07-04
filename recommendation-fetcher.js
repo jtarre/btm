@@ -14,7 +14,7 @@ RecommendationFetcher = {
   fetchRecommendations: function(apiKey, sites, search, fetch){
     var recommendationPromises = [];
     for (var i=0; i < sites.length; i++){
-      recommendations.push(this.fetchRecommendation(apiKey, sites[i], search, fetch));
+      recommendationPromises.push(this.fetchRecommendation(apiKey, sites[i], search, fetch));
     }
     return recommendationPromises;
   },
