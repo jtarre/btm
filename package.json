@@ -1,0 +1,26 @@
+{
+  "name": "bridge-the-media",
+  "version": "1.0.0",
+  "description": "## Important files in production:",
+  "main": "btm-facebook.js",
+  "dependencies": {
+    "chai": "^4.0.2"
+  },
+  "devDependencies": {
+    "chai": "^4.0.2",
+    "mocha": "^3.4.2"
+  },
+  "scripts": {
+    "test": "mocha --reporter=nyan ./*-spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anishpdalal/bridge-the-media.git"
+  },
+  "author": "@jtarre, @anishpdalal, @emtseng",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anishpdalal/bridge-the-media/issues"
+  },
+  "homepage": "https://github.com/anishpdalal/bridge-the-media#readme"
+}

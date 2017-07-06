@@ -28,7 +28,3 @@ Testing:
 
 - Currently using Mocha + Chai - see recommendation-fetcher-spec.js for an example
 - To run tests: mocha --reporter=nyan ./*-spec.js
-
-
-
-
