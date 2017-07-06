@@ -24,7 +24,7 @@ The goal is to separate the logic for embedding the BTM icon/Show Alternatives b
 	- should be responsible for registering events that use recommendation-fetcher for obtaining recommendations
 	- should be responsible for rendering recommendations into html that makes up the BTM popover
 
-## Testing:
+## Testing
 
 - Currently using Mocha + Chai - see recommendation-fetcher-spec.js for an example
 - To run tests: mocha --reporter=nyan ./*-spec.js
