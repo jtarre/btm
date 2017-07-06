@@ -62,8 +62,8 @@ module.exports = {
   },
 
   extractDate: function (recommendation, publisher) {
-    var pagemap = recommendation.pagemap;
-    var date;
+    const pagemap = recommendation.pagemap;
+    let date;
     switch (publisher) {
       case FOXNEWS:
         date = this.handlePropertyLookup(pagemap.metatags, 'dc.date')
@@ -87,24 +87,25 @@ module.exports = {
   },
 
   extractDescription: function (recommendation, publisher) {
-    var pagemap = recommendation.pagemap;
-    var description;
-    if (publisher === "foxnews.com") {
-      description = this.handlePropertyLookup(pagemap.metatags, 'dc.description');
-    } else if (publisher === "nationalreview.com") {
-      description = this.handlePropertyLookup(pagemap.article, 'articlebody');
-    } else if (publisher == "nypost.com") {
-      description = this.handlePropertyLookup(pagemap.metatags, 'og:description');
-    } else if (publisher === "wsj.com") {
-      description = this.handlePropertyLookup(pagemap.webpage, 'description');
-    } else if (publisher === "theatlantic.com") {
-      description = this.handlePropertyLookup(pagemap.newsarticle, 'description');
-    } else if (publisher === "vice.com") {
-      description = this.handlePropertyLookup(pagemap.metatags, 'og:description');
-    } else if (publisher === "slate.com") {
-      description = this.handlePropertyLookup(pagemap.metatags, 'og:description');
+    const pagemap = recommendation.pagemap;
+    switch (publisher) {
+      case FOXNEWS:
+        return this.handlePropertyLookup(pagemap.metatags, 'dc.description')
+      case NATLREVIEW:
+        return this.handlePropertyLookup(pagemap.article, 'articlebody')
+      case NYPOST:
+        return this.handlePropertyLookup(pagemap.metatags, 'og:description')
+      case WSJ:
+        return this.handlePropertyLookup(pagemap.webpage, 'description')
+      case ATLANTIC:
+        return this.handlePropertyLookup(pagemap.newsarticle, 'description')
+      case VICE:
+        return this.handlePropertyLookup(pagemap.metatags, 'og:description')
+      case SLATE:
+        return this.handlePropertyLookup(pagemap.metatags, 'og:description')
+      default:
+        return ''
     }
-    return description;
   },
 
   transformRecommendation: function (recommendation, publisher) {
