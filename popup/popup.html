@@ -1,0 +1,32 @@
+<!doctype html>
+<!--
+ This page is shown when the extension button is clicked, because the
+ "browser_action" field in manifest.json contains the "default_popup" key with
+ value "popup.html".
+ -->
+<html>
+
+<head>
+  <title>Bridge the Media</title>
+
+  <script src="https://code.jquery.com/jquery-3.2.0.js" integrity="sha256-wPFJNIFlVY49B+CuAIrDr932XSb6Jk3J1M22M3E2ylQ=" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" type="text/css" href="./popup.css">
+  <script src="./popup.js"></script>
+</head>
+
+<body>
+  <h1 class="btm-popup-header">Bridge the Media</h1>
+  <p class="btm-popup-body">
+    Here's how to begin challenging your perspective:
+    <ol>
+      <li>Navigate to <a href="https://www.nytimes.com" target="_blank">nytimes.com</a>, <a href="https://www.foxnews.com" target="_blank">foxnews.com</a>,
+        or <a href="https://www.facebook.com/" target="_blank">facebook.com</a></li>
+      <li>Hover over headlines (or click our logo when it appears beneath headlines on Facebook)</li>
+      <li>Check out our recommended articles </li>
+    </ol>
+  </p>
+  <script src="../search.js"></script>
+</body>
+
+</html>

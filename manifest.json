@@ -1,36 +1,42 @@
 {
   "manifest_version": 2,
-
   "name": "Bridge the Media",
   "description": "Get outside your bubble. Expand your horizons. Read across the political spectrum",
   "version": "1.5",
-  "icons": { "16": "btm_logo.png",
-           "48": "btm_logo.png",
-          "128": "btm_logo.png" },
-
+  "icons": {
+    "16": "icons/btm_logo.png",
+    "48": "icons/btm_logo.png",
+    "128": "icons/btm_logo.png"
+  },
   "browser_action": {
-    "default_icon": "btm_logo_32.png",
-    "default_popup": "popup.html",
+    "default_icon": "icons/btm_logo_32.png",
+    "default_popup": "popup/popup.html",
     "default_title": "Bridge the Media"
   },
-
   "background": {
-    "page" : "popup.html",
+    "page": "popup/popup.html",
     "persistent": false
   },
-
   "content_scripts": [
     {
-      "matches": ["http://www.nytimes.com/*",
-      "https://www.nytimes.com/*",
-      "http://www.foxnews.com/*",
-      "https://www.foxnews.com/*",
-      "https://www.facebook.com/*",
-      "http://www.facebook.com/*"
-
+      "matches": [
+        "http://www.nytimes.com/*",
+        "https://www.nytimes.com/*",
+        "http://www.foxnews.com/*",
+        "https://www.foxnews.com/*",
+        "https://www.facebook.com/*",
+        "http://www.facebook.com/*"
       ],
-      "css": ["font-awesome-4.7.0/css/font-awesome.css", "popup.css"],
-      "js": ["jquery-3.2.0.js", "link_hover.js", "btm-facebook.js", "bootstrap-3.3.7-dist/js/bootstrap.js"]
+      "css": [
+        "external/font-awesome-4.7.0/css/font-awesome.css",
+        "popup/popup.css"
+      ],
+      "js": [
+        "external/jquery-3.2.0.js",
+        "link_hover.js",
+        "btm-facebook.js",
+        "external/bootstrap-3.3.7-dist/js/bootstrap.js"
+      ]
     }
   ],
   "permissions": [
@@ -39,11 +45,11 @@
     "https://ajax.googleapis.com/",
     "https://cse.google.com/*"
   ],
-
-  "web_accessible_resources": ["font-awesome-4.7.0/fonts/fontawesome*",
-  "btm_logo_24.png",
-  "btm_logo_32.png",
-  "btm_logo.png"],
+  "web_accessible_resources": [
+    "external/font-awesome-4.7.0/fonts/fontawesome*",
+    "icons/btm_logo_24.png",
+    "icons/btm_logo_32.png",
+    "icons/btm_logo.png"
+  ],
   "content_security_policy": "script-src 'self' https://cse.google.com https://www.google.com https://code.jquery.com https://ssl.google-analytics.com; object-src 'self'"
-
 }
