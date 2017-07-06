@@ -37,4 +37,4 @@ document.addEventListener('DOMContentLoaded', function() {
 //     errorCallback('Network error.');
 //   };
 //   x.send();
-});
+})

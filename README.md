@@ -1,5 +1,7 @@
 # Bridge The Media Chrome Extension
 
+{VERSIONING INFO HERE}
+
 ## Important files in production
 
 - btm-facebook.js - Responsible for BTM icon embeddings on Facebook
