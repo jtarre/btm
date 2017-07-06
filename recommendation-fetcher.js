@@ -20,11 +20,9 @@ module.exports = {
   },
 
   getTransformedRecommendations: function (recommendations, sites) {
-    var transformedRecommendations = [];
-    var transformRecommendation;
-    for (var i = 0; i < recommendations.length; i++) {
-      transformedRecommendation = this.transformRecommendation(recommendation[i], sites[i]);
-      transformedRecommendations.push(transformRecommendation);
+    const transformedRecommendations = [];
+    for (let i = 0; i < recommendations.length; i++) {
+      transformedRecommendations.push(this.transformRecommendation(recommendations[i], sites[i]));
     }
     return transformedRecommendations;
   },
