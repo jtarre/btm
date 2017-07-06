@@ -216,8 +216,7 @@ $(function() {
 		var sites = spectrum_sites[window.location.hostname];
 		var site_promises = siteSearches(sites, slug);
 		$.when.apply($, site_promises)
-		.then(function() { // this is the promise part of the site
-			var search_results = Array.prototype.slice.call(arguments);
+		.then((search_results) => { // this is the promise part of the site
 			console.log('(init page hover) search results:', search_results);
 			var popup = createPopup(search_results, slug);
 			console.log('(btmHover) popup:', popup)
@@ -523,9 +522,8 @@ $(function() {
 		var sites = spectrum_sites[window.location.hostname];
 		var site_promises = siteSearches(sites, slug);
 		$.when.apply($, site_promises)
-		.then(function() { // this is the promise part of the site
+		.then((search_results) => { // this is the promise part of the site
 			$('#btm-btn-' + slug).hide();
-			var search_results = Array.prototype.slice.call(arguments);
 			var popup = createPopup(search_results, slug);
 			// add popup to page
 			$('#btm-popover-body-' + slug).after(popup);
