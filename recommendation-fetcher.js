@@ -40,8 +40,8 @@ module.exports = {
   },
 
   formatDate: function (date) {
-    var cutoffIndex = 16;
-    return date != undefined ? new Date(date).toUTCString().slice(0, cutoffIndex) : "";
+    const cutoffIndex = 16;
+    return date !== undefined ? new Date(date).toUTCString().slice(0, cutoffIndex) : '';
   },
 
   handlePropertyLookup: function (collection, field) {
