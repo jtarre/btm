@@ -1,3 +1,11 @@
+const FOXNEWS = "foxnews.com"
+    , NATLREVIEW = "nationalreview.com"
+    , NYPOST = "nypost.com"
+    , WSJ = "wsj.com"
+    , ATLANTIC = "theatlantic.com"
+    , VICE = "vice.com"
+    , SLATE = "slate.com";
+
 module.exports = {
 
   fetchRecommendation: function (apiKey, site, search, fetch) {
@@ -56,18 +64,26 @@ module.exports = {
   extractDate: function (recommendation, publisher) {
     var pagemap = recommendation.pagemap;
     var date;
-    if (publisher === "foxnews.com") {
-      date = this.handlePropertyLookup(pagemap.metatags, 'dc.date');
-    } else if (publisher === "nationalreview.com") {
-      date = this.handlePropertyLookup(pagemap.article, 'datepublished');
-    } else if (publisher === "nypost.com") {
-      date = this.handlePropertyLookup(pagemap.metatags, 'article:published_time');
-    } else if (publisher === "wsj.com") {
-      date = this.handlePropertyLookup(pagemap.webpage, 'datecreated');
-    } else if (publisher === "theatlantic.com") {
-      date = this.handlePropertyLookup(pagemap.newsarticle, 'datepublished');
+    switch (publisher) {
+      case FOXNEWS:
+        date = this.handlePropertyLookup(pagemap.metatags, 'dc.date')
+        break
+      case NATLREVIEW:
+        date = this.handlePropertyLookup(pagemap.article, 'datepublished')
+        break
+      case NYPOST:
+        date = this.handlePropertyLookup(pagemap.metatags, 'article:published_time')
+        break
+      case WSJ:
+        date = this.handlePropertyLookup(pagemap.webpage, 'datecreated')
+        break
+      case ATLANTIC:
+        date = this.handlePropertyLookup(pagemap.newsarticle, 'datepublished')
+        break
+      default:
+        break;
     }
-    return this.formatDate(date);
+    return this.formatDate(date)
   },
 
   extractDescription: function (recommendation, publisher) {
