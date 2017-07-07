@@ -1,10 +1,10 @@
 const FOXNEWS = "foxnews.com"
-    , NATLREVIEW = "nationalreview.com"
-    , NYPOST = "nypost.com"
-    , WSJ = "wsj.com"
-    , ATLANTIC = "theatlantic.com"
-    , VICE = "vice.com"
-    , SLATE = "slate.com";
+  , NATLREVIEW = "nationalreview.com"
+  , NYPOST = "nypost.com"
+  , WSJ = "wsj.com"
+  , ATLANTIC = "theatlantic.com"
+  , VICE = "vice.com"
+  , SLATE = "slate.com";
 
 module.exports = {
 
@@ -23,11 +23,8 @@ module.exports = {
     return recommendationPromises;
   },
 
-  //Should results be recommendations?
-  getRecommendations: function(recommendationPromises){
-    var recommendations;
-    $.when.apply($, recommendationPromises).then(results => results)
-    return recommendations;
+  getRecommendations: function (recommendationPromises) {
+    return Promise.all(recommendationPromises).then(results => results)
   },
 
   getTransformedRecommendations: function (recommendations, sites) {
@@ -39,7 +36,7 @@ module.exports = {
   },
 
   extractHeadline: function (recommendation, publisher) {
-    if (publisher === NATLREVIEW) {
+    if (publisher === "nationalreview.com") {
       var headline = recommendation.pagemap.article[0].headline;
       return headline !== undefined ? headline : recommendation.title;
     }
