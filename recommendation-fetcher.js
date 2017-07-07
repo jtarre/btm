@@ -23,12 +23,9 @@ module.exports = {
     return recommendationPromises;
   },
 
+  //Should results be recommendations?
   getRecommendations: function(recommendationPromises){
-    var recommendations;
-    $.when.apply($, recommendationPromises).then(function(){
-      results = Array.prototype.slice.call(arguments);
-    })
-    return recommendations;
+    return $.when.apply($, recommendationPromises).then(results => results)
   },
 
   getTransformedRecommendations: function (recommendations, sites) {
