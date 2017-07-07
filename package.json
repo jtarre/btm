@@ -1,7 +1,7 @@
 {
   "name": "bridge-the-media",
   "version": "1.0.0",
-  "description": "## Important files in production:",
+  "description": "",
   "main": "btm-facebook.js",
   "dependencies": {
     "chai": "^4.0.2"

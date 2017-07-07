@@ -29,7 +29,7 @@
       ],
       "css": [
         "external/font-awesome-4.7.0/css/font-awesome.css",
-        "popup/popup.css"
+        "btm.css"
       ],
       "js": [
         "external/jquery-3.2.0.js",
@@ -47,7 +47,8 @@
   ],
   "web_accessible_resources": [
     "external/font-awesome-4.7.0/fonts/fontawesome*",
-    "icons/*.png"
+    "icons/*.png",
+    "btm.css"
   ],
   "content_security_policy": "script-src 'self' https://cse.google.com https://www.google.com https://code.jquery.com https://ssl.google-analytics.com; object-src 'self'"
 }

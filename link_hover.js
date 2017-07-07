@@ -388,7 +388,10 @@ $(function() {
 	}
 
 	function siteSearches(sites, slug) {
-		return sites.map((site) => siteSearch(site, slug))
+		return sites.map(function(site) {
+			var site_ajax = siteSearch(site, slug);
+			return site_ajax;
+		})
 	}
 
 	function siteSearch(site, search) {
