@@ -39,7 +39,7 @@ module.exports = {
   },
 
   extractHeadline: function (recommendation, publisher) {
-    if (publisher === "nationalreview.com") {
+    if (publisher === NATLREVIEW) {
       var headline = recommendation.pagemap.article[0].headline;
       return headline !== undefined ? headline : recommendation.title;
     }
