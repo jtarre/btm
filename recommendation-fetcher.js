@@ -25,7 +25,9 @@ module.exports = {
 
   //Should results be recommendations?
   getRecommendations: function(recommendationPromises){
-    return $.when.apply($, recommendationPromises).then(results => results)
+    var recommendations;
+    $.when.apply($, recommendationPromises).then(results => results)
+    return recommendations;
   },
 
   getTransformedRecommendations: function (recommendations, sites) {
