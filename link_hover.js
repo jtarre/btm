@@ -214,8 +214,8 @@ $(function() {
 		$('body').append($(btmHover));
 		var sites = spectrum_sites[window.location.hostname];
 		var site_promises = siteSearches(sites, slug);
-		$.when.apply($, site_promises)
-		.then((search_results) => { // this is the promise part of the site
+		Promise.all(site_promises)
+		.then(function(search_results) { // this is the promise part of the site
 			console.log('(init page hover) search results:', search_results);
 			var popup = createPopup(search_results, slug);
 			console.log('(btmHover) popup:', popup)
@@ -439,7 +439,9 @@ $(function() {
 	// css and html for each news snippet
 	function createPopup(search_results, slug, style_addition) {
 		if(!style_addition) style_addition = "";
+
 		var html = "<div style='margin:10px;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;" + style_addition +"'><ul class='list-unstyled'>";
+
 		var html_style =
 		"color: black;" +
 		  // "padding: 1px;" +
@@ -450,11 +452,14 @@ $(function() {
 		  "line-height: 1.42857143;" +
 		  "text-align: left;" +
 		  "text-align: start;";
+
 		var site_title;
-		search_results.forEach(function(search_result) {
-			if(search_result && search_result[0].items) html += "<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>" + item_template(search_result[0]["queries"]["request"][0]["siteSearch"], search_result[0].items[0], slug) + "</li>";
-			else {
-				site_title = get_site_title[search_result[0]["queries"]["request"][0]["siteSearch"]];
+
+		search_results.forEach((search_result) => {
+			if (search_result && search_result.items[0]) {
+				html += "<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>" + item_template(search_result["queries"]["request"][0]["siteSearch"], search_result.items[0], slug) + "</li>";
+			} else {
+				site_title = get_site_title[search_result["queries"]["request"][0]["siteSearch"]];
 
 				html += "<li><p style='" + html_style + "'><strong style='font-family: PT Serif;color:black;font-size:12px'>" + site_title + "</strong></br><span style='font-family: PT Serif;color:black;font-size:12px'>No Results</span></li>"
 			}
@@ -520,8 +525,8 @@ $(function() {
 	function displayArticles(slug, event) {
 		var sites = spectrum_sites[window.location.hostname];
 		var site_promises = siteSearches(sites, slug);
-		$.when.apply($, site_promises)
-		.then((search_results) => { // this is the promise part of the site
+		Promise.all(site_promises)
+		.then(function(search_results) { // this is the promise part of the site
 			$('#btm-btn-' + slug).hide();
 			var popup = createPopup(search_results, slug);
 			// add popup to page
