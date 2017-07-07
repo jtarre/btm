@@ -135,7 +135,7 @@ $(function() {
 						slug_list[slug] = 1;
 						$newsfeed_post = $element.closest('.fbUserContent').first(); // this is wrong level of abstraction. where to start. let's make the thing work.
 						$post_text = $newsfeed_post.find('.userContent');
-						var btmimg = chrome.runtime.getURL('btm_logo.png');
+						var btmimg = chrome.runtime.getURL('icons/btm_logo.png');
 						var $btm_button = $('<p><a href="javascript:void(0);"><img src="' + btmimg + '" height="24" width="26"></a></p>');
 						var popover_html = getPopoverHtml(slug);
 						var content = '<div id="btm-popover-body-' + slug + '"><div id="btm-loading-' + slug + '"><p>Loading...</p></div></div>';

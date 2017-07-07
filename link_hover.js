@@ -110,7 +110,7 @@ $(function() {
 
 	var domain = window.location.hostname.split('www.')[1];
 	// use the title of current website (eg. NY Times) to help categorize click eventd
-	var originTitle = (get_site_title[domain] != undefined ? get_site_title[domain] : domain);
+	var originTitle = (get_site_title[domain] !== undefined ? get_site_title[domain] : domain);
 	var originUrl; // Url of current website that gets defined when user clicks on a recommendation link
 	var startTime = new Date(); //start tracking time spent on web page
 	var endTime; // set this when a user clicks on a recommendation
@@ -128,7 +128,7 @@ $(function() {
 		var href_segments;
 		var slug = "";
 		var last;
-		switch(window.location.hostname){
+		switch (window.location.hostname) {
 			case "www.nytimes.com":
 				href_segments = href.split("/");
 				slug = href_segments[href_segments.length-1];
@@ -138,7 +138,6 @@ $(function() {
 				break;
 			case "www.cnn.com":
 				href_segments = href.split("/");
-
 				last = href_segments[href_segments.length-1];
 				if(last == "index.html"){
 					slug = href_segments[href_segments.length-2];

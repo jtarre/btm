@@ -47,9 +47,7 @@
   ],
   "web_accessible_resources": [
     "external/font-awesome-4.7.0/fonts/fontawesome*",
-    "icons/btm_logo_24.png",
-    "icons/btm_logo_32.png",
-    "icons/btm_logo.png"
+    "icons/*.png"
   ],
   "content_security_policy": "script-src 'self' https://cse.google.com https://www.google.com https://code.jquery.com https://ssl.google-analytics.com; object-src 'self'"
 }

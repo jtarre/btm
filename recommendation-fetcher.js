@@ -23,8 +23,12 @@ module.exports = {
     return recommendationPromises;
   },
 
-  getRecommendations: function (recommendationPromises) {
-    return $.when.apply($, recommendationPromises).then(results => results)
+  getRecommendations: function(recommendationPromises){
+    var recommendations;
+    $.when.apply($, recommendationPromises).then(function(){
+      results = Array.prototype.slice.call(arguments);
+    })
+    return recommendations;
   },
 
   getTransformedRecommendations: function (recommendations, sites) {
