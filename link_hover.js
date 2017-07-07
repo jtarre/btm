@@ -109,7 +109,7 @@ $(function() {
 	}
 
 	var domain = window.location.hostname.split('www.')[1];
-	// use the title of current website (eg. NY Times) to help categorize click eventd
+	// use the title of current website (eg. NY Times) to help categorize click event
 	var originTitle = (get_site_title[domain] !== undefined ? get_site_title[domain] : domain);
 	var originUrl; // Url of current website that gets defined when user clicks on a recommendation link
 	var startTime = new Date(); //start tracking time spent on web page
@@ -388,10 +388,7 @@ $(function() {
 	}
 
 	function siteSearches(sites, slug) {
-		return sites.map(function(site) {
-			var site_ajax = siteSearch(site, slug);
-			return site_ajax;
-		})
+		return sites.map((site) => siteSearch(site, slug))
 	}
 
 	function siteSearch(site, search) {
