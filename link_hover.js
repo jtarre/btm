@@ -109,8 +109,8 @@ $(function() {
 	}
 
 	var domain = window.location.hostname.split('www.')[1];
-	// use the title of current website (eg. NY Times) to help categorize click eventd
-	var originTitle = (get_site_title[domain] != undefined ? get_site_title[domain] : domain);
+	// use the title of current website (eg. NY Times) to help categorize click event
+	var originTitle = (get_site_title[domain] !== undefined ? get_site_title[domain] : domain);
 	var originUrl; // Url of current website that gets defined when user clicks on a recommendation link
 	var startTime = new Date(); //start tracking time spent on web page
 	var endTime; // set this when a user clicks on a recommendation
@@ -128,7 +128,7 @@ $(function() {
 		var href_segments;
 		var slug = "";
 		var last;
-		switch(window.location.hostname){
+		switch (window.location.hostname) {
 			case "www.nytimes.com":
 				href_segments = href.split("/");
 				slug = href_segments[href_segments.length-1];
@@ -138,7 +138,6 @@ $(function() {
 				break;
 			case "www.cnn.com":
 				href_segments = href.split("/");
-
 				last = href_segments[href_segments.length-1];
 				if(last == "index.html"){
 					slug = href_segments[href_segments.length-2];
@@ -215,9 +214,8 @@ $(function() {
 		$('body').append($(btmHover));
 		var sites = spectrum_sites[window.location.hostname];
 		var site_promises = siteSearches(sites, slug);
-		$.when.apply($, site_promises)
-		.then(function() { // this is the promise part of the site
-			var search_results = Array.prototype.slice.call(arguments);
+		Promise.all(site_promises)
+		.then(function(search_results) { // this is the promise part of the site
 			console.log('(init page hover) search results:', search_results);
 			var popup = createPopup(search_results, slug);
 			console.log('(btmHover) popup:', popup)
@@ -260,7 +258,7 @@ $(function() {
 	initNewsPageHover();
 
 	// initialization for a home page such as nytimes.com or foxnews.com
-	// this is the place where we specify what parts of the page have the btm 
+	// this is the place where we specify what parts of the page have the btm
 	// hover made active. if you want to change, come here.
 	function initAnchor() {
 		var $a;
@@ -320,7 +318,7 @@ $(function() {
 	var $a = initAnchor();
 
 	// todo: wrap in a function call
-	// this each loop 1) turns each link into a popover enabled link and 
+	// this each loop 1) turns each link into a popover enabled link and
 	// 2) it specifies the html and code for the popover.
 	$a.each(function(index, link) {
 		$link = $(link);
@@ -349,7 +347,7 @@ $(function() {
 		  "text-align: left;" +
 		  "text-align: start;";
 			// todo: this should be its own function for clarity
-			$link.popover({trigger: "manual", // this code right here initializes the popover. 
+			$link.popover({trigger: "manual", // this code right here initializes the popover.
 
 						html: "true",
 						template: popover_html,
@@ -357,13 +355,13 @@ $(function() {
 						placement: placement,
 						content: content
 					})
-					.on("mouseenter", popoverEnter.bind($link, slug)) 
+					.on("mouseenter", popoverEnter.bind($link, slug))
 		}
 	})
-	
+
 	// this function defines how the popover interacts with the mouse
 	// e.g. how long you have to hover over a link before the bubble pops up
-	// this is 
+	// this is
 	function popoverEnter (slug) {
 		var $link = this;
 		originUrl = $link.attr("href");
@@ -382,7 +380,7 @@ $(function() {
 				}, 500)
 			}
 		}, 900); // this is how long the hover waits before displaying
-		// todo: 
+		// todo:
 	}
 
 	function hidePopover(event) {
@@ -441,7 +439,9 @@ $(function() {
 	// css and html for each news snippet
 	function createPopup(search_results, slug, style_addition) {
 		if(!style_addition) style_addition = "";
+
 		var html = "<div style='margin:10px;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;" + style_addition +"'><ul class='list-unstyled'>";
+
 		var html_style =
 		"color: black;" +
 		  // "padding: 1px;" +
@@ -452,11 +452,14 @@ $(function() {
 		  "line-height: 1.42857143;" +
 		  "text-align: left;" +
 		  "text-align: start;";
+
 		var site_title;
-		search_results.forEach(function(search_result) {
-			if(search_result && search_result[0].items) html += "<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>" + item_template(search_result[0]["queries"]["request"][0]["siteSearch"], search_result[0].items[0], slug) + "</li>";
-			else {
-				site_title = get_site_title[search_result[0]["queries"]["request"][0]["siteSearch"]];
+
+		search_results.forEach((search_result) => {
+			if (search_result && search_result.items[0]) {
+				html += "<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>" + item_template(search_result["queries"]["request"][0]["siteSearch"], search_result.items[0], slug) + "</li>";
+			} else {
+				site_title = get_site_title[search_result["queries"]["request"][0]["siteSearch"]];
 
 				html += "<li><p style='" + html_style + "'><strong style='font-family: PT Serif;color:black;font-size:12px'>" + site_title + "</strong></br><span style='font-family: PT Serif;color:black;font-size:12px'>No Results</span></li>"
 			}
@@ -522,10 +525,9 @@ $(function() {
 	function displayArticles(slug, event) {
 		var sites = spectrum_sites[window.location.hostname];
 		var site_promises = siteSearches(sites, slug);
-		$.when.apply($, site_promises)
-		.then(function() { // this is the promise part of the site
+		Promise.all(site_promises)
+		.then(function(search_results) { // this is the promise part of the site
 			$('#btm-btn-' + slug).hide();
-			var search_results = Array.prototype.slice.call(arguments);
 			var popup = createPopup(search_results, slug);
 			// add popup to page
 			$('#btm-popover-body-' + slug).after(popup);
