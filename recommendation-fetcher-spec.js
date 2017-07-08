@@ -416,4 +416,32 @@ describe('#transformRecommendation()', function(){
         });
     });
 
+    describe('#extractRecommendation()', function(){
+      it('should take a raw result from a resolved promise and return the first record from the items field', function(){
+        var apiKey = 'some key';
+        var recommendations;
+        var sites = ['foxnews.com'];
+        var search = 'some search';
+        var fakeData = {
+              "items": [exampleRecommendation]
+            };
+            var fakeFetcher = function(url){
+              var expectedURL = 'https://www.googleapis.com/customsearch/v1?q=' +
+              search + ' &cx=013013877924597244999%3Atbq0ixuctim&dateRestrict=m[7]&siteSearch=' +
+              sites[0] + '&key=' + apiKey;
+              expect(url).to.equal(expectedURL);
+              return Promise.resolve(fakeData);
+            }
+
+            var promises = RecommendationFetcher.fetchRecommendations(apiKey, sites, search, fakeFetcher);
+            Promise.all(promises)
+              .then(rawResults => {
+                recommendations = rawResults.map(entry => RecommendationFetcher.extractRecommendation);
+                expect(recommendations[0]).to.eql(exampleRecommendation);
+                expect(recommendations.length).to.equal(1);
+              });
+
+        });
+    });
+
 });

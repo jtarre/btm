@@ -1,3 +1,4 @@
+'use strict';
 const FOXNEWS = "foxnews.com"
   , NATLREVIEW = "nationalreview.com"
   , NYPOST = "nypost.com"
@@ -23,8 +24,8 @@ module.exports = {
     return recommendationPromises;
   },
 
-  getRecommendations: function (recommendationPromises) {
-    return Promise.all(recommendationPromises).then(results => results)
+  extractRecommendation: function (rawResult) {
+    return rawResult.items[0];
   },
 
   getTransformedRecommendations: function (recommendations, sites) {
@@ -118,4 +119,3 @@ module.exports = {
   }
 
 };
-
