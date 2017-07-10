@@ -312,6 +312,11 @@ $(function() {
 				$a = $('a');
 		}
 		console.log('(init before return) a links:', $a);
+		$a = $a.filter(function(index){
+			href = $(this).attr("href");
+			return href.includes("/politics/") || href.includes("/opinion/");
+		})
+
 		return $a;
 	}
 
