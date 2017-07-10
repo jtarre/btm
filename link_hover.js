@@ -1,22 +1,45 @@
 $(function() {
 
-
-	// if(chrome && chrome.runtime && chrome.runtime.onUpdateAvailble) {
-	// 	chrome.runtime.onUpdateAvailable.addListener(function(details) {
-	// 	  chrome.runtime.reload();
-	// 	});
-	// }
-
-
 	/** Current Algorithm **/
 	/** on a per site basis **/
 	/*
-	Switch statements abound
-	1. Identify the links - initAnchor (switch)
-	2. Identify the slugs - getSlug (switch)
-	displayPopup
+
+	High Level Overview:
+
+	1. Identify the links when web page loads - initAnchor
+	2. For each link, get slug and setup the popover title and empty body that will eventually be filled
+	3. When Show Alternatives button is clicked, get Google search results
 	3. Google search based on site searches - siteSearches
 	4. Create Popup - createPopup / create_item_template (getPopupDetails (switch)) / createItemHtml
+
+	New Proposed Algorithm for Jurisdiction:
+
+	1. Identify the links when web page loads
+	 	- Get all anchors in predefined sections of site
+		- Filter anchors based on whether they have "opinion" or "politics" in href
+		- Possibly further filter opinion anchors that only are associated with certain authors
+
+	2. Do a Google Search for each anchor's slug/site combo and return a list of promises
+		- store promises and hrefs in separate lists but with aligned indices
+		- eg. hrefs = ["foo", "foo", "bar"] , promises = [Promise1, Promse2, Promise 3]
+		- "foo" has promises Promise 1 and Promise 2, bar has Promise 3
+
+	3. Once all resolved promises (ie. recommmendations) are fulfilled or rejected, filter the ones out that don't have any 'items'
+		- this means making the value at the index for the list of promises as 'undefined'
+		- Other option is to lookup resolved value not as a key but one of many values in a hash table ==> that's slower then array lookups
+
+	4. For each recommendation, parse out link, headline, description, date, site title
+
+	5. For any anchors that have at least one recommendation with link, headline, description, date, and site title, embed btm icon next to that anchor
+
+	6. When btm icon is clicked, identify anchor it's associated with and create popover that displays recommendations in html form
+		- to lookup the right recommendations, find first instance of href in dictionary
+		- get that index + len(complimentary_sites) == range of indices
+		- lookup values in recommendations at those indices and ignore undefined
+		- for defined recommendations, call some function that converts recommendation object to html string
+
+
+
 
 	 */
 
