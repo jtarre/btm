@@ -50,11 +50,6 @@ $(function() {
 	  "box-shadow: 0 5px 10px rgba(0, 0, 0, .2);" +
   		"line-break: auto;" +
   		"z-index: 25";
-  	// i think each and every div and element needs separate styling to break
-  	// with the styling of the page
-  	// impatience slows me down
-  	// work through methodically, without checking facebook
-  	// adn the development will proceed at its own pace
 
   	var popover_title_style =
 		"color: black;" +
@@ -215,7 +210,7 @@ $(function() {
 		var sites = spectrum_sites[window.location.hostname];
 		var site_promises = siteSearches(sites, slug);
 		Promise.all(site_promises)
-		.then(function(search_results) { // this is the promise part of the site
+		.then((search_results) => {
 			console.log('(init page hover) search results:', search_results);
 			var popup = createPopup(search_results, slug);
 			console.log('(btmHover) popup:', popup)
