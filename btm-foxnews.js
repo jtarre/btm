@@ -154,7 +154,7 @@ $(function() {
 			$element = $(element);
 			href = $element.attr('href')
 			var btmimg = chrome.runtime.getURL('icons/btm_logo.png');
-		  var $btm_button = $('<a href="javascript:void(0);"><img src="' + btmimg + '" height="24" width="26"></a>');
+		  var $btm_button = $('<a href="javascript:void(0);"><img src="' + btmimg + '" height="20" width="20"></a>');
 		  var popover_html = getPopoverHtml(slug);
 			var content = '<div id="btm-popover-body-' + slug + '"><div id="btm-loading-' + slug + '"><p>Loading...</p></div></div>';
 			var title_style =
@@ -174,7 +174,7 @@ $(function() {
 								title: "<span style='" + title_style +"'>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>",
 								content: content
 							})
-						$element.parent().append($btm_button);
+						$btm_button.insertAfter($element);
 						$btm_button.on('shown.bs.popover', initPopover.bind($btm_button, slug, href));
 						$btm_button.on('shown.bs.popover', hidePopoverIfUnused.bind($btm_button, slug));
 
