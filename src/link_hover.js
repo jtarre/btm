@@ -1,6 +1,6 @@
-// import searcher from './btm-media.js';
+import { searcher } from './btm-media.js';
 
-const searcher = '&key=AIzaSyBS3sgS67eZkQRC_A7LZZG82AFeyBt8FW8'
+// const searcher = '&key=AIzaSyBS3sgS67eZkQRC_A7LZZG82AFeyBt8FW8'
 
 /* ---------- STYLES --------- */
 
@@ -100,8 +100,6 @@ function getPopoverHtml(slug) {
 
 
 $(function () {
-	debugger
-
 	// if(chrome && chrome.runtime && chrome.runtime.onUpdateAvailble) {
 	// 	chrome.runtime.onUpdateAvailable.addListener(function(details) {
 	// 	  chrome.runtime.reload();
@@ -122,8 +120,8 @@ $(function () {
 	 */
 
 	const domain = window.location.hostname.split('www.')[1]
-			, pathname = window.location.pathname
-			, originTitle = siteTitles[domain] !== undefined ? siteTitles[domain] : domain;
+		, pathname = window.location.pathname
+		, originTitle = siteTitles[domain] !== undefined ? siteTitles[domain] : domain;
 
 	let originUrl //url of current website
 		, endTime //this will be set when the user clicks on a recommendation
@@ -168,7 +166,6 @@ $(function () {
 	}
 
 	function initNewsPageHover() {
-		debugger
 		const pathnameArr = pathname.split('/');
 		let btmHover, btmButton, slug, side;
 		if (pathnameArr.length > 5) { // it's a news page, at least for fox news, need to add hover to bottom left of page
