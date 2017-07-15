@@ -70,11 +70,9 @@
 "use strict";
 
 
-var _btmMedia = __webpack_require__(1);
+// import searcher from './btm-media.js';
 
-var _btmMedia2 = _interopRequireDefault(_btmMedia);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var searcher = '&key=AIzaSyBS3sgS67eZkQRC_A7LZZG82AFeyBt8FW8';
 
 /* ---------- STYLES --------- */
 
@@ -87,15 +85,15 @@ var popover_title_style = "color: black;" +
 var btn_primary_style = "color: #4665B0;" + "background-color: #FECC08;" + "font-size:14px" + "font-family: PT Serif, serif" + "border-color: black;" + "margin: 10px";
 
 var spectrum_sites = {
-	"www.nytimes.com": ["foxnews.com", "nationalreview.com", "wsj.com", "nypost.com"],
-	"www.cnn.com": ["thehill.com", "thefiscaltimes.com", "forbes.com", "economist.com"],
-	"www.foxnews.com": ["theatlantic.com", "vice.com", "slate.com"],
-	"www.politico.com": ["nypost.com", "foxnews.com", "washingtontimes.com"],
-	"www.vox.com": ["nypost.com", "foxnews.com", "washingtontimes.com"],
-	"www.nbcnews.com": ["nypost.com", "foxnews.com", "washingtontimes.com"]
+	"nytimes.com": ["foxnews.com", "nationalreview.com", "wsj.com", "nypost.com"],
+	"cnn.com": ["thehill.com", "thefiscaltimes.com", "forbes.com", "economist.com"],
+	"foxnews.com": ["theatlantic.com", "vice.com", "slate.com"],
+	"politico.com": ["nypost.com", "foxnews.com", "washingtontimes.com"],
+	"vox.com": ["nypost.com", "foxnews.com", "washingtontimes.com"],
+	"nbcnews.com": ["nypost.com", "foxnews.com", "washingtontimes.com"]
 };
 
-var get_site_title = {
+var siteTitles = {
 	"foxnews.com": "Fox News",
 	"nationalreview.com": "National Review",
 	"wsj.com": "Wall Street Journal",
@@ -112,9 +110,15 @@ var get_site_title = {
 	"reason.com": "Reason",
 	"telegraph.co.uk": "The Telegraph",
 	"nytimes.com": "NY Times"
-};
+
+	/* ------- HELPER FUNCTIONS ------- */
+
+};function getPopoverHtml(slug) {
+	return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popover_style + '">' + '<div class="arrow"></div>' + '<h3 style="' + popover_title_style + '" class="popover-title"><span>&times;</span></h3>' + '<div data-slug="' + slug + '" class="popover-content">' + '</div>' + '</div>';
+}
 
 $(function () {
+	debugger;
 
 	// if(chrome && chrome.runtime && chrome.runtime.onUpdateAvailble) {
 	// 	chrome.runtime.onUpdateAvailable.addListener(function(details) {
@@ -134,30 +138,29 @@ $(function () {
  4. Create Popup - createPopup / create_item_template (getPopupDetails (switch)) / createItemHtml
  	 */
 
-	var domain = window.location.hostname.split('www.')[1];
-	// use the title of current website (eg. NY Times) to help categorize click event
-	var originTitle = get_site_title[domain] !== undefined ? get_site_title[domain] : domain;
-	var originUrl; // Url of current website that gets defined when user clicks on a recommendation link
-	var startTime = new Date(); //start tracking time spent on web page
-	var endTime; // set this when a user clicks on a recommendation
+	var domain = window.location.hostname.split('www.')[1],
+	    pathname = window.location.pathname,
+	    originTitle = siteTitles[domain] !== undefined ? siteTitles[domain] : domain;
 
-	function getPopoverHtml(slug) {
-		return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popover_style + '">' + '<div class="arrow"></div>' + '<h3 style="' + popover_title_style + '" class="popover-title"><span>&times;</span></h3>' + '<div data-slug="' + slug + '" class="popover-content">' + '</div>' + '</div>';
-	}
+	var originUrl = void 0 //url of current website
+	,
+	    endTime = void 0 //this will be set when the user clicks on a recommendation
+	,
+	    startTime = new Date(); //this is initialized at the current time
 
 	function getSlug(href) {
 		var href_segments;
 		var slug = "";
 		var last;
-		switch (window.location.hostname) {
-			case "www.nytimes.com":
+		switch (domain) {
+			case "nytimes.com":
 				href_segments = href.split("/");
 				slug = href_segments[href_segments.length - 1];
 				slug = slug.replace(/\d+/g, "");
 				slug = slug.split(".", 1);
 				slug = slug[0];
 				break;
-			case "www.cnn.com":
+			case "cnn.com":
 				href_segments = href.split("/");
 				last = href_segments[href_segments.length - 1];
 				if (last == "index.html") {
@@ -168,7 +171,7 @@ $(function () {
 					break;
 				}
 				break;
-			case "www.foxnews.com":
+			case "foxnews.com":
 				href_segments = href.split("/");
 				slug = href_segments[href_segments.length - 1];
 				slug = slug.replace(/\d+/g, "");
@@ -184,37 +187,27 @@ $(function () {
 	}
 
 	function initNewsPageHover() {
-		var btmHover;
-		var btmButton;
-		var slug;
-		var pathname = window.location.pathname;
-		var pathname_split = pathname.split('/');
-		if (pathname_split.length > 5) {
+		debugger;
+		var pathnameArr = pathname.split('/');
+		var btmHover = void 0,
+		    btmButton = void 0,
+		    slug = void 0,
+		    side = void 0;
+		if (pathnameArr.length > 5) {
 			// it's a news page, at least for fox news, need to add hover to bottom left of page
-			switch (window.location.hostname) {
-				case "www.foxnews.com":
-					console.log('(init page news hover) pathname:', pathname_split);
-					slug = pathname_split[pathname_split.length - 1];
-					slug = slug.replace('.html', '');
+			switch (domain) {
+				case 'foxnews.com':
+					console.log('(init page news hover) pathname:', pathnameArr);
+					slug = pathnameArr[pathnameArr.length - 1].replace('.html', '');
 					console.log('(init page hover (switch)) slug:', slug);
+					side = 'left';
 					break;
-				case "www.nytimes.com":
-					slug = pathname_split[pathname_split.length - 1];
-					slug = slug.replace('.html', '');
-					break;
-				default:
-					break;
-			}
-			var side;
-			switch (window.location.hostname) {
-				case "www.nytimes.com":
-					side = "right";
-					break;
-				case "www.foxnews.com":
-					side = "left";
+				case 'nytimes.com':
+					slug = pathnameArr[pathnameArr.length - 1].replace('.html', '');
+					side = 'right';
 					break;
 				default:
-					side = "right";
+					side = 'right';
 					break;
 			}
 
@@ -224,7 +217,7 @@ $(function () {
 		}
 
 		$('body').append($(btmHover));
-		var sites = spectrum_sites[window.location.hostname];
+		var sites = spectrum_sites[domain];
 		var site_promises = siteSearches(sites, slug);
 		Promise.all(site_promises).then(function (search_results) {
 			console.log('(init page hover) search results:', search_results);
@@ -264,50 +257,61 @@ $(function () {
 
 	initNewsPageHover();
 
-	// initialization for a home page such as nytimes.com or foxnews.com
-	// this is the place where we specify what parts of the page have the btm
-	// hover made active. if you want to change, come here.
-	function initAnchor() {
-		var $a;
-		switch (window.location.hostname) {
-			case "www.nytimes.com":
-				var pathname = window.location.pathname;
-				var pathname_split = pathname.split('/');
-				if (pathname_split[1] == "") $a = $('.TemplateUtils-column--2kfG7 a, .lede-package-region a, .first-column-region a, .second-column-region a, .opinion-c-col-left-region a, .opinion-c-col-right-region a, .well-region a, .inside-nyt-browser a'); // means we're on the nyt home page
-				else if (pathname_split.length >= 3 && pathname_split[1] == "section") $a = $('.story-menu a'); // section/world or section/world/africas (or another country) or section/us
-					else if (pathname_split.length >= 3 && pathname_split[2] == "opinion") $a = $('.abColumn a, .bColumn a, .cColumn a'); // pages/opinion section
-						else if (pathname_split.length >= 3 && pathname_split[2] == "politics") $a = $('.aColumn a, .bColumn a, .cColumn .videoDetails a, .cColumn .extVidPlayerThumbsContainer a'); // pages/politics section
-							else $a = $("#nolinks");
-				console.log('(initAnchor) pathname_split:', pathname_split);
+	function initNYTAnchor(pathnameArr) {
+		if (pathnameArr[1] === "") {
+			return $('.TemplateUtils-column--2kfG7 a, .lede-package-region a, .first-column-region a, .second-column-region a, .opinion-c-col-left-region a, .opinion-c-col-right-region a, .well-region a, .inside-nyt-browser a'); // means we're on the nyt home page
+		} else if (pathnameArr.length >= 3 && pathnameArr[1] === "section") {
+			return $('.story-menu a'); // section/world or section/world/africas (or another country) or section/us
+		} else if (pathnameArr.length >= 3 && pathnameArr[2] === "opinion") {
+			return $('.abColumn a, .bColumn a, .cColumn a'); // pages/opinion section
+		} else if (pathnameArr.length >= 3 && pathnameArr[2] === "politics") {
+			return $('.aColumn a, .bColumn a, .cColumn .videoDetails a, .cColumn .extVidPlayerThumbsContainer a'); // pages/politics section
+		} else {
+			return $("#nolinks");
+		}
+	}
 
+	function initFoxAnchor(pathnameArr) {
+		if (pathnameArr.length > 2) // it's a individual page
+			return $('.ob-last a'); // this class is associated with a bar called "More from Fox News"
+		else if (pathnameArr[1] == "") // it's the homepage
+				return $('#col a, .rail a, #opinion a');else {
+				// header page - i.e. Politics, Opinion, World
+				var header = pathnameArr[1];
+				var $a;
+				switch (header) {
+					case "opinion.html":
+						$a = $('.row-1 a, .row-2 .mod-2 a, .row-2 .mod-3 a, .row-3 .mod-4 a, .row-4 a, .row-5 a, .row-6 .mod-7 a');
+						break;
+					case "us.html":
+						$a = $('.row-1 a, .row-2 a, .row-3 a, .row-4 .bkt-4 a, .row-5 .bkt-5 a, .row-6 a, .row-7 a, .row-8 a, .row-9 a, .row-10 a');
+						break;
+					case "politics.html":
+						$a = $('.mod-1 a, .mod-2 a, .in-house a, .mod-4 a, .video-ct a, .article-ct a, .mod-5 a, .mod-7 a');
+						break;
+					case "world.html":
+						$a = $('.row-1 a, .row-2 a, .row-3 .video-ct a, .row-4 .left a, .row-4 .right a, .row-5, .row-6 .right .video-ct a, .row-6 .right .article-ct a, .row-7 .js-infinite-scroll-list a');
+						break;
+					default:
+						$a = $('#nolinks');
+						break;
+				}
+				return $a;
+			}
+	}
+
+	// initialization for a home page such as nytimes.com or foxnews.com
+	// this is the place where we specify what parts of the page have the btm hover made active.
+	function initAnchor() {
+		var $a = void 0;
+		var pathnameArr = pathname.split('/');
+		switch (domain) {
+			case "nytimes.com":
+				$a = initNYTAnchor(pathname.split('/'));
+				console.log('(initAnchor) pathnameArr:', pathnameArr);
 				break;
-			case "www.foxnews.com":
-				var pathname = window.location.pathname;
-				var pathname_split = pathname.split('/');
-				if (pathname_split.length > 2) // it's a individual page
-					$a = $('.ob-last a'); // this class is associated with a bar called "More from Fox News"
-				else if (pathname_split[1] == "") // it's the homepage
-						$a = $('#col a, .rail a, #opinion a');else {
-						// header page - i.e. Politics, Opinion, World
-						var header = pathname_split[1];
-						switch (header) {
-							case "opinion.html":
-								$a = $('.row-1 a, .row-2 .mod-2 a, .row-2 .mod-3 a, .row-3 .mod-4 a, .row-4 a, .row-5 a, .row-6 .mod-7 a');
-								break;
-							case "us.html":
-								$a = $('.row-1 a, .row-2 a, .row-3 a, .row-4 .bkt-4 a, .row-5 .bkt-5 a, .row-6 a, .row-7 a, .row-8 a, .row-9 a, .row-10 a');
-								break;
-							case "politics.html":
-								$a = $('.mod-1 a, .mod-2 a, .in-house a, .mod-4 a, .video-ct a, .article-ct a, .mod-5 a, .mod-7 a');
-								break;
-							case "world.html":
-								$a = $('.row-1 a, .row-2 a, .row-3 .video-ct a, .row-4 .left a, .row-4 .right a, .row-5, .row-6 .right .video-ct a, .row-6 .right .article-ct a, .row-7 .js-infinite-scroll-list a');
-								break;
-							default:
-								$a = $('#nolinks');
-								break;
-						}
-					}
+			case "foxnews.com":
+				$a = initFoxAnchor(pathnameArr);
 				break;
 			default:
 				$a = $('a');
@@ -322,14 +326,14 @@ $(function () {
 	// this each loop 1) turns each link into a popover enabled link and
 	// 2) it specifies the html and code for the popover.
 	$a.each(function (index, link) {
-		$link = $(link);
-		$link.attr('data-container', 'body');
-		href = $link.attr("href");
-
+		console.log('initAnchor link:', link);
+		var $link = $(link);
+		// $link.attr('data-container', 'body')
+		var href = $link.attr("href");
 		var placement = "right";
 		// var pathname = window.location.pathname;
-		// var pathname_split = pathname.split('/');
-		// if(pathname_split[1] == "") placement = "bottom";
+		// var pathnameArr = pathname.split('/');
+		// if(pathnameArr[1] == "") placement = "bottom";
 
 		if (href) {
 			var slug = getSlug(href);
@@ -389,7 +393,7 @@ $(function () {
 	}
 
 	function siteSearch(site, search) {
-		var google_url = 'https://www.googleapis.com/customsearch/v1?q=' + search + ' &cx=013013877924597244999%3Atbq0ixuctim&dateRestrict=m[7]&siteSearch=' + site + _btmMedia2.default;
+		var google_url = 'https://www.googleapis.com/customsearch/v1?q=' + search + ' &cx=013013877924597244999%3Atbq0ixuctim&dateRestrict=m[7]&siteSearch=' + site + searcher;
 		return $.ajax({
 			type: 'get',
 			url: google_url,
@@ -415,7 +419,7 @@ $(function () {
 		event.preventDefault();
 		var $link = $(event.target);
 		var href = $link.attr('href');
-		originUrl = originUrl != undefined ? originUrl : window.location.hostname + window.location.pathname;
+		originUrl = originUrl !== undefined ? originUrl : 'http://' + domain + pathname;
 		endTime = new Date();
 		elapsedTime = Math.round((endTime - startTime) / 60000); // calculate elapsedTime in minutes
 		startTime = new Date(); // reset startTime
@@ -446,7 +450,7 @@ $(function () {
 			if (search_result && search_result.items[0]) {
 				html += "<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>" + item_template(search_result["queries"]["request"][0]["siteSearch"], search_result.items[0], slug) + "</li>";
 			} else {
-				site_title = get_site_title[search_result["queries"]["request"][0]["siteSearch"]];
+				site_title = siteTitles[search_result["queries"]["request"][0]["siteSearch"]];
 
 				html += "<li><p style='" + html_style + "'><strong style='font-family: PT Serif;color:black;font-size:12px'>" + site_title + "</strong></br><span style='font-family: PT Serif;color:black;font-size:12px'>No Results</span></li>";
 			}
@@ -486,7 +490,7 @@ $(function () {
 	}
 
 	function displayArticles(slug, event) {
-		var sites = spectrum_sites[window.location.hostname];
+		var sites = spectrum_sites[domain];
 		var site_promises = siteSearches(sites, slug);
 		Promise.all(site_promises).then(function (search_results) {
 			// this is the promise part of the site
@@ -506,7 +510,7 @@ $(function () {
 
 	// this is where we extract article info. embedly or mercury may make this unnecessary
 	function getPopupDetails(publisher, item) {
-		var site_title = get_site_title[publisher];
+		var site_title = siteTitles[publisher];
 		var link;
 		var headline;
 		var description;
@@ -637,18 +641,6 @@ $(function () {
 		return details;
 	}
 });
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var searcher = exports.searcher = '&key=AIzaSyBS3sgS67eZkQRC_A7LZZG82AFeyBt8FW8';
 
 /***/ })
 /******/ ]);
