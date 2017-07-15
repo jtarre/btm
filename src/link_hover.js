@@ -6,33 +6,7 @@ import { searcher } from './btm-media.js';
 
 import { popover_style, popover_title_style, btn_primary_style } from './inline-styles.js'
 
-const spectrum_sites = {
-	"nytimes.com": ["foxnews.com", "nationalreview.com", "wsj.com", "nypost.com"],
-	"cnn.com": ["thehill.com", "thefiscaltimes.com", "forbes.com", "economist.com"],
-	"foxnews.com": ["theatlantic.com", "vice.com", "slate.com"],
-	"politico.com": ["nypost.com", "foxnews.com", "washingtontimes.com"],
-	"vox.com": ["nypost.com", "foxnews.com", "washingtontimes.com"],
-	"nbcnews.com": ["nypost.com", "foxnews.com", "washingtontimes.com"]
-}
-
-const siteTitles = {
-	"foxnews.com": "Fox News",
-	"nationalreview.com": "National Review",
-	"wsj.com": "Wall Street Journal",
-	"nypost.com": "New York Post",
-	"thehill.com": "The Hill",
-	"thefiscaltimes.com": "The Fiscal Times",
-	"forbes.com": "Forbes",
-	"economist.com": "The Economist",
-	"theatlantic.com": "The Atlantic",
-	"vice.com": "Vice",
-	"slate.com": "Slate",
-	"huffingtonpost.com": "Huffington Post",
-	"thedailybeast.com": "Daily Beast",
-	"reason.com": "Reason",
-	"telegraph.co.uk": "The Telegraph",
-	"nytimes.com": "NY Times"
-}
+import { spectrumSites, siteTitles } from './site-constants.js'
 
 /* ------- HELPER FUNCTIONS ------- */
 
@@ -148,7 +122,7 @@ $(function () {
 		}
 
 		$('body').append($(btmHover));
-		var sites = spectrum_sites[domain];
+		var sites = spectrumSites[domain];
 		var site_promises = siteSearches(sites, slug);
 		Promise.all(site_promises)
 			.then((search_results) => {
@@ -468,7 +442,7 @@ $(function () {
 	}
 
 	function displayArticles(slug, event) {
-		var sites = spectrum_sites[domain];
+		var sites = spectrumSites[domain];
 		var site_promises = siteSearches(sites, slug);
 		Promise.all(site_promises)
 			.then(function (search_results) { // this is the promise part of the site

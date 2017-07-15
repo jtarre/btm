@@ -74,40 +74,15 @@ var _btmMedia = __webpack_require__(1);
 
 var _inlineStyles = __webpack_require__(2);
 
-var spectrum_sites = {
-	"nytimes.com": ["foxnews.com", "nationalreview.com", "wsj.com", "nypost.com"],
-	"cnn.com": ["thehill.com", "thefiscaltimes.com", "forbes.com", "economist.com"],
-	"foxnews.com": ["theatlantic.com", "vice.com", "slate.com"],
-	"politico.com": ["nypost.com", "foxnews.com", "washingtontimes.com"],
-	"vox.com": ["nypost.com", "foxnews.com", "washingtontimes.com"],
-	"nbcnews.com": ["nypost.com", "foxnews.com", "washingtontimes.com"]
-};
+var _siteConstants = __webpack_require__(3);
+
+/* ------- HELPER FUNCTIONS ------- */
 
 // const searcher = '&key=AIzaSyBS3sgS67eZkQRC_A7LZZG82AFeyBt8FW8'
 
 /* ---------- STYLES --------- */
 
-var siteTitles = {
-	"foxnews.com": "Fox News",
-	"nationalreview.com": "National Review",
-	"wsj.com": "Wall Street Journal",
-	"nypost.com": "New York Post",
-	"thehill.com": "The Hill",
-	"thefiscaltimes.com": "The Fiscal Times",
-	"forbes.com": "Forbes",
-	"economist.com": "The Economist",
-	"theatlantic.com": "The Atlantic",
-	"vice.com": "Vice",
-	"slate.com": "Slate",
-	"huffingtonpost.com": "Huffington Post",
-	"thedailybeast.com": "Daily Beast",
-	"reason.com": "Reason",
-	"telegraph.co.uk": "The Telegraph",
-	"nytimes.com": "NY Times"
-
-	/* ------- HELPER FUNCTIONS ------- */
-
-};function getPopoverHtml(slug) {
+function getPopoverHtml(slug) {
 	return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + _inlineStyles.popover_style + '">' + '<div class="arrow"></div>' + '<h3 style="' + _inlineStyles.popover_title_style + '" class="popover-title"><span>&times;</span></h3>' + '<div data-slug="' + slug + '" class="popover-content">' + '</div>' + '</div>';
 }
 
@@ -132,7 +107,7 @@ $(function () {
 
 	var domain = window.location.hostname.split('www.')[1],
 	    pathname = window.location.pathname,
-	    originTitle = siteTitles[domain] !== undefined ? siteTitles[domain] : domain;
+	    originTitle = _siteConstants.siteTitles[domain] !== undefined ? _siteConstants.siteTitles[domain] : domain;
 
 	var originUrl = void 0 //url of current website
 	,
@@ -208,7 +183,7 @@ $(function () {
 		}
 
 		$('body').append($(btmHover));
-		var sites = spectrum_sites[domain];
+		var sites = _siteConstants.spectrumSites[domain];
 		var site_promises = siteSearches(sites, slug);
 		Promise.all(site_promises).then(function (search_results) {
 			console.log('(init page hover) search results:', search_results);
@@ -441,7 +416,7 @@ $(function () {
 			if (search_result && search_result.items[0]) {
 				html += "<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>" + item_template(search_result["queries"]["request"][0]["siteSearch"], search_result.items[0], slug) + "</li>";
 			} else {
-				site_title = siteTitles[search_result["queries"]["request"][0]["siteSearch"]];
+				site_title = _siteConstants.siteTitles[search_result["queries"]["request"][0]["siteSearch"]];
 
 				html += "<li><p style='" + html_style + "'><strong style='font-family: PT Serif;color:black;font-size:12px'>" + site_title + "</strong></br><span style='font-family: PT Serif;color:black;font-size:12px'>No Results</span></li>";
 			}
@@ -481,7 +456,7 @@ $(function () {
 	}
 
 	function displayArticles(slug, event) {
-		var sites = spectrum_sites[domain];
+		var sites = _siteConstants.spectrumSites[domain];
 		var site_promises = siteSearches(sites, slug);
 		Promise.all(site_promises).then(function (search_results) {
 			// this is the promise part of the site
@@ -501,7 +476,7 @@ $(function () {
 
 	// this is where we extract article info. embedly or mercury may make this unnecessary
 	function getPopupDetails(publisher, item) {
-		var site_title = siteTitles[publisher];
+		var site_title = _siteConstants.siteTitles[publisher];
 		var link;
 		var headline;
 		var description;
@@ -662,6 +637,44 @@ var popover_title_style = exports.popover_title_style = "color: black;" +
 "font-family: Josefin Sans, serif;" + "font-size: 16px;" + "font-style: normal;" + "font-weight: bolder;" + "line-height: 1.42857143;" + "text-align: left;" + "text-align: start;" + "padding: 8px 14px;" + "margin: 0;" + "background-color: #f7f7f7;" + "border-bottom: 1px solid #ebebeb;" + "border-radius: 5px 5px 0 0;";
 
 var btn_primary_style = exports.btn_primary_style = "color: #4665B0;" + "background-color: #FECC08;" + "font-size:14px" + "font-family: PT Serif, serif" + "border-color: black;" + "margin: 10px";
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+var spectrumSites = exports.spectrumSites = {
+	"nytimes.com": ["foxnews.com", "nationalreview.com", "wsj.com", "nypost.com"],
+	"cnn.com": ["thehill.com", "thefiscaltimes.com", "forbes.com", "economist.com"],
+	"foxnews.com": ["theatlantic.com", "vice.com", "slate.com"],
+	"politico.com": ["nypost.com", "foxnews.com", "washingtontimes.com"],
+	"vox.com": ["nypost.com", "foxnews.com", "washingtontimes.com"],
+	"nbcnews.com": ["nypost.com", "foxnews.com", "washingtontimes.com"]
+};
+
+var siteTitles = exports.siteTitles = {
+	"foxnews.com": "Fox News",
+	"nationalreview.com": "National Review",
+	"wsj.com": "Wall Street Journal",
+	"nypost.com": "New York Post",
+	"thehill.com": "The Hill",
+	"thefiscaltimes.com": "The Fiscal Times",
+	"forbes.com": "Forbes",
+	"economist.com": "The Economist",
+	"theatlantic.com": "The Atlantic",
+	"vice.com": "Vice",
+	"slate.com": "Slate",
+	"huffingtonpost.com": "Huffington Post",
+	"thedailybeast.com": "Daily Beast",
+	"reason.com": "Reason",
+	"telegraph.co.uk": "The Telegraph",
+	"nytimes.com": "NY Times"
+};
 
 /***/ })
 /******/ ]);
