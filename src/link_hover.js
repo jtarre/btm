@@ -1,7 +1,93 @@
 
 const searcher = '&key=AIzaSyBS3sgS67eZkQRC_A7LZZG82AFeyBt8FW8'
 
-$(function() {
+/* ---------- STYLES --------- */
+
+const popover_style =
+	"width: 250px;" +
+	"max-width: 276px;" +
+	"color: black;" +
+	"padding: 1px;" +
+	"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;" +
+	"font-size: 14px;" +
+	"font-style: normal;" +
+	"font-weight: normal;" +
+	"line-height: 1.42857143;" +
+	"text-align: left;" +
+	"text-align: start;" +
+	"text-decoration: none;" +
+	"text-shadow: none;" +
+	"text-transform: none;" +
+	"letter-spacing: normal;" +
+	"word-break: normal;" +
+	"word-spacing: normal;" +
+	"word-wrap: normal;" +
+	"white-space: normal;" +
+	"background-color: #fff;" +
+	"-webkit-background-clip: padding-box;" +
+	"background-clip: padding-box;" +
+	"border: 1px solid #ccc;" +
+	"border: 1px solid rgba(0, 0, 0, .2);" +
+	"border-radius: 6px;" +
+	"-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);" +
+	"box-shadow: 0 5px 10px rgba(0, 0, 0, .2);" +
+	"line-break: auto;" +
+	"z-index: 25";
+
+const popover_title_style =
+	"color: black;" +
+	// "padding: 1px;" +
+	"font-family: Josefin Sans, serif;" +
+	"font-size: 16px;" +
+	"font-style: normal;" +
+	"font-weight: bolder;" +
+	"line-height: 1.42857143;" +
+	"text-align: left;" +
+	"text-align: start;" +
+	"padding: 8px 14px;" +
+	"margin: 0;" +
+	"background-color: #f7f7f7;" +
+	"border-bottom: 1px solid #ebebeb;" +
+	"border-radius: 5px 5px 0 0;";
+
+const btn_primary_style =
+	"color: #4665B0;" +
+	"background-color: #FECC08;" +
+	"font-size:14px" +
+	"font-family: PT Serif, serif" +
+	"border-color: black;" +
+	"margin: 10px";
+
+const spectrum_sites = {
+	"www.nytimes.com": ["foxnews.com", "nationalreview.com", "wsj.com", "nypost.com"],
+	"www.cnn.com": ["thehill.com", "thefiscaltimes.com", "forbes.com", "economist.com"],
+	"www.foxnews.com": ["theatlantic.com", "vice.com", "slate.com"],
+	"www.politico.com": ["nypost.com", "foxnews.com", "washingtontimes.com"],
+	"www.vox.com": ["nypost.com", "foxnews.com", "washingtontimes.com"],
+	"www.nbcnews.com": ["nypost.com", "foxnews.com", "washingtontimes.com"]
+}
+
+const get_site_title = {
+	"foxnews.com": "Fox News",
+	"nationalreview.com": "National Review",
+	"wsj.com": "Wall Street Journal",
+	"nypost.com": "New York Post",
+	"thehill.com": "The Hill",
+	"thefiscaltimes.com": "The Fiscal Times",
+	"forbes.com": "Forbes",
+	"economist.com": "The Economist",
+	"theatlantic.com": "The Atlantic",
+	"vice.com": "Vice",
+	"slate.com": "Slate",
+	"huffingtonpost.com": "Huffington Post",
+	"thedailybeast.com": "Daily Beast",
+	"reason.com": "Reason",
+	"telegraph.co.uk": "The Telegraph",
+	"nytimes.com": "NY Times"
+}
+
+
+$(function () {
 
 
 	// if(chrome && chrome.runtime && chrome.runtime.onUpdateAvailble) {
@@ -23,89 +109,6 @@ $(function() {
 
 	 */
 
-	var popover_style =
-	  "width: 250px;" +
-	  "max-width: 276px;" +
-	  "color: black;" +
-	  "padding: 1px;" +
-	  "font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;" +
-	  "font-size: 14px;" +
-	  "font-style: normal;" +
-	  "font-weight: normal;" +
-	  "line-height: 1.42857143;" +
-	  "text-align: left;" +
-	  "text-align: start;" +
-	  "text-decoration: none;" +
-	  "text-shadow: none;" +
-	  "text-transform: none;" +
-	  "letter-spacing: normal;" +
-	  "word-break: normal;" +
-	  "word-spacing: normal;" +
-	  "word-wrap: normal;" +
-	  "white-space: normal;" +
-	  "background-color: #fff;" +
-	  "-webkit-background-clip: padding-box;" +
-	  "background-clip: padding-box;" +
-	  "border: 1px solid #ccc;" +
-	  "border: 1px solid rgba(0, 0, 0, .2);" +
-	  "border-radius: 6px;" +
-	  "-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);" +
-	  "box-shadow: 0 5px 10px rgba(0, 0, 0, .2);" +
-  		"line-break: auto;" +
-  		"z-index: 25";
-
-  	var popover_title_style =
-		"color: black;" +
-		  // "padding: 1px;" +
-		  "font-family: Josefin Sans, serif;" +
-		  "font-size: 16px;" +
-		  "font-style: normal;" +
-		  "font-weight: bolder;" +
-		  "line-height: 1.42857143;" +
-		  "text-align: left;" +
-		  "text-align: start;" +
-		"padding: 8px 14px;" +
-		"margin: 0;" +
-		"background-color: #f7f7f7;" +
-		"border-bottom: 1px solid #ebebeb;" +
-		"border-radius: 5px 5px 0 0;";
-
-  	var btn_primary_style =
-		"color: #4665B0;" +
-		"background-color: #FECC08;" +
-		"font-size:14px" +
-		"font-family: PT Serif, serif" +
-		"border-color: black;" +
-		"margin: 10px";
-
-	var spectrum_sites = {
-		"www.nytimes.com": ["foxnews.com", "nationalreview.com", "wsj.com","nypost.com"],
-		"www.cnn.com": ["thehill.com", "thefiscaltimes.com", "forbes.com","economist.com"],
-		"www.foxnews.com": ["theatlantic.com", "vice.com", "slate.com"],
-		"www.politico.com": ["nypost.com", "foxnews.com", "washingtontimes.com"],
-		"www.vox.com": ["nypost.com", "foxnews.com", "washingtontimes.com"],
-		"www.nbcnews.com": ["nypost.com", "foxnews.com", "washingtontimes.com"]
-	}
-
-	var get_site_title = {
-		"foxnews.com": "Fox News",
-		"nationalreview.com": "National Review",
-		"wsj.com": "Wall Street Journal",
-		"nypost.com": "New York Post",
-		"thehill.com": "The Hill",
-		"thefiscaltimes.com": "The Fiscal Times",
-		"forbes.com": "Forbes",
-		"economist.com": "The Economist",
-		"theatlantic.com": "The Atlantic",
-		"vice.com": "Vice",
-		"slate.com": "Slate",
-		"huffingtonpost.com": "Huffington Post",
-		"thedailybeast.com": "Daily Beast",
-		"reason.com": "Reason",
-		"telegraph.co.uk": "The Telegraph",
-		"nytimes.com": "NY Times"
-	}
-
 	var domain = window.location.hostname.split('www.')[1];
 	// use the title of current website (eg. NY Times) to help categorize click event
 	var originTitle = (get_site_title[domain] !== undefined ? get_site_title[domain] : domain);
@@ -115,11 +118,11 @@ $(function() {
 
 	function getPopoverHtml(slug) {
 		return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popover_style + '">' +
-		'<div class="arrow"></div>' +
-		'<h3 style="' + popover_title_style + '" class="popover-title"><span>&times;</span></h3>' +
-		'<div data-slug="' + slug + '" class="popover-content">' +
-		'</div>' +
-		'</div>';
+			'<div class="arrow"></div>' +
+			'<h3 style="' + popover_title_style + '" class="popover-title"><span>&times;</span></h3>' +
+			'<div data-slug="' + slug + '" class="popover-content">' +
+			'</div>' +
+			'</div>';
 	}
 
 	function getSlug(href) {
@@ -129,16 +132,16 @@ $(function() {
 		switch (window.location.hostname) {
 			case "www.nytimes.com":
 				href_segments = href.split("/");
-				slug = href_segments[href_segments.length-1];
+				slug = href_segments[href_segments.length - 1];
 				slug = slug.replace(/\d+/g, "");
 				slug = slug.split(".", 1);
 				slug = slug[0];
 				break;
 			case "www.cnn.com":
 				href_segments = href.split("/");
-				last = href_segments[href_segments.length-1];
-				if(last == "index.html"){
-					slug = href_segments[href_segments.length-2];
+				last = href_segments[href_segments.length - 1];
+				if (last == "index.html") {
+					slug = href_segments[href_segments.length - 2];
 					slug = slug.split(".", 1);
 					slug = slug[0];
 				} else {
@@ -147,7 +150,7 @@ $(function() {
 				break;
 			case "www.foxnews.com":
 				href_segments = href.split("/");
-				slug = href_segments[href_segments.length-1];
+				slug = href_segments[href_segments.length - 1];
 				slug = slug.replace(/\d+/g, "");
 
 				slug = slug.split(".", 1);
@@ -166,8 +169,8 @@ $(function() {
 		var slug;
 		var pathname = window.location.pathname;
 		var pathname_split = pathname.split('/');
-		if(pathname_split.length > 5) { // it's a news page, at least for fox news, need to add hover to bottom left of page
-			switch(window.location.hostname) {
+		if (pathname_split.length > 5) { // it's a news page, at least for fox news, need to add hover to bottom left of page
+			switch (window.location.hostname) {
 				case "www.foxnews.com":
 					console.log('(init page news hover) pathname:', pathname_split);
 					slug = pathname_split[pathname_split.length - 1];
@@ -182,7 +185,7 @@ $(function() {
 					break;
 			}
 			var side;
-			switch(window.location.hostname) {
+			switch (window.location.hostname) {
 				case "www.nytimes.com":
 					side = "right";
 					break;
@@ -200,12 +203,12 @@ $(function() {
 
 			btmHover =
 				'<div data-slug="' + slug + '" style="' + popover_style + ';position:fixed;' + side + ':50px;bottom:10px;">' +
-					'<h3 style="' + popover_title_style + '">' +
-				 		'BRIDGE THE MEDIA' +
-			 		'</h3>' +
-						'<div id="btm-hover-' + slug + '">' +
-							"<div style='max-height:450px;overflow:scroll;'id='btm-popover-body-" + slug + "'></div>" + btmButton +
-						"</div>" +
+				'<h3 style="' + popover_title_style + '">' +
+				'BRIDGE THE MEDIA' +
+				'</h3>' +
+				'<div id="btm-hover-' + slug + '">' +
+				"<div style='max-height:450px;overflow:scroll;'id='btm-popover-body-" + slug + "'></div>" + btmButton +
+				"</div>" +
 				'</div>';
 		}
 
@@ -213,18 +216,18 @@ $(function() {
 		var sites = spectrum_sites[window.location.hostname];
 		var site_promises = siteSearches(sites, slug);
 		Promise.all(site_promises)
-		.then((search_results) => {
-			console.log('(init page hover) search results:', search_results);
-			var popup = createPopup(search_results, slug);
-			console.log('(btmHover) popup:', popup)
-			// // add popup to page
-			$('#btm-popover-body-' + slug).css('display', 'none');
-			$('#btm-popover-body-' + slug).append(popup);
-			$('.collapse-link').on('click', toggleSummary);
-			$('.popup-link').on('click', openArticleLink);
-			$('.btm-close').on('click', closeHover.bind($('#btm-hover-' + slug)));
+			.then((search_results) => {
+				console.log('(init page hover) search results:', search_results);
+				var popup = createPopup(search_results, slug);
+				console.log('(btmHover) popup:', popup)
+				// // add popup to page
+				$('#btm-popover-body-' + slug).css('display', 'none');
+				$('#btm-popover-body-' + slug).append(popup);
+				$('.collapse-link').on('click', toggleSummary);
+				$('.popup-link').on('click', openArticleLink);
+				$('.btm-close').on('click', closeHover.bind($('#btm-hover-' + slug)));
 
-		})
+			})
 		$('.google-search').on('click', toggleArticles.bind($(btmHover), slug));
 	}
 
@@ -234,13 +237,13 @@ $(function() {
 
 	function toggleArticles(slug, event) {
 		console.log('(toggleArticles) display:', $('#btm-popover-body-' + slug).attr('display'));
-		if($('#btm-popover-body-' + slug + ':hidden').length > 0)
+		if ($('#btm-popover-body-' + slug + ':hidden').length > 0)
 			toggleVisible($('#btm-popover-body-' + slug), $('#btm-btn-' + slug));
 		else
 			toggleInvisible($('#btm-popover-body-' + slug), $('#btm-btn-' + slug));
 
 		function toggleVisible($container, $button) {
-			chrome.runtime.sendMessage({source: originTitle, type: "Show Alternatives Click"}, function(response) {
+			chrome.runtime.sendMessage({ source: originTitle, type: "Show Alternatives Click" }, function (response) {
 				console.log(response);
 			});
 			$button.text('HIDE');
@@ -260,17 +263,17 @@ $(function() {
 	// hover made active. if you want to change, come here.
 	function initAnchor() {
 		var $a;
-		switch(window.location.hostname) {
+		switch (window.location.hostname) {
 			case "www.nytimes.com":
 				var pathname = window.location.pathname;
 				var pathname_split = pathname.split('/');
-				if(pathname_split[1] == "")
+				if (pathname_split[1] == "")
 					$a = $('.TemplateUtils-column--2kfG7 a, .lede-package-region a, .first-column-region a, .second-column-region a, .opinion-c-col-left-region a, .opinion-c-col-right-region a, .well-region a, .inside-nyt-browser a'); // means we're on the nyt home page
-				else if(pathname_split.length >= 3 && pathname_split[1] == "section")
+				else if (pathname_split.length >= 3 && pathname_split[1] == "section")
 					$a = $('.story-menu a'); // section/world or section/world/africas (or another country) or section/us
-				else if(pathname_split.length >= 3 && pathname_split[2] == "opinion")
+				else if (pathname_split.length >= 3 && pathname_split[2] == "opinion")
 					$a = $('.abColumn a, .bColumn a, .cColumn a'); // pages/opinion section
-				else if(pathname_split.length >= 3 && pathname_split[2] == "politics")
+				else if (pathname_split.length >= 3 && pathname_split[2] == "politics")
 					$a = $('.aColumn a, .bColumn a, .cColumn .videoDetails a, .cColumn .extVidPlayerThumbsContainer a'); // pages/politics section
 				else
 					$a = $("#nolinks");
@@ -280,14 +283,14 @@ $(function() {
 			case "www.foxnews.com":
 				var pathname = window.location.pathname;
 				var pathname_split = pathname.split('/');
-				if(pathname_split.length > 2) // it's a individual page
+				if (pathname_split.length > 2) // it's a individual page
 					$a = $('.ob-last a'); // this class is associated with a bar called "More from Fox News"
-				else if(pathname_split[1] == "") // it's the homepage
+				else if (pathname_split[1] == "") // it's the homepage
 					$a = $('#col a, .rail a, #opinion a');
 				else {
 					// header page - i.e. Politics, Opinion, World
 					var header = pathname_split[1];
-					switch(header) {
+					switch (header) {
 						case "opinion.html":
 							$a = $('.row-1 a, .row-2 .mod-2 a, .row-2 .mod-3 a, .row-3 .mod-4 a, .row-4 a, .row-5 a, .row-6 .mod-7 a');
 							break;
@@ -318,7 +321,7 @@ $(function() {
 	// todo: wrap in a function call
 	// this each loop 1) turns each link into a popover enabled link and
 	// 2) it specifies the html and code for the popover.
-	$a.each(function(index, link) {
+	$a.each(function (index, link) {
 		$link = $(link);
 		$link.attr('data-container', 'body');
 		href = $link.attr("href");
@@ -328,53 +331,54 @@ $(function() {
 		// var pathname_split = pathname.split('/');
 		// if(pathname_split[1] == "") placement = "bottom";
 
-		if(href) {
+		if (href) {
 			var slug = getSlug(href);
 			var popover_html = getPopoverHtml(slug);
 			var content = '<button id="btm-btn-' + slug + '" style="' + btn_primary_style + '" class="google-search btn btn-primary" href="javascript:void(0);" data-slug="' + slug + '">' +
 				'SHOW ALTERNATIVES' +
-			'</button><div id="btm-popover-body-' + slug + '"></div>';
+				'</button><div id="btm-popover-body-' + slug + '"></div>';
 			var title_style =
-			"color: black;" +
-		  // "padding: 1px;" +
-		  "font-family: Josefin Sans, serif;" +
-		  "font-size: 16px;" +
-		  "font-style: normal;" +
-		  "font-weight: bolder;" +
-		  "line-height: 1.42857143;" +
-		  "text-align: left;" +
-		  "text-align: start;";
+				"color: black;" +
+				// "padding: 1px;" +
+				"font-family: Josefin Sans, serif;" +
+				"font-size: 16px;" +
+				"font-style: normal;" +
+				"font-weight: bolder;" +
+				"line-height: 1.42857143;" +
+				"text-align: left;" +
+				"text-align: start;";
 			// todo: this should be its own function for clarity
-			$link.popover({trigger: "manual", // this code right here initializes the popover.
+			$link.popover({
+				trigger: "manual", // this code right here initializes the popover.
 
-						html: "true",
-						template: popover_html,
-						title: "<span style='" + title_style +"'>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>",
-						placement: placement,
-						content: content
-					})
-					.on("mouseenter", popoverEnter.bind($link, slug))
+				html: "true",
+				template: popover_html,
+				title: "<span style='" + title_style + "'>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>",
+				placement: placement,
+				content: content
+			})
+				.on("mouseenter", popoverEnter.bind($link, slug))
 		}
 	})
 
 	// this function defines how the popover interacts with the mouse
 	// e.g. how long you have to hover over a link before the bubble pops up
 	// this is
-	function popoverEnter (slug) {
+	function popoverEnter(slug) {
 		var $link = this;
 		originUrl = $link.attr("href");
-		setTimeout(function setupPopover () {
-			if($link.is(':hover')) {
+		setTimeout(function setupPopover() {
+			if ($link.is(':hover')) {
 				$('.popover:not([data-slug="' + slug + '"])').hide();
 				setTimeout(function showPopover() {
 					$link.popover("show");
 					var $popover = $('.popover[data-slug="' + slug + '"]');
 					$('.google-search').on('click', displayArticles.bind($popover, slug));
-					$('.btm-close').on('click', function() { $link.popover('hide') });
+					$('.btm-close').on('click', function () { $link.popover('hide') });
 					$(window).on('click', function (event) {
 						// event.preventDefault();
-						if($popover.filter(':hover').length < 1) $link.popover('hide');
-				 	});
+						if ($popover.filter(':hover').length < 1) $link.popover('hide');
+					});
 				}, 500)
 			}
 		}, 900); // this is how long the hover waits before displaying
@@ -386,14 +390,14 @@ $(function() {
 	}
 
 	function siteSearches(sites, slug) {
-		return sites.map(function(site) {
+		return sites.map(function (site) {
 			var site_ajax = siteSearch(site, slug);
 			return site_ajax;
 		})
 	}
 
 	function siteSearch(site, search) {
-		var google_url ='https://www.googleapis.com/customsearch/v1?q=' + search + ' &cx=013013877924597244999%3Atbq0ixuctim&dateRestrict=m[7]&siteSearch=' + site + searcher;
+		var google_url = 'https://www.googleapis.com/customsearch/v1?q=' + search + ' &cx=013013877924597244999%3Atbq0ixuctim&dateRestrict=m[7]&siteSearch=' + site + searcher;
 		return $.ajax({
 			type: 'get',
 			url: google_url,
@@ -405,14 +409,14 @@ $(function() {
 		event.preventDefault();
 		var $link = $(event.target);
 		console.log('(createCollapseEvents) link:', $link);
-		if($link.hasClass('fa-caret-down') || $link.hasClass('fa-caret-up')) $link = $link.parent();
+		if ($link.hasClass('fa-caret-down') || $link.hasClass('fa-caret-up')) $link = $link.parent();
 
 		var cache = $link.data('cache');
 		var $cache = $('#' + cache);
 		var $caret = $('#btm-span-' + cache);
 		$cache.collapse('toggle');
 
-		if($caret.hasClass('fa-caret-up')) $caret.addClass('fa-caret-down').removeClass('fa-caret-up');
+		if ($caret.hasClass('fa-caret-up')) $caret.addClass('fa-caret-down').removeClass('fa-caret-up');
 		else $caret.addClass('fa-caret-up').removeClass('fa-caret-down');
 	}
 
@@ -422,34 +426,36 @@ $(function() {
 		var href = $link.attr('href');
 		originUrl = (originUrl != undefined ? originUrl : window.location.hostname + window.location.pathname);
 		endTime = new Date();
-		elapsedTime = Math.round((endTime - startTime)/60000); // calculate elapsedTime in minutes
+		elapsedTime = Math.round((endTime - startTime) / 60000); // calculate elapsedTime in minutes
 		startTime = new Date(); // reset startTime
-		chrome.runtime.sendMessage({targetUrl: href,
-															  type: "Outbound Link Click",
-		                            source: originTitle,
-															  originUrl: originUrl,
-															 	elapsedTime: elapsedTime},
-		                            function(response) {});
+		chrome.runtime.sendMessage({
+			targetUrl: href,
+			type: "Outbound Link Click",
+			source: originTitle,
+			originUrl: originUrl,
+			elapsedTime: elapsedTime
+		},
+			function (response) { });
 		window.open(href);
 		$('.popup-link').on('click', openArticleLink)
 	}
 
 	// css and html for each news snippet
 	function createPopup(search_results, slug, style_addition) {
-		if(!style_addition) style_addition = "";
+		if (!style_addition) style_addition = "";
 
-		var html = "<div style='margin:10px;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;" + style_addition +"'><ul class='list-unstyled'>";
+		var html = "<div style='margin:10px;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;" + style_addition + "'><ul class='list-unstyled'>";
 
 		var html_style =
-		"color: black;" +
-		  // "padding: 1px;" +
-		  "font-family: Helvetica Neue, Helvetica, Arial, sans-serif;" +
-		  "font-size: 14px;" +
-		  "font-style: normal;" +
-		  "font-weight: normal;" +
-		  "line-height: 1.42857143;" +
-		  "text-align: left;" +
-		  "text-align: start;";
+			"color: black;" +
+			// "padding: 1px;" +
+			"font-family: Helvetica Neue, Helvetica, Arial, sans-serif;" +
+			"font-size: 14px;" +
+			"font-style: normal;" +
+			"font-weight: normal;" +
+			"line-height: 1.42857143;" +
+			"text-align: left;" +
+			"text-align: start;";
 
 		var site_title;
 
@@ -492,30 +498,30 @@ $(function() {
 		if (date) date = " | " + date;
 		else date = "| date unavailable";
 		var html_style =
-		"color: black;" +
-		  // "padding: 1px;" +
-		  "font-family: PT serif, serif;" +
-		  "font-size: 12px;" +
-		  "font-style: normal;" +
-		  "font-weight: normal;" +
-		  "line-height: 1.42857143;" +
-		  "text-align: left;" +
-		  "text-align: start;";
-		 var anchor_style =
-		  "font-family: PT Serif, serif;" +
-		  "color: black;" +
-		  "font-size: 12px;";
+			"color: black;" +
+			// "padding: 1px;" +
+			"font-family: PT serif, serif;" +
+			"font-size: 12px;" +
+			"font-style: normal;" +
+			"font-weight: normal;" +
+			"line-height: 1.42857143;" +
+			"text-align: left;" +
+			"text-align: start;";
+		var anchor_style =
+			"font-family: PT Serif, serif;" +
+			"color: black;" +
+			"font-size: 12px;";
 
 		var cache = slug + "-" + site_id + "-collapse";
 		var html =
 			"<p style='" + html_style + "'><strong style='font-family: PT Serif, serif;'>" + site + date + "</strong></br>" +
-			"<a style='" + anchor_style + "' class='collapse-link' data-toggle='collapse' data-cache='" + cache + "' href='javascript:void(0);'>" + title +"<span id='btm-span-" + cache + "' class='fa fa-caret-down'></span></a></p>" +
+			"<a style='" + anchor_style + "' class='collapse-link' data-toggle='collapse' data-cache='" + cache + "' href='javascript:void(0);'>" + title + "<span id='btm-span-" + cache + "' class='fa fa-caret-down'></span></a></p>" +
 			"<div class='collapse' id='" + slug + "-" + site_id + "-collapse'>" +
-				"<div class='well'>" +
-				"<h4 style='font-family: PT Serif, serif;color:black;font-size:12px' +><a class='popup-link' href='" + link + "'>" + "Read entire article</a>" +
-				"</h4>" +
-					"<p style='font-family: PT Serif, serif;color:black;font-size:12px' +>" + description + "</p>" +
-				"</div>"+
+			"<div class='well'>" +
+			"<h4 style='font-family: PT Serif, serif;color:black;font-size:12px' +><a class='popup-link' href='" + link + "'>" + "Read entire article</a>" +
+			"</h4>" +
+			"<p style='font-family: PT Serif, serif;color:black;font-size:12px' +>" + description + "</p>" +
+			"</div>" +
 			"</div>";
 		return html;
 	}
@@ -524,19 +530,19 @@ $(function() {
 		var sites = spectrum_sites[window.location.hostname];
 		var site_promises = siteSearches(sites, slug);
 		Promise.all(site_promises)
-		.then(function(search_results) { // this is the promise part of the site
-			$('#btm-btn-' + slug).hide();
-			var popup = createPopup(search_results, slug);
-			// add popup to page
-			$('#btm-popover-body-' + slug).after(popup);
-			$('.collapse-link').on('click', toggleSummary);
-			$('.popup-link').on('click', openArticleLink);
+			.then(function (search_results) { // this is the promise part of the site
+				$('#btm-btn-' + slug).hide();
+				var popup = createPopup(search_results, slug);
+				// add popup to page
+				$('#btm-popover-body-' + slug).after(popup);
+				$('.collapse-link').on('click', toggleSummary);
+				$('.popup-link').on('click', openArticleLink);
 
-			// Get current news publication and send it to popup.js when Show Alternatives is clicked
-			chrome.runtime.sendMessage({source: originTitle, type: "Show Alternatives Click"}, function(response) {
-				console.log(response);
-			});
-		})
+				// Get current news publication and send it to popup.js when Show Alternatives is clicked
+				chrome.runtime.sendMessage({ source: originTitle, type: "Show Alternatives Click" }, function (response) {
+					console.log(response);
+				});
+			})
 	}
 
 	// this is where we extract article info. embedly or mercury may make this unnecessary
@@ -547,15 +553,15 @@ $(function() {
 		var description;
 		var date;
 
-		switch(publisher) {
+		switch (publisher) {
 			case "foxnews.com":
 				link = item.link;
-				headline= item.title;
+				headline = item.title;
 
-				if(item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["dc.description"]) description = item.pagemap.metatags[0]["dc.description"];
+				if (item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["dc.description"]) description = item.pagemap.metatags[0]["dc.description"];
 				else description = item.snippet;
 
-				if(item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]['dc.date']) {
+				if (item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]['dc.date']) {
 					date = item.pagemap.metatags[0]['dc.date'];
 					date = new Date(date);
 					date = date.toDateString();
@@ -566,15 +572,15 @@ $(function() {
 				link = item.link;
 
 				/** headline**/
-				if(item && item.pagemap && item.pagemap.article && item.pagemap.article[0].headline) headline= item.pagemap.article[0].headline;
-				else headline= item.title;
+				if (item && item.pagemap && item.pagemap.article && item.pagemap.article[0].headline) headline = item.pagemap.article[0].headline;
+				else headline = item.title;
 
 				/** Description **/
-				if(item && item.pagemap && item.pagemap.article && item.pagemap.article[0].articlebody) description = item.pagemap.article[0].articlebody;
+				if (item && item.pagemap && item.pagemap.article && item.pagemap.article[0].articlebody) description = item.pagemap.article[0].articlebody;
 				else description = item.snippet;
 
 				/** Date **/
-				if(item && item.pagemap && item.pagemap.article && item.pagemap.article[0].datepublished) {
+				if (item && item.pagemap && item.pagemap.article && item.pagemap.article[0].datepublished) {
 					date = item.pagemap.article[0].datepublished;
 					date = new Date(date);
 					date = date.toDateString();
@@ -583,13 +589,13 @@ $(function() {
 
 			case "nypost.com":
 				link = item.link;
-				headline= item.title;
+				headline = item.title;
 				/** Description **/
-				if(item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["og:description"]) description = item.pagemap.metatags[0]["og:description"];
+				if (item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["og:description"]) description = item.pagemap.metatags[0]["og:description"];
 				else description = item.snippet;
 
 				/** Date **/
-				if(item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]['article:published_time']) {
+				if (item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]['article:published_time']) {
 					date = item.pagemap.metatags[0]['article:published_time'];
 					date = new Date(date);
 					date = date.toDateString();
@@ -598,14 +604,14 @@ $(function() {
 
 			case "wsj.com":
 				link = item.link;
-				headline= item.title;
+				headline = item.title;
 
 				/** Description **/
-				if(item && item.pagemap && item.pagemap.webpage && item.pagemap.webpage[0].description) description = item.pagemap.webpage[0].description;
+				if (item && item.pagemap && item.pagemap.webpage && item.pagemap.webpage[0].description) description = item.pagemap.webpage[0].description;
 				else description = item.snippet;
 
 				/** Date **/
-				if(item && item.pagemap && item.pagemap.webpage && item.pagemap.webpage[0].datecreated) {
+				if (item && item.pagemap && item.pagemap.webpage && item.pagemap.webpage[0].datecreated) {
 					date = item.pagemap.webpage[0].datecreated;
 					date = new Date(date);
 					date = date.toDateString();
@@ -622,10 +628,10 @@ $(function() {
 			case "theatlantic.com":
 				link = item.link;
 				headline = item.title;
-				if(item && item.pagemap && item.pagemap.newsarticle && item.pagemap.newsarticle[0].description) description = item.pagemap.newsarticle[0].description;
+				if (item && item.pagemap && item.pagemap.newsarticle && item.pagemap.newsarticle[0].description) description = item.pagemap.newsarticle[0].description;
 				else description = item.snippet;
 
-				if(item && item.pagemap && item.pagemap.newsarticle && item.pagemap.newsarticle[0].datepublished) {
+				if (item && item.pagemap && item.pagemap.newsarticle && item.pagemap.newsarticle[0].datepublished) {
 					date = item.pagemap.newsarticle[0].datepublished;
 					date = new Date(date);
 					date = date.toDateString();
@@ -634,7 +640,7 @@ $(function() {
 			case "vice.com":
 				link = item.link;
 				headline = item.title;
-				if(item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["og:description"]) description = item.pagemap.metatags[0]["og:description"];
+				if (item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["og:description"]) description = item.pagemap.metatags[0]["og:description"];
 				else description = item.snippet;
 
 				/** Date **/
@@ -647,7 +653,7 @@ $(function() {
 			case "slate.com":
 				link = item.link;
 				headline = item.title;
-				if(item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["og:description"]) description = item.pagemap.metatags[0]["og:description"];
+				if (item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["og:description"]) description = item.pagemap.metatags[0]["og:description"];
 				else description = item.snippet;
 
 				/** Date **/
