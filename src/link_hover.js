@@ -2,22 +2,11 @@ import { searcher } from './btm-media.js';
 
 // const searcher = '&key=AIzaSyBS3sgS67eZkQRC_A7LZZG82AFeyBt8FW8'
 
-/* ---------- STYLES --------- */
+/* ---------- STYLES + HELPER FUNCTIONS --------- */
 
-import { popoverStyle, popoverTitleStyle, btnPrimaryStyle } from './link_hover_helpers/inline-styles.js'
+import { popoverStyle, popoverTitleStyle, btnPrimaryStyle, getPopoverHtml } from './link_hover_helpers/inline-styles.js'
 
 import { spectrumSites, siteTitles } from './link_hover_helpers/site-constants.js'
-
-/* ------- HELPER FUNCTIONS ------- */
-
-function getPopoverHtml(slug) {
-	return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popoverStyle + '">' +
-		'<div class="arrow"></div>' +
-		'<h3 style="' + popoverTitleStyle + '" class="popover-title"><span>&times;</span></h3>' +
-		'<div data-slug="' + slug + '" class="popover-content">' +
-		'</div>' +
-		'</div>';
-}
 
 
 $(function () {

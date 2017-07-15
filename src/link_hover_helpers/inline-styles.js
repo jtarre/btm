@@ -52,3 +52,10 @@ export const btnPrimaryStyle =
 	"font-family: PT Serif, serif" +
 	"border-color: black;" +
 	"margin: 10px";
+
+export const getPopoverHtml = (slug) => ('<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popoverStyle + '">' +
+	'<div class="arrow"></div>' +
+	'<h3 style="' + popoverTitleStyle + '" class="popover-title"><span>&times;</span></h3>' +
+	'<div data-slug="' + slug + '" class="popover-content">' +
+	'</div>' +
+	'</div>')

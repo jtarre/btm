@@ -76,15 +76,9 @@ var _inlineStyles = __webpack_require__(2);
 
 var _siteConstants = __webpack_require__(3);
 
-/* ------- HELPER FUNCTIONS ------- */
-
 // const searcher = '&key=AIzaSyBS3sgS67eZkQRC_A7LZZG82AFeyBt8FW8'
 
-/* ---------- STYLES --------- */
-
-function getPopoverHtml(slug) {
-	return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + _inlineStyles.popoverStyle + '">' + '<div class="arrow"></div>' + '<h3 style="' + _inlineStyles.popoverTitleStyle + '" class="popover-title"><span>&times;</span></h3>' + '<div data-slug="' + slug + '" class="popover-content">' + '</div>' + '</div>';
-}
+/* ---------- STYLES + HELPER FUNCTIONS --------- */
 
 $(function () {
 	// if(chrome && chrome.runtime && chrome.runtime.onUpdateAvailble) {
@@ -303,7 +297,7 @@ $(function () {
 
 		if (href) {
 			var slug = getSlug(href);
-			var popover_html = getPopoverHtml(slug);
+			var popover_html = (0, _inlineStyles.getPopoverHtml)(slug);
 			var content = '<button id="btm-btn-' + slug + '" style="' + _inlineStyles.btnPrimaryStyle + '" class="google-search btn btn-primary" href="javascript:void(0);" data-slug="' + slug + '">' + 'SHOW ALTERNATIVES' + '</button><div id="btm-popover-body-' + slug + '"></div>';
 			var title_style = "color: black;" +
 			// "padding: 1px;" +
@@ -637,6 +631,10 @@ var popoverTitleStyle = exports.popoverTitleStyle = "color: black;" +
 "font-family: Josefin Sans, serif;" + "font-size: 16px;" + "font-style: normal;" + "font-weight: bolder;" + "line-height: 1.42857143;" + "text-align: left;" + "text-align: start;" + "padding: 8px 14px;" + "margin: 0;" + "background-color: #f7f7f7;" + "border-bottom: 1px solid #ebebeb;" + "border-radius: 5px 5px 0 0;";
 
 var btnPrimaryStyle = exports.btnPrimaryStyle = "color: #4665B0;" + "background-color: #FECC08;" + "font-size:14px" + "font-family: PT Serif, serif" + "border-color: black;" + "margin: 10px";
+
+var getPopoverHtml = exports.getPopoverHtml = function getPopoverHtml(slug) {
+	return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popoverStyle + '">' + '<div class="arrow"></div>' + '<h3 style="' + popoverTitleStyle + '" class="popover-title"><span>&times;</span></h3>' + '<div data-slug="' + slug + '" class="popover-content">' + '</div>' + '</div>';
+};
 
 /***/ }),
 /* 3 */
