@@ -4,16 +4,16 @@ import { searcher } from './btm-media.js';
 
 /* ---------- STYLES --------- */
 
-import { popover_style, popover_title_style, btn_primary_style } from './inline-styles.js'
+import { popoverStyle, popoverTitleStyle, btnPrimaryStyle } from './link_hover_helpers/inline-styles.js'
 
-import { spectrumSites, siteTitles } from './site-constants.js'
+import { spectrumSites, siteTitles } from './link_hover_helpers/site-constants.js'
 
 /* ------- HELPER FUNCTIONS ------- */
 
 function getPopoverHtml(slug) {
-	return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popover_style + '">' +
+	return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popoverStyle + '">' +
 		'<div class="arrow"></div>' +
-		'<h3 style="' + popover_title_style + '" class="popover-title"><span>&times;</span></h3>' +
+		'<h3 style="' + popoverTitleStyle + '" class="popover-title"><span>&times;</span></h3>' +
 		'<div data-slug="' + slug + '" class="popover-content">' +
 		'</div>' +
 		'</div>';
@@ -106,13 +106,13 @@ $(function () {
 					break;
 			}
 
-			btmButton = '<button id="btm-btn-' + slug + '" style="' + btn_primary_style + '" class="google-search btn btn-primary" href="javascript:void(0);" data-slug="' + slug + '">' +
+			btmButton = '<button id="btm-btn-' + slug + '" style="' + btnPrimaryStyle + '" class="google-search btn btn-primary" href="javascript:void(0);" data-slug="' + slug + '">' +
 				'SHOW ALTERNATIVES' +
 				'</button>';
 
 			btmHover =
-				'<div data-slug="' + slug + '" style="' + popover_style + ';position:fixed;' + side + ':50px;bottom:10px;">' +
-				'<h3 style="' + popover_title_style + '">' +
+				'<div data-slug="' + slug + '" style="' + popoverStyle + ';position:fixed;' + side + ':50px;bottom:10px;">' +
+				'<h3 style="' + popoverTitleStyle + '">' +
 				'BRIDGE THE MEDIA' +
 				'</h3>' +
 				'<div id="btm-hover-' + slug + '">' +
@@ -249,7 +249,7 @@ $(function () {
 		if (href) {
 			var slug = getSlug(href);
 			var popover_html = getPopoverHtml(slug);
-			var content = '<button id="btm-btn-' + slug + '" style="' + btn_primary_style + '" class="google-search btn btn-primary" href="javascript:void(0);" data-slug="' + slug + '">' +
+			var content = '<button id="btm-btn-' + slug + '" style="' + btnPrimaryStyle + '" class="google-search btn btn-primary" href="javascript:void(0);" data-slug="' + slug + '">' +
 				'SHOW ALTERNATIVES' +
 				'</button><div id="btm-popover-body-' + slug + '"></div>';
 			var title_style =

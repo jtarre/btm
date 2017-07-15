@@ -1,4 +1,4 @@
-export const popover_style =
+export const popoverStyle =
 	"width: 250px;" +
 	"max-width: 276px;" +
 	"color: black;" +
@@ -29,7 +29,7 @@ export const popover_style =
 	"line-break: auto;" +
 	"z-index: 25";
 
-export const popover_title_style =
+export const popoverTitleStyle =
 	"color: black;" +
 	// "padding: 1px;" +
 	"font-family: Josefin Sans, serif;" +
@@ -45,7 +45,7 @@ export const popover_title_style =
 	"border-bottom: 1px solid #ebebeb;" +
 	"border-radius: 5px 5px 0 0;";
 
-export const btn_primary_style =
+export const btnPrimaryStyle =
 	"color: #4665B0;" +
 	"background-color: #FECC08;" +
 	"font-size:14px" +
