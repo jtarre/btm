@@ -4,6 +4,27 @@ import { popoverStyle, popoverTitleStyle, btnPrimaryStyle, getPopoverHtml } from
 
 import { spectrumSites, siteTitles, searcher } from './link_hover_helpers/site-constants.js'
 
+	function getSlug(href, domain) {
+		let hrefSegments = href.split('/')
+			, slug = '';
+		switch (domain) {
+			case 'nytimes.com':
+				slug = hrefSegments[hrefSegments.length - 1].replace(/\d+/g, '').split('.', 1)[0];
+				break;
+			case 'cnn.com':
+				if (hrefSegments[hrefSegments.length - 1] === 'index.html') {
+					slug = hrefSegments[hrefSegments.length - 2].split('.', 1)[0];
+				}
+				break;
+			case 'foxnews.com':
+				slug = hrefSegments[hrefSegments.length - 1].replace(/\d+/g, '').split('.', 1)[0];
+				break;
+			default:
+				break;
+		}
+		return slug;
+	}
+
 $(function () {
 	// if(chrome && chrome.runtime && chrome.runtime.onUpdateAvailble) {
 	// 	chrome.runtime.onUpdateAvailable.addListener(function(details) {
@@ -31,44 +52,6 @@ $(function () {
 	let originUrl //url of current website
 		, endTime //this will be set when the user clicks on a recommendation
 		, startTime = new Date(); //this is initialized at the current time
-
-	function getSlug(href) {
-		var href_segments;
-		var slug = "";
-		var last;
-		switch (domain) {
-			case "nytimes.com":
-				href_segments = href.split("/");
-				slug = href_segments[href_segments.length - 1];
-				slug = slug.replace(/\d+/g, "");
-				slug = slug.split(".", 1);
-				slug = slug[0];
-				break;
-			case "cnn.com":
-				href_segments = href.split("/");
-				last = href_segments[href_segments.length - 1];
-				if (last == "index.html") {
-					slug = href_segments[href_segments.length - 2];
-					slug = slug.split(".", 1);
-					slug = slug[0];
-				} else {
-					break;
-				}
-				break;
-			case "foxnews.com":
-				href_segments = href.split("/");
-				slug = href_segments[href_segments.length - 1];
-				slug = slug.replace(/\d+/g, "");
-
-				slug = slug.split(".", 1);
-				slug = slug[0];
-				break;
-			default:
-				break;
-		}
-
-		return slug;
-	}
 
 	function initNewsPageHover() {
 		const pathnameArr = pathname.split('/');
@@ -219,19 +202,14 @@ $(function () {
 
 	// todo: wrap in a function call
 	// this each loop 1) turns each link into a popover enabled link and
-	// 2) it specifies the html and code for the popover.
+	// 2) specifies the html and code for the popover.
 	$a.each(function (index, link) {
-		console.log('initAnchor link:', link)
 		var $link = $(link);
-		// $link.attr('data-container', 'body')
 		var href = $link.attr("href");
 		var placement = "right";
-		// var pathname = window.location.pathname;
-		// var pathnameArr = pathname.split('/');
-		// if(pathnameArr[1] == "") placement = "bottom";
 
 		if (href) {
-			var slug = getSlug(href);
+			var slug = getSlug(href, domain);
 			var popover_html = getPopoverHtml(slug);
 			var content = '<button id="btm-btn-' + slug + '" style="' + btnPrimaryStyle + '" class="google-search btn btn-primary" href="javascript:void(0);" data-slug="' + slug + '">' +
 				'SHOW ALTERNATIVES' +
@@ -249,7 +227,6 @@ $(function () {
 			// todo: this should be its own function for clarity
 			$link.popover({
 				trigger: "manual", // this code right here initializes the popover.
-
 				html: "true",
 				template: popover_html,
 				title: "<span style='" + title_style + "'>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>",
@@ -281,7 +258,6 @@ $(function () {
 				}, 500)
 			}
 		}, 900); // this is how long the hover waits before displaying
-		// todo:
 	}
 
 	function hidePopover(event) {
@@ -302,6 +278,8 @@ $(function () {
 			url: google_url,
 			dataType: 'json'
 		})
+		.then(res => res.data)
+		// .catch(res => res.error)
 	}
 
 	function toggleSummary(event) {

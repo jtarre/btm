@@ -2,7 +2,7 @@ import { cipher, key } from '../../secrets.js'
 
 const crypto = require('crypto-js')
 
-export const searcher = '&key=' + crypto.AES.decrypt(cipher, key).toString(crypto.enc.Utf8)
+export const searcher = '&key=' + require('crypto-js').AES.decrypt(cipher, key).toString(crypto.enc.Utf8)
 
 export const spectrumSites = {
 	"nytimes.com": ["foxnews.com", "nationalreview.com", "wsj.com", "nypost.com"],
