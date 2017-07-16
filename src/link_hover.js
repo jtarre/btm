@@ -2,28 +2,7 @@
 
 import { popoverStyle, popoverTitleStyle, btnPrimaryStyle, getPopoverHtml } from './link_hover_helpers/inline-styles.js'
 
-import { spectrumSites, siteTitles, searcher } from './link_hover_helpers/site-constants.js'
-
-	function getSlug(href, domain) {
-		let hrefSegments = href.split('/')
-			, slug = '';
-		switch (domain) {
-			case 'nytimes.com':
-				slug = hrefSegments[hrefSegments.length - 1].replace(/\d+/g, '').split('.', 1)[0];
-				break;
-			case 'cnn.com':
-				if (hrefSegments[hrefSegments.length - 1] === 'index.html') {
-					slug = hrefSegments[hrefSegments.length - 2].split('.', 1)[0];
-				}
-				break;
-			case 'foxnews.com':
-				slug = hrefSegments[hrefSegments.length - 1].replace(/\d+/g, '').split('.', 1)[0];
-				break;
-			default:
-				break;
-		}
-		return slug;
-	}
+import { spectrumSites, siteTitles, searcher, getSlug } from './link_hover_helpers/site-constants.js'
 
 $(function () {
 	// if(chrome && chrome.runtime && chrome.runtime.onUpdateAvailble) {
@@ -278,8 +257,6 @@ $(function () {
 			url: google_url,
 			dataType: 'json'
 		})
-		.then(res => res.data)
-		// .catch(res => res.error)
 	}
 
 	function toggleSummary(event) {

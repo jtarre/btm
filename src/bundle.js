@@ -76,27 +76,6 @@ var _siteConstants = __webpack_require__(3);
 
 /* ---------- STYLES + HELPER FUNCTIONS --------- */
 
-function getSlug(href, domain) {
-	var hrefSegments = href.split('/'),
-	    slug = '';
-	switch (domain) {
-		case 'nytimes.com':
-			slug = hrefSegments[hrefSegments.length - 1].replace(/\d+/g, '').split('.', 1)[0];
-			break;
-		case 'cnn.com':
-			if (hrefSegments[hrefSegments.length - 1] === 'index.html') {
-				slug = hrefSegments[hrefSegments.length - 2].split('.', 1)[0];
-			}
-			break;
-		case 'foxnews.com':
-			slug = hrefSegments[hrefSegments.length - 1].replace(/\d+/g, '').split('.', 1)[0];
-			break;
-		default:
-			break;
-	}
-	return slug;
-}
-
 $(function () {
 	// if(chrome && chrome.runtime && chrome.runtime.onUpdateAvailble) {
 	// 	chrome.runtime.onUpdateAvailable.addListener(function(details) {
@@ -270,7 +249,7 @@ $(function () {
 		var placement = "right";
 
 		if (href) {
-			var slug = getSlug(href, domain);
+			var slug = (0, _siteConstants.getSlug)(href, domain);
 			var popover_html = (0, _inlineStyles.getPopoverHtml)(slug);
 			var content = '<button id="btm-btn-' + slug + '" style="' + _inlineStyles.btnPrimaryStyle + '" class="google-search btn btn-primary" href="javascript:void(0);" data-slug="' + slug + '">' + 'SHOW ALTERNATIVES' + '</button><div id="btm-popover-body-' + slug + '"></div>';
 			var title_style = "color: black;" +
@@ -330,10 +309,7 @@ $(function () {
 			type: 'get',
 			url: google_url,
 			dataType: 'json'
-		}).then(function (res) {
-			return res.data;
 		});
-		// .catch(res => res.error)
 	}
 
 	function toggleSummary(event) {
@@ -610,9 +586,30 @@ var getPopoverHtml = exports.getPopoverHtml = function getPopoverHtml(slug) {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.siteTitles = exports.spectrumSites = exports.searcher = undefined;
+exports.siteTitles = exports.spectrumSites = exports.searcher = exports.getSlug = undefined;
 
 var _secrets = __webpack_require__(4);
+
+var getSlug = exports.getSlug = function getSlug(href, domain) {
+	var hrefSegments = href.split('/');
+	var slug = '';
+	switch (domain) {
+		case 'nytimes.com':
+			slug = hrefSegments[hrefSegments.length - 1].replace(/\d+/g, '').split('.', 1)[0];
+			break;
+		case 'cnn.com':
+			if (hrefSegments[hrefSegments.length - 1] === 'index.html') {
+				slug = hrefSegments[hrefSegments.length - 2].split('.', 1)[0];
+			}
+			break;
+		case 'foxnews.com':
+			slug = hrefSegments[hrefSegments.length - 1].replace(/\d+/g, '').split('.', 1)[0];
+			break;
+		default:
+			break;
+	}
+	return slug;
+};
 
 var crypto = __webpack_require__(15);
 
