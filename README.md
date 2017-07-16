@@ -26,6 +26,14 @@ The goal is to separate the logic for embedding the BTM icon/Show Alternatives b
 	- should be responsible for registering events that use recommendation-fetcher for obtaining recommendations
 	- should be responsible for rendering recommendations into html that makes up the BTM popover
 
+
+## Deployment
+
+1. Get the ```secrets``` on your local machine from a BTM dev
+2. ```npm run build``` to generate a `bundle.js`
+3. Make sure the ```manifest.json``` points to the ```bundle.js```
+
+
 ## Testing
 
 - Currently using Mocha + Chai - see recommendation-fetcher-spec.js for an example
