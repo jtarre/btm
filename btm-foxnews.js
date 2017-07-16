@@ -101,43 +101,46 @@ $(function() {
 	}
 
 	function facebookInterval() {
-		checkFacebookLinks();
+		setInterval(checkFacebookLinks, 5000);
+		//checkFacebookLinks();
 	}
+
+	function hasUndefinedElements(elements){
+		return elements[0] === undefined;
+	}
+
+	function hasProperTextElements(href, elements){
+		var result = false;
+		elements.forEach(function(element){
+			if (element['childNodes'][0] !== undefined){
+				if (element['childNodes'][0]['nodeName'] === '#text'){
+					result = true;
+				}
+			}
+			if (element['nextSibling'] !== null){
+				if (element['nextSibling']['nodeName'] === '#text' && !element['nodeName'] === "DIV"){
+					result = true;
+				}
+			}
+		});
+		return result;
+	}
+
 
   function getLinks() {
 		var $a;
-		var pathname = window.location.pathname;
-		var pathname_split = pathname.split('/');
-		if(pathname_split.length > 2){
-				$a = $('.ob-last a');
-      }
-		else if(pathname_split[1] == ""){ // it's the homepage
-				$a = $('#col a, .rail a, #opinion a');
-      }
-		else {
-			var header = pathname_split[1];
-			switch(header) {
-			     case "opinion.html":
-					      $a = $('.row-1 a, .row-2 .mod-2 a, .row-2 .mod-3 a, .row-3 .mod-4 a, .row-4 a, .row-5 a, .row-6 .mod-7 a');
-							  break;
-					 case "us.html":
-							  $a = $('.row-1 a, .row-2 a, .row-3 a, .row-4 .bkt-4 a, .row-5 .bkt-5 a, .row-6 a, .row-7 a, .row-8 a, .row-9 a, .row-10 a')
-							  break;
-					 case "politics.html":
-							  $a = $('.mod-1 a, .mod-2 a, .in-house a, .mod-4 a, .video-ct a, .article-ct a, .mod-5 a, .mod-7 a');
-							  break;
-					 case "world.html":
-							  $a = $('.row-1 a, .row-2 a, .row-3 .video-ct a, .row-4 .left a, .row-4 .right a, .row-5, .row-6 .right .video-ct a, .row-6 .right .article-ct a, .row-7 .js-infinite-scroll-list a');
-							  break;
-					default:
-							  $a = $('#nolinks');
-							  break;
-					}
-				}
+		var $a = $("a");
       $a = $a.filter(function(index){
+				 var includesPoliticsOrOpinion = false;
+				 var hasRightElements = false;
     	   href = $(this).attr("href");
-    	   return href.includes("/politics/") || href.includes("/opinion/");
-    	})
+				 if (href !== undefined){
+					 elements = $(this).find('*').toArray();
+					 includesPoliticsOrOpinion = href.includes("/politics/") || href.includes("/opinion/");
+					 hasRightElements = hasUndefinedElements(elements) || hasProperTextElements(href, elements);
+			 	}
+				 return includesPoliticsOrOpinion && hasRightElements;
+    	});
 		return $a;
 	}
 
@@ -174,7 +177,10 @@ $(function() {
 								title: "<span style='" + title_style +"'>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>",
 								content: content
 							})
-						$btm_button.insertAfter($element);
+						if (!$element.next().is('a')){
+								$btm_button.insertAfter($element);
+						}
+
 						$btm_button.on('shown.bs.popover', initPopover.bind($btm_button, slug, href));
 						$btm_button.on('shown.bs.popover', hidePopoverIfUnused.bind($btm_button, slug));
 
