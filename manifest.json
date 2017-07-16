@@ -3,7 +3,7 @@
 
   "name": "Bridge the Media",
   "description": "Get outside your bubble. Expand your horizons. Read across the political spectrum",
-  "version": "1.5",
+  "version": "1.6",
   "icons": { "16": "btm_logo.png",
            "48": "btm_logo.png",
           "128": "btm_logo.png" },
