@@ -97,15 +97,16 @@ $(function() {
 
 	function hasProperTextElements(href, elements){
 		var result = false;
+
 		elements.forEach(function(element){
 
 			if (element['childNodes'][0] !== undefined){
-				if (element['childNodes'][0]['nodeName'] === '#text'){
+				if (element['childNodes'][0]['nodeName'] === '#text' && $(element['childNodes'][0]).parents('figcaption').length === 0){
 					result = true;
 				}
 			}
 			if (element['nextSibling'] !== null){
-				if (element['nextSibling']['nodeName'] === '#text' && !element['nodeName'] === "DIV"){
+				if (element['nextSibling']['nodeName'] === '#text' && element['nodeName'] !== "DIV" && $.trim(element['nextSibling']['textContent']) !== ""){
 					result = true;
 				}
 			}
@@ -228,7 +229,9 @@ $(function() {
 		$cache.collapse('toggle');
 	}
 
-	embedIconsInterval();
+	if (window.location.hostname !== "www.facebook.com"){
+		embedIconsInterval();
+	}
 
 	function getPopoverHtml(slug) {
 		return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popover_style + '">' +
