@@ -1,13 +1,8 @@
-import { searcher } from './btm-media.js';
-
-// const searcher = '&key=AIzaSyBS3sgS67eZkQRC_A7LZZG82AFeyBt8FW8'
-
 /* ---------- STYLES + HELPER FUNCTIONS --------- */
 
 import { popoverStyle, popoverTitleStyle, btnPrimaryStyle, getPopoverHtml } from './link_hover_helpers/inline-styles.js'
 
-import { spectrumSites, siteTitles } from './link_hover_helpers/site-constants.js'
-
+import { spectrumSites, siteTitles, searcher } from './link_hover_helpers/site-constants.js'
 
 $(function () {
 	// if(chrome && chrome.runtime && chrome.runtime.onUpdateAvailble) {

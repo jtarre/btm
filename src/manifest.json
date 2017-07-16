@@ -35,8 +35,6 @@
         "external/jquery-3.2.0.js",
         "btm-facebook.js",
         "bundle.js",
-        // "link_hover.js",
-        // "btm-media.js",
         "external/bootstrap-3.3.7-dist/js/bootstrap.js"
       ]
     }
