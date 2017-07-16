@@ -162,7 +162,7 @@ $(function() {
 
 						function initPopover(slug, href_split) {
 							originUrl = href_split.slice(2, href_split.length-1).join("/") + "/" + slug + ".html";
-							chrome.runtime.sendMessage({source: "Facebook", type: "Facebook BTM Icon Click"}, function(response) {
+							chrome.runtime.sendMessage({source: "Facebook", type: "BTM Icon Click"}, function(response) {
 							});
 							$btm_button = this;
 							var sites = spectrum_sites["www.nytimes.com"];

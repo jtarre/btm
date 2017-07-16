@@ -29,7 +29,7 @@ $(function() {
 	  "box-shadow: 0 5px 10px rgba(0, 0, 0, .2);" +
   		"line-break: auto;" +
   		"z-index: 25";
-  
+
   	var popover_title_style =
 		"color: black;" +
 		  // "padding: 1px;" +
@@ -78,10 +78,14 @@ $(function() {
 		"huffingtonpost.com": "Huffington Post",
 		"thedailybeast.com": "Daily Beast",
 		"reason.com": "Reason",
-		"telegraph.co.uk": "The Telegraph"
+		"telegraph.co.uk": "The Telegraph",
+		"nytimes.com": "NY Times"
 	}
 
+	var domain = window.location.hostname.split('www.')[1];
+	var originTitle = (get_site_title[domain] !== undefined ? get_site_title[domain] : domain);
 	var originUrl;
+	var startTime = new Date();
 
 	function embedIconsInterval() {
 		setInterval(embedIcons, 5000);
@@ -127,18 +131,27 @@ $(function() {
 		return $a;
 	}
 
+	function getSlug(href) {
+		var href_segments;
+		var slug = "";
+		var last;
+		href_segments = href.split("/");
+		slug = href_segments[href_segments.length-1];
+		slug = slug.replace(/\d+/g, "");
+		slug = slug.split(".", 1);
+		slug = slug[0];
+		return slug;
+	}
+
 	function embedIcons() {
 		$links = getLinks();
 		var href;
-		var href_split;
 		var slug;
 		var $element;
-		var pathname;
-		var $newsfeed_post;
-		var $post_text;
 		$links.each(function(index, element) { // this is for nytimes only. not general
 			$element = $(element);
-			href = $element.attr('href')
+			href = $element.attr('href');
+			slug = getSlug(href);
 			var btmimg = chrome.runtime.getURL('icons/btm_logo.png');
 		  var $btm_button = $('<a href="javascript:void(0);"><img src="' + btmimg + '" height="20" width="20"></a>');
 		  var popover_html = getPopoverHtml(slug);
@@ -168,11 +181,10 @@ $(function() {
 						$btm_button.on('shown.bs.popover', hidePopoverIfUnused.bind($btm_button, slug));
 
 						function initPopover(slug, href) {
-							originUrl = href;
-							chrome.runtime.sendMessage({source: "Facebook", type: "Facebook BTM Icon Click"}, function(response) {
+							chrome.runtime.sendMessage({source: originTitle, type: "BTM Icon Click"}, function(response) {
 							});
 							$btm_button = this;
-							var sites = spectrum_sites["www.foxnews.com"];
+							var sites = spectrum_sites[window.location.hostname];
 							var site_promises = siteSearches(sites, slug);
 							$('.btm-close').on('click', function() { $btm_button.popover('hide') });
 							$.when.apply($, site_promises)
@@ -210,16 +222,10 @@ $(function() {
 	function toggleSummary(event) {
 		event.preventDefault();
 		var $link = $(event.target);
-		// console.log('(createCollapseEvents) link:', $link);
-		// if($link.hasClass('fa-user-circle') || $link.hasClass('fa-meetup')) $link = $link.parent();
-
 		var cache = $link.data('cache');
 		var $cache = $('#' + cache);
 		var $caret = $('#btm-span-' + cache);
 		$cache.collapse('toggle');
-
-		// if($caret.hasClass('fa-meetup')) $caret.addClass('fa-user-circle').removeClass('fa-meetup');
-		// else $caret.addClass('fa-meetup').removeClass('fa-user-circle');
 	}
 
 	embedIconsInterval();
@@ -238,7 +244,6 @@ $(function() {
 	}
 
 	function toggleArticles(slug, event) {
-		// console.log('(toggleArticles) display:', $('#btm-popover-body-' + slug).attr('display'));
 		if($('#btm-popover-body-' + slug + ':hidden').length > 0)
 			toggleVisible($('#btm-popover-body-' + slug), $('#btm-btn-' + slug));
 		else
@@ -259,11 +264,10 @@ $(function() {
 		var sites = spectrum_sites[window.location.hostname];
 		var site_promises = siteSearches(sites, slug);
 		$.when.apply($, site_promises)
-		.then(function() { // this is the promise part of the site
+		.then(function() {
 			$('#btm-btn-' + slug).hide();
 			var search_results = Array.prototype.slice.call(arguments);
 			var popup = createPopup(search_results, slug);
-			// add popup to page
 			$('#btm-popover-body-' + slug).after(popup);
 			$('.collapse-link').on('click', toggleSummary);
 			$('.popup-link').on('click', openArticleLink);
@@ -294,14 +298,15 @@ $(function() {
 		event.preventDefault();
 		var $link = $(event.target);
 		var href = $link.attr('href');
-		console.log("clicking article!");
-		console.log(href);
-		console.log(originUrl);
+		originUrl = originUrl != undefined ? originUrl : window.location.hostname + window.location.pathname;
+		endTime = new Date();
+		elapsedTime = Math.round((endTime - startTime)/60000); // calculate elapsedTime in minutes
+		startTime = new Date(); // reset startTime
 		chrome.runtime.sendMessage({targetUrl: href,
 															  type: "Outbound Link Click",
-		                            source: "Facebook",
+		                            source: originTitle,
 															  originUrl: originUrl,
-															  elapsedTime: 0},
+															  elapsedTime: elapsedTime},
 		                            function(response) {});
 		window.open(href);
 		$('.popup-link').on('click', openArticleLink)
@@ -341,13 +346,6 @@ $(function() {
 			popup_details.headline,
 			popup_details.description,
 			popup_details.date, slug);
-		// function compare_date(items, article_date, args) {
-		// 	for( var i = 0; i < args.length; ++i ) {
-		// 		if(!args[i]) return;
-		// 	}
-		// 	var compare_date = new Date("August 31 2017");
-		// 	var date = new Date(article_date);
-		// }
 	}
 
 	function createItemHtml(site, link, title, description, date, slug) {
@@ -481,26 +479,12 @@ $(function() {
 				headline = item.title;
 				if(item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["og:description"]) description = item.pagemap.metatags[0]["og:description"];
 				else description = item.snippet;
-
-				/** Date **/
-				// if(item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]['article:published_time']) {
-				// 	date = item.pagemap.metatags[0]['article:published_time'];
-				// 	date = new Date(date);
-				// 	date = date.toDateString();
-				// }
 				break;
 			case "slate.com":
 				link = item.link;
 				headline = item.title;
 				if(item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["og:description"]) description = item.pagemap.metatags[0]["og:description"];
 				else description = item.snippet;
-
-				/** Date **/
-				// if(item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]['article:published_time']) {
-				// 	date = item.pagemap.metatags[0]['article:published_time'];
-				// 	date = new Date(date);
-				// 	date = date.toDateString();
-				// }
 				break;
 			case "huffingtonpost.com":
 				break;
