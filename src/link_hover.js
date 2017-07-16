@@ -68,9 +68,8 @@ $(function () {
 		}
 
 		$('body').append($(btmHover));
-		var sites = spectrumSites[domain];
-		var site_promises = siteSearches(sites, slug);
-		Promise.all(site_promises)
+		var sitePromises = siteSearches(spectrumSites[domain], slug);
+		Promise.all(sitePromises)
 			.then((search_results) => {
 				console.log('(init page hover) search results:', search_results);
 				var popup = createPopup(search_results, slug);
@@ -381,9 +380,8 @@ $(function () {
 	}
 
 	function displayArticles(slug, event) {
-		var sites = spectrumSites[domain];
-		var site_promises = siteSearches(sites, slug);
-		Promise.all(site_promises)
+		var sitePromises = siteSearches(spectrumSites[domain], slug);
+		Promise.all(sitePromises)
 			.then(function (search_results) { // this is the promise part of the site
 				$('#btm-btn-' + slug).hide();
 				var popup = createPopup(search_results, slug);
