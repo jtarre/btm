@@ -29,12 +29,7 @@ $(function() {
 	  "box-shadow: 0 5px 10px rgba(0, 0, 0, .2);" +
   		"line-break: auto;" +
   		"z-index: 25";
-  	// i think each and every div and element needs separate styling to break
-  	// with the styling of the page
-  	// impatience slows me down
-  	// work through methodically, without checking facebook
-  	// adn the development will proceed at its own pace
-
+  
   	var popover_title_style =
 		"color: black;" +
 		  // "padding: 1px;" +
@@ -88,21 +83,8 @@ $(function() {
 
 	var originUrl;
 
-	var facebook_links = {};
-	var slug_list = {};
-	function facebookInit() {
-		switch(window.location.hostname) {
-			case "www.facebook.com":
-				break;
-			default:
-				break;
-		}
-		checkFacebookLinks();
-	}
-
-	function facebookInterval() {
-		setInterval(checkFacebookLinks, 5000);
-		//checkFacebookLinks();
+	function embedIconsInterval() {
+		setInterval(embedIcons, 5000);
 	}
 
 	function hasUndefinedElements(elements){
@@ -112,6 +94,7 @@ $(function() {
 	function hasProperTextElements(href, elements){
 		var result = false;
 		elements.forEach(function(element){
+
 			if (element['childNodes'][0] !== undefined){
 				if (element['childNodes'][0]['nodeName'] === '#text'){
 					result = true;
@@ -136,7 +119,7 @@ $(function() {
     	   href = $(this).attr("href");
 				 if (href !== undefined){
 					 elements = $(this).find('*').toArray();
-					 includesPoliticsOrOpinion = href.includes("/politics/") || href.includes("/opinion/");
+					 includesPoliticsOrOpinion = (href.includes("/politics/") || href.includes("/opinion/")) && !href.includes("index.html");
 					 hasRightElements = hasUndefinedElements(elements) || hasProperTextElements(href, elements);
 			 	}
 				 return includesPoliticsOrOpinion && hasRightElements;
@@ -144,7 +127,7 @@ $(function() {
 		return $a;
 	}
 
-	function checkFacebookLinks() {
+	function embedIcons() {
 		$links = getLinks();
 		var href;
 		var href_split;
@@ -239,8 +222,7 @@ $(function() {
 		// else $caret.addClass('fa-meetup').removeClass('fa-user-circle');
 	}
 
-	// facebookInit();
-	facebookInterval();
+	embedIconsInterval();
 
 	function getPopoverHtml(slug) {
 		return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popover_style + '">' +
