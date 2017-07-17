@@ -260,7 +260,7 @@ $(function() {
 	initNewsPageHover();
 
 	// initialization for a home page such as nytimes.com or foxnews.com
-	// this is the place where we specify what parts of the page have the btm 
+	// this is the place where we specify what parts of the page have the btm
 	// hover made active. if you want to change, come here.
 	function initAnchor() {
 		var $a;
@@ -320,7 +320,7 @@ $(function() {
 	var $a = initAnchor();
 
 	// todo: wrap in a function call
-	// this each loop 1) turns each link into a popover enabled link and 
+	// this each loop 1) turns each link into a popover enabled link and
 	// 2) it specifies the html and code for the popover.
 	$a.each(function(index, link) {
 		$link = $(link);
@@ -349,7 +349,7 @@ $(function() {
 		  "text-align: left;" +
 		  "text-align: start;";
 			// todo: this should be its own function for clarity
-			$link.popover({trigger: "manual", // this code right here initializes the popover. 
+			$link.popover({trigger: "manual", // this code right here initializes the popover.
 
 						html: "true",
 						template: popover_html,
@@ -357,13 +357,13 @@ $(function() {
 						placement: placement,
 						content: content
 					})
-					.on("mouseenter", popoverEnter.bind($link, slug)) 
+					.on("mouseenter", popoverEnter.bind($link, slug))
 		}
 	})
-	
+
 	// this function defines how the popover interacts with the mouse
 	// e.g. how long you have to hover over a link before the bubble pops up
-	// this is 
+	// this is
 	function popoverEnter (slug) {
 		var $link = this;
 		originUrl = $link.attr("href");
@@ -382,7 +382,7 @@ $(function() {
 				}, 500)
 			}
 		}, 900); // this is how long the hover waits before displaying
-		// todo: 
+		// todo:
 	}
 
 	function hidePopover(event) {
@@ -435,7 +435,6 @@ $(function() {
 															 	elapsedTime: elapsedTime},
 		                            function(response) {});
 		window.open(href);
-		$('.popup-link').on('click', openArticleLink)
 	}
 
 	// css and html for each news snippet
