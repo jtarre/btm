@@ -2,7 +2,7 @@ const path = require('path')
     , webpack = require('webpack');
 
 module.exports = {
-  entry: './src/link_hover.js',
+  entry: './src/btm-embed-icon.js',
   output: {
     path: path.resolve(__dirname, 'src'),
     filename: 'bundle.js'

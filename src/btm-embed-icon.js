@@ -1,91 +1,19 @@
+/* ---------- STYLES + HELPER FUNCTIONS --------- */
+
+import { getPopoverHtml } from './link_hover_helpers/inline-styles.js'
+
+import { spectrumSites, siteTitles, searcher, getSlug } from './link_hover_helpers/site-constants.js'
+
+
 $(function() {
-	var popover_style =
-	  "width: 250px;" +
-	  "max-width: 276px;" +
-	  "color: black;" +
-	  "padding: 1px;" +
-	  "font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;" +
-	  "font-size: 14px;" +
-	  "font-style: normal;" +
-	  "font-weight: normal;" +
-	  "line-height: 1.42857143;" +
-	  "text-align: left;" +
-	  "text-align: start;" +
-	  "text-decoration: none;" +
-	  "text-shadow: none;" +
-	  "text-transform: none;" +
-	  "letter-spacing: normal;" +
-	  "word-break: normal;" +
-	  "word-spacing: normal;" +
-	  "word-wrap: normal;" +
-	  "white-space: normal;" +
-	  "background-color: #fff;" +
-	  "-webkit-background-clip: padding-box;" +
-	  "background-clip: padding-box;" +
-	  "border: 1px solid #ccc;" +
-	  "border: 1px solid rgba(0, 0, 0, .2);" +
-	  "border-radius: 6px;" +
-	  "-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);" +
-	  "box-shadow: 0 5px 10px rgba(0, 0, 0, .2);" +
-  		"line-break: auto;" +
-  		"z-index: 25";
 
-  	var popover_title_style =
-		"color: black;" +
-		  // "padding: 1px;" +
-		  "font-family: Josefin Sans, serif;" +
-		  "font-size: 16px;" +
-		  "font-style: normal;" +
-		  "font-weight: bolder;" +
-		  "line-height: 1.42857143;" +
-		  "text-align: left;" +
-		  "text-align: start;" +
-		"padding: 8px 14px;" +
-		"margin: 0;" +
-		"background-color: #f7f7f7;" +
-		"border-bottom: 1px solid #ebebeb;" +
-		"border-radius: 5px 5px 0 0;";
+	const domain = window.location.hostname.split('www.')[1]
+		, pathname = window.location.pathname
+		, originTitle = siteTitles[domain] !== undefined ? siteTitles[domain] : domain;
 
-  	var btn_primary_style =
-		"color: #4665B0;" +
-		"background-color: #FECC08;" +
-		"font-size:14px" +
-		"font-family: PT Serif, serif" +
-		"border-color: black;" +
-		"margin: 10px";
-
-	var spectrum_sites = {
-		"www.nytimes.com": ["foxnews.com", "nationalreview.com", "wsj.com","nypost.com"],
-		"www.cnn.com": ["thehill.com", "thefiscaltimes.com", "forbes.com","economist.com"],
-		"www.foxnews.com": ["theatlantic.com", "vice.com", "slate.com"],
-		"www.politico.com": ["nypost.com", "foxnews.com", "washingtontimes.com"],
-		"www.vox.com": ["nypost.com", "foxnews.com", "washingtontimes.com"],
-		"www.nbcnews.com": ["nypost.com", "foxnews.com", "washingtontimes.com"]
-	}
-
-	var get_site_title = {
-		"foxnews.com": "Fox News",
-		"nationalreview.com": "National Review",
-		"wsj.com": "Wall Street Journal",
-		"nypost.com": "New York Post",
-		"thehill.com": "The Hill",
-		"thefiscaltimes.com": "The Fiscal Times",
-		"forbes.com": "Forbes",
-		"economist.com": "The Economist",
-		"theatlantic.com": "The Atlantic",
-		"vice.com": "Vice",
-		"slate.com": "Slate",
-		"huffingtonpost.com": "Huffington Post",
-		"thedailybeast.com": "Daily Beast",
-		"reason.com": "Reason",
-		"telegraph.co.uk": "The Telegraph",
-		"nytimes.com": "NY Times"
-	}
-
-	var domain = window.location.hostname.split('www.')[1];
-	var originTitle = (get_site_title[domain] !== undefined ? get_site_title[domain] : domain);
-	var originUrl;
-	var startTime = new Date();
+	let originUrl //url of current website
+		, endTime //this will be set when the user clicks on a recommendation
+		, startTime = new Date(); //this is initialized at the current time
 
 	function embedIconsInterval() {
 		setInterval(embedIcons, 5000);
@@ -95,7 +23,7 @@ $(function() {
 		return elements[0] === undefined;
 	}
 
-	function hasProperTextElements(href, elements){
+	function hasProperTextElements(elements){
 		var result = false;
 
 		elements.forEach(function(element){
@@ -121,27 +49,15 @@ $(function() {
       $a = $a.filter(function(index){
 				 var includesPoliticsOrOpinion = false;
 				 var hasRightElements = false;
-    	   href = $(this).attr("href");
+    	   var href = $(this).attr("href");
 				 if (href !== undefined){
-					 elements = $(this).find('*').toArray();
+					 var elements = $(this).find('*').toArray();
 					 includesPoliticsOrOpinion = (href.includes("/politics/") || href.includes("/opinion/")) && !href.includes("index.html");
-					 hasRightElements = hasUndefinedElements(elements) || hasProperTextElements(href, elements);
+					 hasRightElements = hasUndefinedElements(elements) || hasProperTextElements(elements);
 			 	}
 				 return includesPoliticsOrOpinion && hasRightElements;
     	});
 		return $a;
-	}
-
-	function getSlug(href) {
-		var href_segments;
-		var slug = "";
-		var last;
-		href_segments = href.split("/");
-		slug = href_segments[href_segments.length-1];
-		slug = slug.replace(/\d+/g, "");
-		slug = slug.split(".", 1);
-		slug = slug[0];
-		return slug;
 	}
 
 	function embedIcons() {
@@ -153,6 +69,7 @@ $(function() {
 			$element = $(element);
 			href = $element.attr('href');
 			slug = getSlug(href);
+			var placement = "right";
 			var btmimg = chrome.runtime.getURL('icons/btm_logo.png');
 		  var $btm_button = $('<a href="javascript:void(0);"><img src="' + btmimg + '" height="20" width="20"></a>');
 		  var popover_html = getPopoverHtml(slug);
@@ -172,6 +89,7 @@ $(function() {
 								html: "true",
 								template: popover_html,
 								title: "<span style='" + title_style +"'>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>",
+								placement: placement,
 								content: content
 							})
 						if (!$element.next().is('a')){
@@ -179,13 +97,13 @@ $(function() {
 						}
 
 						$btm_button.on('shown.bs.popover', initPopover.bind($btm_button, slug, href));
-						$btm_button.on('shown.bs.popover', hidePopoverIfUnused.bind($btm_button, slug));
+						// $btm_button.on('shown.bs.popover', hidePopoverIfUnused.bind($btm_button, slug));
 
 						function initPopover(slug, href) {
 							chrome.runtime.sendMessage({source: originTitle, type: "BTM Icon Click"}, function(response) {
 							});
 							$btm_button = this;
-							var sites = spectrum_sites[window.location.hostname];
+							var sites = spectrumSites[domain];
 							var site_promises = siteSearches(sites, slug);
 							$('.btm-close').on('click', function() { $btm_button.popover('hide') });
 							$.when.apply($, site_promises)
@@ -202,19 +120,20 @@ $(function() {
 							})
 						}
 
-						function hidePopoverIfUnused(slug) {
-							var $btm_button = this;
-							var interval = setInterval(btmHidePopover.bind($btm_button, slug),5000);
-							function btmHidePopover (slug) {
-								$popover = $('.popover[data-slug="' + slug + '"]');
-								if(!$popover.is(':hover')) {
-									$btm_button.popover('hide');
-									$btm_button.on('hidden.bs.popover', function() {
-										clearInterval(interval);
-									});
-								}
-							}
-					}
+					// 	function hidePopoverIfUnused(slug) {
+					// 		var $btm_button = this;
+					// 		var $popover;
+					// 		var interval = setInterval(btmHidePopover.bind($btm_button, slug),5000);
+					// 		function btmHidePopover (slug) {
+					// 			$popover = $('.popover[data-slug="' + slug + '"]');
+					// 			if(!$popover.is(':hover')) {
+					// 				$btm_button.popover('hide');
+					// 				$btm_button.on('hidden.bs.popover', function() {
+					// 					clearInterval(interval);
+					// 				});
+					// 			}
+					// 		}
+					// }
 			})
 
 
@@ -231,15 +150,6 @@ $(function() {
 
 	if (window.location.hostname !== "www.facebook.com"){
 		embedIconsInterval();
-	}
-
-	function getPopoverHtml(slug) {
-		return '<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popover_style + '">' +
-		'<div class="arrow"></div>' +
-		'<h3 style="' + popover_title_style + '" class="popover-title"><span>&times;</span></h3>' +
-		'<div data-slug="' + slug + '" class="popover-content">' +
-		'</div>' +
-		'</div>';
 	}
 
 	function closeHover(event) {
@@ -264,17 +174,16 @@ $(function() {
 	}
 
 	function displayArticles(slug, event) {
-		var sites = spectrum_sites[window.location.hostname];
-		var site_promises = siteSearches(sites, slug);
-		$.when.apply($, site_promises)
-		.then(function() {
-			$('#btm-btn-' + slug).hide();
-			var search_results = Array.prototype.slice.call(arguments);
-			var popup = createPopup(search_results, slug);
-			$('#btm-popover-body-' + slug).after(popup);
-			$('.collapse-link').on('click', toggleSummary);
-			$('.popup-link').on('click', openArticleLink);
-		})
+		var sitePromises = siteSearches(spectrumSites[domain], slug);
+		Promise.all(sitePromises)
+			.then(function (search_results) { // this is the promise part of the site
+				$('#btm-btn-' + slug).hide();
+				var popup = createPopup(search_results, slug);
+				// add popup to page
+				$('#btm-popover-body-' + slug).after(popup);
+				$('.collapse-link').on('click', toggleSummary);
+				$('.popup-link').on('click', openArticleLink);
+			})
 	}
 
 	function hidePopover(event) {
@@ -289,7 +198,7 @@ $(function() {
 	}
 
 	function siteSearch(site, search) {
-		var google_url ='https://www.googleapis.com/customsearch/v1?q=' + search + ' &cx=013013877924597244999%3Atbq0ixuctim&dateRestrict=m[7]&siteSearch=' + site + '&key=AIzaSyBS3sgS67eZkQRC_A7LZZG82AFeyBt8FW8';
+		var google_url = 'https://www.googleapis.com/customsearch/v1?q=' + search + ' &cx=013013877924597244999%3Atbq0ixuctim&dateRestrict=m[7]&siteSearch=' + site + searcher;
 		return $.ajax({
 			type: 'get',
 			url: google_url,
@@ -315,24 +224,33 @@ $(function() {
 		$('.popup-link').on('click', openArticleLink)
 	}
 
+	// css and html for each news snippet
 	function createPopup(search_results, slug, style_addition) {
-		if(!style_addition) style_addition = "";
-		var html = "<div style='margin:10px;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;" + style_addition +"'><ul class='list-unstyled'>";
+		if (!style_addition) style_addition = "";
+
+		var html = "<div style='margin:10px;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;" + style_addition + "'><ul class='list-unstyled'>";
+
 		var html_style =
-		"color: black;" +
-		  // "padding: 1px;" +
-		  "font-family: Helvetica Neue, Helvetica, Arial, sans-serif;" +
-		  "font-size: 14px;" +
-		  "font-style: normal;" +
-		  "font-weight: normal;" +
-		  "line-height: 1.42857143;" +
-		  "text-align: left;" +
-		  "text-align: start;";
+			"color: black;" +
+			// "padding: 1px;" +
+			"font-family: Helvetica Neue, Helvetica, Arial, sans-serif;" +
+			"font-size: 14px;" +
+			"font-style: normal;" +
+			"font-weight: normal;" +
+			"line-height: 1.42857143;" +
+			"text-align: left;" +
+			"text-align: start;";
+
 		var site_title;
-		search_results.forEach(function(search_result) {
-			if(search_result && search_result[0].items) html += "<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>" + item_template(search_result[0]["queries"]["request"][0]["siteSearch"], search_result[0].items[0], slug) + "</li>";
-			else {
-				site_title = get_site_title[search_result[0]["queries"]["request"][0]["siteSearch"]];
+
+		search_results.forEach((search_result) => {
+			var result = search_result[0];
+			var site = result["queries"]["request"][0]["siteSearch"];
+			var item = result.items !== undefined ? result.items[0]: "";
+			if (result) {
+				html += "<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>" + item_template(site, item, slug) + "</li>";
+			} else {
+				site_title = siteTitles[site];
 
 				html += "<li><p style='" + html_style + "'><strong style='font-family: PT Serif;color:black;font-size:12px'>" + site_title + "</strong></br><span style='font-family: PT Serif;color:black;font-size:12px'>No Results</span></li>"
 			}
@@ -387,7 +305,7 @@ $(function() {
 	}
 
 	function getPopupDetails(publisher, item) {
-		var site_title = get_site_title[publisher];
+		var site_title = siteTitles[publisher];
 		var link;
 		var headline;
 		var description;

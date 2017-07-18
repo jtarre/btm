@@ -1,21 +1,10 @@
-export const getSlug = (href, domain) => {
-	const hrefSegments = href.split('/');
+export const getSlug = (href) => {
+	const href_segments = href.split("/");
 	let slug = '';
-	switch (domain) {
-		case 'nytimes.com':
-			slug = hrefSegments[hrefSegments.length - 1].replace(/\d+/g, '').split('.', 1)[0];
-			break;
-		case 'cnn.com':
-			if (hrefSegments[hrefSegments.length - 1] === 'index.html') {
-				slug = hrefSegments[hrefSegments.length - 2].split('.', 1)[0];
-			}
-			break;
-		case 'foxnews.com':
-			slug = hrefSegments[hrefSegments.length - 1].replace(/\d+/g, '').split('.', 1)[0];
-			break;
-		default:
-			break;
-	}
+	slug = href_segments[href_segments.length-1];
+	slug = slug.replace(/\d+/g, "");
+	slug = slug.split(".", 1);
+	slug = slug[0];
 	return slug;
 }
 
