@@ -13,6 +13,7 @@ $(function() {
 
 	let originUrl //url of current website
 		, endTime //this will be set when the user clicks on a recommendation
+		, elapsedTime
 		, startTime = new Date(); //this is initialized at the current time
 
 	function embedIconsInterval() {
@@ -92,7 +93,7 @@ $(function() {
 								placement: placement,
 								content: content
 							})
-						if (!$element.next().is('a')){
+						if (!$element.next().is('a') && $element.attr('class')!== 'popup-link'){
 								$btm_button.insertAfter($element);
 						}
 
@@ -221,7 +222,6 @@ $(function() {
 															  elapsedTime: elapsedTime},
 		                            function(response) {});
 		window.open(href);
-		$('.popup-link').on('click', openArticleLink)
 	}
 
 	// css and html for each news snippet
