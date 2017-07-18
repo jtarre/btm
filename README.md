@@ -1,6 +1,6 @@
 # Bridge The Media Chrome Extension
 
-{VERSIONING INFO HERE}
+Current production version: v.1.7
 
 ## Important files in production
 
@@ -29,12 +29,12 @@ The goal is to separate the logic for embedding the BTM icon/Show Alternatives b
 
 ## Deployment
 
-1. Get the ```secrets``` on your local machine from a BTM dev
-2. ```npm run build``` to generate a `bundle.js`
-3. Make sure the ```manifest.json``` points to the ```bundle.js```
+1. ```npm run build``` to generate a `bundle.js`
+2. Make sure the ```manifest.json``` points to the ```bundle.js```
+3. Upload the ```/src``` subdirectory as the extension's package
 
 
 ## Testing
 
 - Currently using Mocha + Chai - see recommendation-fetcher-spec.js for an example
-- To run tests: mocha --reporter=nyan ./*-spec.js
+- To run tests: ```npm test```
