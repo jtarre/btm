@@ -2,8 +2,7 @@
 
 import { getPopoverHtml } from './link_hover_helpers/inline-styles.js'
 
-import { spectrumSites, siteTitles, searcher, getSlug, createPopup, invertedSiteTitles,
-	siteSearches} from './link_hover_helpers/site-constants.js'
+import { spectrumSites, siteTitles, searcher, getSlug, createPopup, siteSearches} from './link_hover_helpers/site-constants.js'
 
 $(function() {
 

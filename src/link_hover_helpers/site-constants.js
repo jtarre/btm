@@ -42,7 +42,7 @@ export const siteTitles = {
 	"nytimes.com": "NY Times"
 }
 
-export const invertedSiteTitles = {
+const invertedSiteTitles = {
 	"Fox News": "foxnews.com",
 	"National Review": "nationalreview.com",
 	"Wall Street Journal": "wsj.com",
