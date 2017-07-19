@@ -33,7 +33,6 @@ $(function () {
 		, startTime = new Date(); //this is initialized at the current time
 
 	function initNewsPageHover() {
-		console.log("something is happening!");
 		const pathnameArr = pathname.split('/');
 		let btmHover, btmButton, slug, side;
 		if (pathnameArr.length > 5) { // it's a news page, at least for fox news, need to add hover to bottom left of page
@@ -144,7 +143,7 @@ $(function () {
 		var href = $link.attr('href');
 		originUrl = (originUrl !== undefined ? originUrl : 'http://' + domain + pathname);
 		endTime = new Date();
-		elapsedTime = Math.round((endTime - startTime) / 60000); // calculate elapsedTime in minutes
+		var elapsedTime = Math.round((endTime - startTime) / 60000); // calculate elapsedTime in minutes
 		startTime = new Date(); // reset startTime
 		chrome.runtime.sendMessage({
 			targetUrl: href,
@@ -177,10 +176,17 @@ $(function () {
 		var site_title;
 
 		search_results.forEach((search_result) => {
-			if (search_result && search_result.items[0]) {
-				html += "<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>" + item_template(search_result["queries"]["request"][0]["siteSearch"], search_result.items[0], slug) + "</li>";
+			var result;
+			if (search_result !== undefined){
+				var result = search_result;
+				var site = result["queries"]["request"][0]["siteSearch"];
+				var item = result.items !== undefined ? result.items[0]: "";
+			}
+
+			if (result) {
+				html += "<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>" + item_template(site, item, slug) + "</li>";
 			} else {
-				site_title = siteTitles[search_result["queries"]["request"][0]["siteSearch"]];
+				site_title = siteTitles[site];
 
 				html += "<li><p style='" + html_style + "'><strong style='font-family: PT Serif;color:black;font-size:12px'>" + site_title + "</strong></br><span style='font-family: PT Serif;color:black;font-size:12px'>No Results</span></li>"
 			}
