@@ -98,20 +98,19 @@ $(function() {
 						}
 
 						$btm_button.on('shown.bs.popover', initPopover.bind($btm_button, slug, href));
-						// $btm_button.on('shown.bs.popover', hidePopoverIfUnused.bind($btm_button, slug));
+						$btm_button.on('shown.bs.popover', hidePopoverIfUnused.bind($btm_button, slug));
 
 						function initPopover(slug, href) {
 							chrome.runtime.sendMessage({source: originTitle, type: "BTM Icon Click"}, function(response) {
 							});
 							$btm_button = this;
 							var sites = spectrumSites[domain];
-							var site_promises = siteSearches(sites, slug);
+							var sitePromises = siteSearches(sites, slug);
 							$('.btm-close').on('click', function() { $btm_button.popover('hide') });
-							$.when.apply($, site_promises)
-							.then(function() { // this is the promise part of the site
+							Promise.all(sitePromises)
+							.then(function(search_results) { // this is the promise part of the site
 								// $('#btm-btn-' + slug).hide();
 								$('#btm-loading-' + slug).hide();
-								var search_results = Array.prototype.slice.call(arguments);
 								var popup = createPopup(search_results, slug);
 								// add popup to page
 
@@ -121,20 +120,19 @@ $(function() {
 							})
 						}
 
-					// 	function hidePopoverIfUnused(slug) {
-					// 		var $btm_button = this;
-					// 		var $popover;
-					// 		var interval = setInterval(btmHidePopover.bind($btm_button, slug),5000);
-					// 		function btmHidePopover (slug) {
-					// 			$popover = $('.popover[data-slug="' + slug + '"]');
-					// 			if(!$popover.is(':hover')) {
-					// 				$btm_button.popover('hide');
-					// 				$btm_button.on('hidden.bs.popover', function() {
-					// 					clearInterval(interval);
-					// 				});
-					// 			}
-					// 		}
-					// }
+
+						function hidePopoverIfUnused(slug) {
+							var $btm_button = this;
+							var interval = setInterval(btmHidePopover.bind($btm_button, slug),5000);
+							function btmHidePopover (slug) {
+								var $popover = $('.popover[data-slug="' + slug + '"]');
+									$btm_button.popover('hide');
+									$btm_button.on('hidden.bs.popover', function() {
+										clearInterval(interval);
+									});
+
+							}
+						}
 			})
 
 
@@ -172,19 +170,6 @@ $(function() {
 			$button.text('SHOW ALTERNATIVES');
 			$container.fadeOut();
 		}
-	}
-
-	function displayArticles(slug, event) {
-		var sitePromises = siteSearches(spectrumSites[domain], slug);
-		Promise.all(sitePromises)
-			.then(function (search_results) { // this is the promise part of the site
-				$('#btm-btn-' + slug).hide();
-				var popup = createPopup(search_results, slug);
-				// add popup to page
-				$('#btm-popover-body-' + slug).after(popup);
-				$('.collapse-link').on('click', toggleSummary);
-				$('.popup-link').on('click', openArticleLink);
-			})
 	}
 
 	function hidePopover(event) {
@@ -244,9 +229,13 @@ $(function() {
 		var site_title;
 
 		search_results.forEach((search_result) => {
-			var result = search_result[0];
-			var site = result["queries"]["request"][0]["siteSearch"];
-			var item = result.items !== undefined ? result.items[0]: "";
+			var result;
+			if (search_result !== undefined){
+				var result = search_result;
+				var site = result["queries"]["request"][0]["siteSearch"];
+				var item = result.items !== undefined ? result.items[0]: "";
+			}
+
 			if (result) {
 				html += "<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>" + item_template(site, item, slug) + "</li>";
 			} else {
