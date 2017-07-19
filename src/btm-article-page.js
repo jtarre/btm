@@ -104,7 +104,9 @@ $(function () {
 		}
 	}
 
-	initNewsPageHover();
+	if (pathname.includes("/opinion/") || pathname.includes("/politics/")){
+		initNewsPageHover();
+	}
 
 
 	function siteSearches(sites, slug) {

@@ -104,11 +104,20 @@ $(function() {
 		setInterval(checkFacebookLinks, 5000);
 	}
 
+	function getSlug(href){
+		var href_segments = href.split("/");
+	 	var slug = '';
+		slug = href_segments[href_segments.length-1];
+		slug = slug.replace(/\d+/g, "");
+		slug = slug.split(".", 1);
+		slug = slug[0];
+		return slug;
+	}
+
 	function checkFacebookLinks() {
 		$links = $('a');
 		$links = $links.filter(function(index, element) {
 			var href = element.href;
-			// console.log($(element).text());
 			return href.indexOf('www.nytimes.com') > 0;
 		})
 		var href;
@@ -121,14 +130,14 @@ $(function() {
 		$links.each(function(index, element) { // this is for nytimes only. not general
 			$element = $(element);
 			href = $element.attr('href');
-			if(href.indexOf('%2F') > 0) {
-				href_split = href.split('%2F');
-				href_split.forEach(function(element) { // this is for nytimes
-					if(element.indexOf('.html') > 0) {
-						slug = element.split(".html")[0];
-					}
-				});
-
+			if(href.includes('/politics/') || href.includes('/opinion/')) {
+				// href_split = href.split('%2F');
+				// href_split.forEach(function(element) { // this is for nytimes
+				// 	if(element.indexOf('.html') > 0) {
+				// 		slug = element.split(".html")[0];
+				// 	}
+				// });
+				var slug = getSlug(href)
 				if(!facebook_links.hasOwnProperty(href)) {
 					facebook_links[href] = 1;
 					if(href.indexOf('www.nytimes.com') > 0 && !slug_list.hasOwnProperty(slug)) {
@@ -157,13 +166,11 @@ $(function() {
 								content: content
 							})
 						$post_text.first().append($btm_button);
-						$btm_button.on('shown.bs.popover', initPopover.bind($btm_button, slug, href_split));
+						$btm_button.on('shown.bs.popover', initPopover.bind($btm_button, slug, href));
 						$btm_button.on('shown.bs.popover', hidePopoverIfUnused.bind($btm_button, slug));
 
-						function initPopover(slug, href_split) {
-							originUrl = href_split.slice(2, href_split.length-1).join("/") + "/" + slug + ".html";
-							chrome.runtime.sendMessage({source: "Facebook", type: "BTM Icon Click"}, function(response) {
-							});
+						function initPopover(slug, href) {
+							originUrl = href;
 							$btm_button = this;
 							var sites = spectrum_sites["www.nytimes.com"];
 							var site_promises = siteSearches(sites, slug);
@@ -180,6 +187,8 @@ $(function() {
 								$('.collapse-link').on('click', toggleSummary);
 								$('.popup-link').on('click', openArticleLink);
 							})
+							chrome.runtime.sendMessage({source: "Facebook", type: "BTM Icon Click"}, function(response) {
+							});
 						}
 
 						function hidePopoverIfUnused(slug) {
@@ -187,12 +196,10 @@ $(function() {
 							var interval = setInterval(btmHidePopover.bind($btm_button, slug),5000);
 							function btmHidePopover (slug) {
 								$popover = $('.popover[data-slug="' + slug + '"]');
-								if(!$popover.is(':hover')) {
 									$btm_button.popover('hide');
 									$btm_button.on('hidden.bs.popover', function() {
 										clearInterval(interval);
-									});
-								}
+								});
 							}
 						}
 					}
@@ -291,9 +298,6 @@ $(function() {
 		event.preventDefault();
 		var $link = $(event.target);
 		var href = $link.attr('href');
-		console.log("clicking article!");
-		console.log(href);
-		console.log(originUrl);
 		chrome.runtime.sendMessage({targetUrl: href,
 															  type: "Outbound Link Click",
 		                            source: "Facebook",
