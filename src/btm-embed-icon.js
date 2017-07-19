@@ -2,8 +2,7 @@
 
 import { getPopoverHtml } from './link_hover_helpers/inline-styles.js'
 
-import { spectrumSites, siteTitles, searcher, getSlug } from './link_hover_helpers/site-constants.js'
-
+import { spectrumSites, siteTitles, searcher, getSlug, invertedSiteTitles } from './link_hover_helpers/site-constants.js'
 
 $(function() {
 
@@ -98,7 +97,7 @@ $(function() {
 						}
 
 						$btm_button.on('shown.bs.popover', initPopover.bind($btm_button, slug, href));
-						$btm_button.on('shown.bs.popover', hidePopoverIfUnused.bind($btm_button, slug));
+						//$btm_button.on('shown.bs.popover', hidePopoverIfUnused.bind($btm_button, slug));
 
 						function initPopover(slug, href) {
 
@@ -261,6 +260,7 @@ $(function() {
 	}
 
 	function createItemHtml(site, link, title, description, date, slug) {
+		var html;
 		var site_id = site.replace(/\s/g, "");
 		var random = Math.random() * 100;
 		random = random.toString();
@@ -282,7 +282,13 @@ $(function() {
 		  "font-size: 12px;";
 
 		var cache = slug + "-" + site_id + "-collapse";
-		var html =
+		if (title == undefined || description == undefined){
+			html =
+				"<p style='" + html_style + "'><strong style='font-family: PT Serif, serif;'>" + site + date + "</strong></br>" +
+				"<a style='" + anchor_style + "' target='_blank' href='http://www." + invertedSiteTitles[site] + "'>No Recommendations Available. Visit " + site + "</a></p>";
+		}
+		else {
+			html =
 			"<p style='" + html_style + "'><strong style='font-family: PT Serif, serif;'>" + site + date + "</strong></br>" +
 			"<a style='" + anchor_style + "' class='collapse-link' data-toggle='collapse' data-cache='" + cache + "' href='javascript:void(0);'>" + title + "</a></p>" +
 			"<div class='collapse' id='" + slug + "-" + site_id + "-collapse'>" +
@@ -292,6 +298,7 @@ $(function() {
 					"<p style='font-family: PT Serif, serif;color:black;font-size:12px' +>" + description + "</p>" +
 				"</div>"+
 			"</div>";
+		}
 		return html;
 	}
 
@@ -417,7 +424,6 @@ $(function() {
 			description: description,
 			date: date
 		};
-
 		return details;
 	}
 })

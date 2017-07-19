@@ -41,3 +41,21 @@ export const siteTitles = {
 	"telegraph.co.uk": "The Telegraph",
 	"nytimes.com": "NY Times"
 }
+
+export const invertedSiteTitles = {
+	"Fox News": "foxnews.com",
+	"National Review": "nationalreview.com",
+	"Wall Street Journal": "wsj.com",
+	"New York Post": "nypost.com",
+	"The Hill": "thehill.com",
+	"The Fiscal Times": "thefiscaltimes.com",
+	"The Economist": "economist.com",
+	"The Atlantic": "theatlantic.com",
+	"Vice": "vice.com",
+	"Slate": "slate.com",
+	"Huffington Post": "huffingtonpost.com",
+	"Daily Beast": "thedailybeast.com",
+	"Reason": "reason.com",
+	"The Telegraph": "telegraph.co.uk",
+	"NY Times": "nytimes.com"
+}
