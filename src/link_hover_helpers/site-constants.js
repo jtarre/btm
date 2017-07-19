@@ -42,24 +42,6 @@ export const siteTitles = {
 	"nytimes.com": "NY Times"
 }
 
-const invertedSiteTitles = {
-	"Fox News": "foxnews.com",
-	"National Review": "nationalreview.com",
-	"Wall Street Journal": "wsj.com",
-	"New York Post": "nypost.com",
-	"The Hill": "thehill.com",
-	"The Fiscal Times": "thefiscaltimes.com",
-	"The Economist": "economist.com",
-	"The Atlantic": "theatlantic.com",
-	"Vice": "vice.com",
-	"Slate": "slate.com",
-	"Huffington Post": "huffingtonpost.com",
-	"Daily Beast": "thedailybeast.com",
-	"Reason": "reason.com",
-	"The Telegraph": "telegraph.co.uk",
-	"NY Times": "nytimes.com"
-}
-
 const getPopupDetails = (publisher, item) => {
 	var site_title = siteTitles[publisher];
 	var link;
@@ -221,7 +203,7 @@ const createItemHtml = (site, link, title, description, date, slug) => {
 	if (title == undefined || description == undefined){
 		html =
 			"<p style='" + html_style + "'><strong style='font-family: PT Serif, serif;'>" + site + date + "</strong></br>" +
-			"<a style='" + anchor_style + "' target='_blank' href='http://www." + invertedSiteTitles[site] + "'>No Recommendations Available. Visit " + site + "</a></p>";
+			"<a style='" + anchor_style + "'>No Results</a></p>";
 	}
 	else {
 		html =
