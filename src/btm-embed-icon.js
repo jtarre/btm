@@ -101,8 +101,7 @@ $(function() {
 						$btm_button.on('shown.bs.popover', hidePopoverIfUnused.bind($btm_button, slug));
 
 						function initPopover(slug, href) {
-							chrome.runtime.sendMessage({source: originTitle, type: "BTM Icon Click"}, function(response) {
-							});
+
 							$btm_button = this;
 							var sites = spectrumSites[domain];
 							var sitePromises = siteSearches(sites, slug);
@@ -118,6 +117,9 @@ $(function() {
 								$('.collapse-link').on('click', toggleSummary);
 								$('.popup-link').on('click', openArticleLink);
 							})
+
+							chrome.runtime.sendMessage({source: originTitle, type: "BTM Icon Click"}, function(response) {
+							});
 						}
 
 
