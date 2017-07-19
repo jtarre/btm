@@ -290,7 +290,6 @@ $(function () {
 		},
 			function (response) { });
 		window.open(href);
-		$('.popup-link').on('click', openArticleLink)
 	}
 
 	// css and html for each news snippet

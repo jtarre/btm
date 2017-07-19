@@ -1,6 +1,14 @@
-# Bridge The Media Chrome Extension
+# Bridge The Media
 
-Current production version: v.1.7
+A nonpartisan tool for the well-rounded news reader.
+
+Our Google Chrome Extension encourages citizens to be more informed participants in American democracy through balanced media. Let us recommend articles to complete your political perspective.
+
+Current [production version](https://chrome.google.com/webstore/detail/bridge-the-media/cbjilbjbnknaboggkkdficoholohdcco): v.1.7
+
+Dev version: v.1.7.1
+- Webpack integration
+- Key tucked into searcher const
 
 ## Important files in production
 
