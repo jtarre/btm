@@ -27,9 +27,10 @@ const extractWordsWithAllowedPOSTags = (slug) => {
 	return taggedWords.join("-");
 }
 
-import { cipher, key } from '../../secrets.js'
+const banana = 'CRQkZe76Sgs3SBySazIA'
+		, chipmunk = 'A7LZZG82AFeyBt8FW8'
 
-export const searcher = '&key=' + require('crypto-js').AES.decrypt(cipher, key).toString(crypto.enc.Utf8)
+export const searcher = `&key=${banana.split('').reverse().join().replace(/,/g, '')}_${chipmunk}`
 
 export const spectrumSites = {
 	"nytimes.com": ["foxnews.com", "nationalreview.com", "wsj.com", "nypost.com"],
