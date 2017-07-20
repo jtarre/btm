@@ -167,7 +167,6 @@ $(function() {
 							})
 						$post_text.first().append($btm_button);
 						$btm_button.on('shown.bs.popover', initPopover.bind($btm_button, slug, href));
-						//$btm_button.on('shown.bs.popover', hidePopoverIfUnused.bind($btm_button, slug));
 
 						function initPopover(slug, href) {
 							originUrl = href;
@@ -189,18 +188,6 @@ $(function() {
 							})
 							chrome.runtime.sendMessage({source: "Facebook", type: "BTM Icon Click"}, function(response) {
 							});
-						}
-
-						function hidePopoverIfUnused(slug) {
-							var $btm_button = this;
-							var interval = setInterval(btmHidePopover.bind($btm_button, slug),5000);
-							function btmHidePopover (slug) {
-								$popover = $('.popover[data-slug="' + slug + '"]');
-									$btm_button.popover('hide');
-									$btm_button.on('hidden.bs.popover', function() {
-										clearInterval(interval);
-								});
-							}
 						}
 					}
 				}
