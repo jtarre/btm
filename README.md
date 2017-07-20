@@ -6,17 +6,19 @@ Our Google Chrome Extension encourages citizens to be more informed participants
 
 Current [production version](https://chrome.google.com/webstore/detail/bridge-the-media/cbjilbjbnknaboggkkdficoholohdcco): v.1.7
 
-Dev version: v.1.7.1
+Dev version: v.2.0
 - Webpack integration
 - Key tucked into searcher const
+- Embedded icons
+- Google Search API only includes nouns
 
 ## Important files in production
 
 - btm-facebook.js - Responsible for BTM icon embeddings on Facebook
-- link_hover.js:
-	- responsible for popover appeareance on news sites via hovering over headlines AND
+- btm-embed-icon.js:
+	- responsible for placing BTM icons on news page sites next to political/opinion headlines
+- btm-article-page.js:
 	- responsible for placing Show Alternatives button on bottom-left or bottom-right of an specific article's page
-
 - popup.js - Google Analytics logic lives here
 - List of content scripts and css files injected into facebook, nytimes, or fox is listed in manifest.json
 
