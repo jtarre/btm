@@ -167,7 +167,7 @@ $(function() {
 							})
 						$post_text.first().append($btm_button);
 						$btm_button.on('shown.bs.popover', initPopover.bind($btm_button, slug, href));
-						$btm_button.on('shown.bs.popover', hidePopoverIfUnused.bind($btm_button, slug));
+						//$btm_button.on('shown.bs.popover', hidePopoverIfUnused.bind($btm_button, slug));
 
 						function initPopover(slug, href) {
 							originUrl = href;

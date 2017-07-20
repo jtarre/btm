@@ -1,3 +1,9 @@
+const crypto = require('crypto-js')
+
+const pos = require('pos');
+const tagger = new pos.Tagger();
+const allowedPOSTags = ["NN", "NNP", "NNPS", "NNS", "JJ"];
+
 export const getSlug = (href) => {
 	const href_segments = href.split("/");
 	let slug = '';
@@ -5,12 +11,24 @@ export const getSlug = (href) => {
 	slug = slug.replace(/\d+/g, "");
 	slug = slug.split(".", 1);
 	slug = slug[0];
-	return slug;
+	return extractWordsWithAllowedPOSTags(slug);
+}
+
+const extractWordsWithAllowedPOSTags = (slug) => {
+	let spaces = slug.split("-").join(" ");
+	const words = new pos.Lexer().lex(spaces);
+	let taggedWords = tagger.tag(words);
+	taggedWords = taggedWords.filter(word => {
+		if(allowedPOSTags.indexOf(word[1]) > -1){
+				return true
+			}
+		});
+	taggedWords = taggedWords.map(word => word[0]);
+	console.log(taggedWords.join("-"));
+	return taggedWords.join("-");
 }
 
 import { cipher, key } from '../../secrets.js'
-
-const crypto = require('crypto-js')
 
 export const searcher = '&key=' + require('crypto-js').AES.decrypt(cipher, key).toString(crypto.enc.Utf8)
 
@@ -257,25 +275,6 @@ export const createPopup = (search_results, slug, style_addition) => {
 	});
 	html += "<ul></div>";
 	return html;
-}
-
-export const openArticleLink = (event, originUrl, domain, pathname) => {
-	event.preventDefault();
-	var $link = $(event.target);
-	var href = $link.attr('href');
-	var originUrl = (originUrl !== undefined ? originUrl : 'http://' + domain + pathname);
-	endTime = new Date();
-	var elapsedTime = Math.round((endTime - startTime) / 60000); // calculate elapsedTime in minutes
-	startTime = new Date(); // reset startTime
-	chrome.runtime.sendMessage({
-		targetUrl: href,
-		type: "Outbound Link Click",
-		source: originTitle,
-		originUrl: originUrl,
-		elapsedTime: elapsedTime
-	},
-		function (response) { });
-	window.open(href);
 }
 
 export const siteSearches = (sites, slug) => {
