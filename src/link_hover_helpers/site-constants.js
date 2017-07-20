@@ -24,7 +24,6 @@ const extractWordsWithAllowedPOSTags = (slug) => {
 			}
 		});
 	taggedWords = taggedWords.map(word => word[0]);
-	console.log(taggedWords.join("-"));
 	return taggedWords.join("-");
 }
 
