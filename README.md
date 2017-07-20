@@ -1,6 +1,14 @@
-# Bridge The Media Chrome Extension
+# Bridge The Media
 
-{VERSIONING INFO HERE}
+A nonpartisan tool for the well-rounded news reader.
+
+Our Google Chrome Extension encourages citizens to be more informed participants in American democracy through balanced media. Let us recommend articles to complete your political perspective.
+
+Current [production version](https://chrome.google.com/webstore/detail/bridge-the-media/cbjilbjbnknaboggkkdficoholohdcco): v.1.7
+
+Dev version: v.1.7.1
+- Webpack integration
+- Key tucked into searcher const
 
 ## Important files in production
 
@@ -29,12 +37,12 @@ The goal is to separate the logic for embedding the BTM icon/Show Alternatives b
 
 ## Deployment
 
-1. Get the ```secrets``` on your local machine from a BTM dev
-2. ```npm run build``` to generate a `bundle.js`
-3. Make sure the ```manifest.json``` points to the ```bundle.js```
+1. ```npm run build``` to generate a `bundle.js`
+2. Make sure the ```manifest.json``` points to the ```bundle.js```
+3. Upload the ```/src``` subdirectory as the extension's package
 
 
 ## Testing
 
 - Currently using Mocha + Chai - see recommendation-fetcher-spec.js for an example
-- To run tests: mocha --reporter=nyan ./*-spec.js
+- To run tests: ```npm test```

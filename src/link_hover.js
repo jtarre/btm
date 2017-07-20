@@ -271,6 +271,7 @@ $(function () {
 
 		if ($caret.hasClass('fa-caret-up')) $caret.addClass('fa-caret-down').removeClass('fa-caret-up');
 		else $caret.addClass('fa-caret-up').removeClass('fa-caret-down');
+		console.log('reached end of toggleSummary')
 	}
 
 	function openArticleLink(event) {
@@ -279,7 +280,7 @@ $(function () {
 		var href = $link.attr('href');
 		originUrl = (originUrl !== undefined ? originUrl : 'http://' + domain + pathname);
 		endTime = new Date();
-		elapsedTime = Math.round((endTime - startTime) / 60000); // calculate elapsedTime in minutes
+		var elapsedTime = Math.round((endTime - startTime) / 60000); // calculate elapsedTime in minutes
 		startTime = new Date(); // reset startTime
 		chrome.runtime.sendMessage({
 			targetUrl: href,
@@ -288,9 +289,8 @@ $(function () {
 			originUrl: originUrl,
 			elapsedTime: elapsedTime
 		},
-			function (response) { });
+			(response) => { console.log(response) });
 		window.open(href);
-		$('.popup-link').on('click', openArticleLink)
 	}
 
 	// css and html for each news snippet
@@ -391,7 +391,10 @@ $(function () {
 				$('.popup-link').on('click', openArticleLink);
 
 				// Get current news publication and send it to popup.js when Show Alternatives is clicked
-				chrome.runtime.sendMessage({ source: originTitle, type: "Show Alternatives Click" }, function (response) {
+				chrome.runtime.sendMessage({
+					source: originTitle,
+					type: "Show Alternatives Click"
+				}, (response) => {
 					console.log(response);
 				});
 			})

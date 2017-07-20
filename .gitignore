@@ -1,6 +1,5 @@
 .DS_Store*
 
+# Dependencies
 node_modules/
-secrets.js
-*/bundle.js
-*/bundle.js.map
+
