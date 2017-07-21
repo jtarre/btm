@@ -2,10 +2,14 @@ const path = require('path')
     , webpack = require('webpack');
 
 module.exports = {
-  entry: './src/link_hover.js',
+  entry: {
+    btmIcon: './src/btm-embed-icon.js',
+    btmPage: './src/btm-article-page.js',
+    btmFacebook: './src/btm-facebook.js'
+  },
   output: {
     path: path.resolve(__dirname, 'src'),
-    filename: 'bundle.js'
+    filename: '[name].bundle.js'
   },
   devtool: 'source-map',
   module: {
@@ -21,6 +25,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin(),
+    //new webpack.optimize.UglifyJsPlugin(),
   ]
 }
