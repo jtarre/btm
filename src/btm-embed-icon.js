@@ -61,7 +61,7 @@ $(function() {
 	}
 
 	function embedIcons() {
-		$links = getLinks();
+		let $links = getLinks();
 		var href;
 		var slug;
 		var $element;
