@@ -31,7 +31,6 @@ export const popoverStyle =
 
 export const popoverTitleStyle =
 	"color: black;" +
-	// "padding: 1px;" +
 	"font-family: Josefin Sans, serif;" +
 	"font-size: 16px;" +
 	"font-style: normal;" +
@@ -44,6 +43,16 @@ export const popoverTitleStyle =
 	"background-color: #f7f7f7;" +
 	"border-bottom: 1px solid #ebebeb;" +
 	"border-radius: 5px 5px 0 0;";
+
+export const popoverBTMstyle =
+	"color: black;" +
+	"font-family: Josefin Sans, serif;" +
+	"font-size: 16px;" +
+	"font-style: normal;" +
+	"font-weight: bolder;" +
+	"line-height: 1.42857143;" +
+	"text-align: left;" +
+	"text-align: start;";
 
 export const btnPrimaryStyle =
 	"color: #4665B0;" +
