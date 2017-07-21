@@ -44,7 +44,7 @@ export const popoverTitleStyle =
 	"border-bottom: 1px solid #ebebeb;" +
 	"border-radius: 5px 5px 0 0;";
 
-export const popoverBTMstyle =
+export const popoverBTMStyle =
 	"color: black;" +
 	"font-family: Josefin Sans, serif;" +
 	"font-size: 16px;" +

@@ -1,6 +1,6 @@
 /* ---------- STYLES + HELPER FUNCTIONS --------- */
 
-import { getPopoverHtml, popoverBTMstyle } from './helpers/inline-styles'
+import { getPopoverHtml, popoverBTMStyle } from './helpers/inline-styles'
 
 import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants'
 
@@ -26,24 +26,24 @@ $(function () {
 
 	function embedIcons() {
 		const $links = getLinks()
-				, btmimg = chrome.runtime.getURL('icons/btm_logo.png');
+				, btmImg = chrome.runtime.getURL('icons/btm_logo.png');
 		$links.forEach(element => { // this is for nytimes only. not general
 			const $element = $(element)
 					, href = $element.attr('href')
 					, slug = getSlug(href)
 					, placement = "right" //TODO: generate placement dynamically
-					, $btm_button = $('<a href="javascript:void(0);"><img src="' + btmimg + '" height="20" width="20"></a>')
-					, popover_html = getPopoverHtml(slug)
-					, content = '<div id="btm-popover-body-' + slug + '"><div id="btm-loading-' + slug + '"><p>Loading...</p></div></div>';
+					, $btm_button = $(`<a href="javascript:void(0);"><img src=${btmImg} style="height: 20px; width: 20px; vertical-align: middle"></a>`)
+					, popoverTemplate = getPopoverHtml(slug)
+					, loading = '<div id="btm-popover-body-' + slug + '"><div id="btm-loading-' + slug + '"><p>Loading...</p></div></div>';
 
 			$btm_button.popover({
 				trigger: "click",
 				container: "body",
 				html: "true",
-				template: popover_html,
-				title: "<span style='" + popoverBTMstyle + "'>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>",
+				template: popoverTemplate,
+				title: `<span style=${popoverBTMStyle}>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>`,
 				placement: placement,
-				content: content
+				content: loading
 			})
 
 			if (!$element.next().is('a') && $element.attr('class') !== 'popup-link') {
