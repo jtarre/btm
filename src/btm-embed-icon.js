@@ -26,15 +26,16 @@ $(function () {
 
 	function embedIcons() {
 		const $links = getLinks()
-				, btmImg = chrome.runtime.getURL('icons/btm_logo.png');
+			, btmImg = chrome.runtime.getURL('icons/btm_logo.png');
+
 		$links.forEach(element => { // this is for nytimes only. not general
 			const $element = $(element)
-					, href = $element.attr('href')
-					, slug = getSlug(href)
-					, placement = "right" //TODO: generate placement dynamically
-					, $btm_button = $(`<a href="javascript:void(0);"><img src=${btmImg} style="height: 20px; width: 20px; vertical-align: middle"></a>`)
-					, popoverTemplate = getPopoverHtml(slug)
-					, loading = '<div id="btm-popover-body-' + slug + '"><div id="btm-loading-' + slug + '"><p>Loading...</p></div></div>';
+				, href = $element.attr('href')
+				, slug = getSlug(href)
+				, placement = "right" //TODO: generate placement dynamically
+				, $btm_button = $(`<a href="javascript:void(0);"><img src=${btmImg} style="height: 20px; width: 20px; vertical-align: middle"></a>`)
+				, popoverTemplate = getPopoverHtml(slug)
+				, loading = `<div id="btm-popover-body-${slug}"><div id="btm-loading-${slug}"><p>Loading...</p></div></div>`;
 
 			$btm_button.popover({
 				trigger: "click",
@@ -58,10 +59,10 @@ $(function () {
 				$('.btm-close').on('click', function () { $btm_button.popover('hide') });
 				Promise.all(sitePromises)
 					.then(results => { // this is the promise part of the site
-						$('#btm-loading-' + slug).hide();
+						$(`#btm-loading-${slug}`).hide();
 						var popup = createPopup(results, slug);
 						// add popup to page
-						$('#btm-popover-body-' + slug).after(popup);
+						$(`#btm-popover-body-${slug}`).after(popup);
 						$('.collapse-link').on('click', toggleSummary);
 						$('.popup-link').on('click', openArticleLink);
 					})
@@ -96,7 +97,7 @@ $(function () {
 		var $link = $(event.target);
 		var cache = $link.data('cache');
 		var $cache = $('#' + cache);
-		var $caret = $('#btm-span-' + cache);
+		var $caret = $(`#btm-span-${cache}`);
 		$cache.collapse('toggle');
 	}
 
@@ -105,10 +106,10 @@ $(function () {
 	}
 
 	function toggleArticles(slug, event) {
-		if ($('#btm-popover-body-' + slug + ':hidden').length > 0)
-			toggleVisible($('#btm-popover-body-' + slug), $('#btm-btn-' + slug));
+		if ($(`#btm-popover-body-${slug}:hidden`).length > 0)
+			toggleVisible($(`#btm-popover-body-${slug}`), $(`#btm-btn-${slug}`));
 		else
-			toggleInvisible($('#btm-popover-body-' + slug), $('#btm-btn-' + slug));
+			toggleInvisible($(`#btm-popover-body-${slug}`), $(`#btm-btn-${slug}`));
 
 		function toggleVisible($container, $button) {
 			$button.text('HIDE');
