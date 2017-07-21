@@ -2,23 +2,31 @@ export const checkComments = (link) => {
   return link.href && !link.href.includes('comments')
 }
 
-export const hasUndefinedElements = (elements) => {
-  return elements[0] === undefined;
+export const checkLinkSection = (link) => {
+  return link.href && (link.href.includes("/politics/") || link.href.includes("/opinion/")) && !link.href.includes("index.html");
 }
 
-export const hasProperTextElements = (elements) => {
+const checkUndefinedDescendants = (descendants) => {
+  return descendants[0] === undefined;
+}
+
+const checkHasProperTextElements = (descendants) => {
   let result = false;
-  elements.forEach(element => {
-    if (element['childNodes'][0] !== undefined) {
-      if (element['childNodes'][0]['nodeName'] === '#text' && $(element['childNodes'][0]).parents('figcaption').length === 0) {
+  descendants.forEach(descendant => {
+    if (descendant['childNodes'][0] !== undefined) {
+      if (descendant['childNodes'][0]['nodeName'] === '#text' && $(descendant['childNodes'][0]).parents('figcaption').length === 0) {
         result = true;
       }
     }
-    if (element['nextSibling'] !== null) {
-      if (element['nextSibling']['nodeName'] === '#text' && element['nodeName'] !== "DIV" && $.trim(element['nextSibling']['textContent']) !== "") {
+    if (descendant['nextSibling'] !== null) {
+      if (descendant['nextSibling']['nodeName'] === '#text' && descendant['nodeName'] !== "DIV" && $.trim(descendant['nextSibling']['textContent']) !== "") {
         result = true;
       }
     }
   });
   return result;
+}
+
+export const checkDescendants = (descendants) => {
+  return checkUndefinedDescendants(descendants) || checkHasProperTextElements(descendants)
 }

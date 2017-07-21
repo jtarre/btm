@@ -4,7 +4,7 @@ import { getPopoverHtml } from './helpers/inline-styles'
 
 import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches} from './helpers/site-constants'
 
-import { checkComments, hasUndefinedElements, hasProperTextElements } from './helpers/getLinks-helpers'
+import { checkComments, checkLinkSection, checkDescendants } from './helpers/getLinks-helpers'
 
 $(function() {
 
@@ -18,23 +18,13 @@ $(function() {
 		, startTime = new Date(); //this is initialized at the current time
 
 	function getLinks() {
-		debugger
-		return $('a').toArray().filter(link => {
-			let isNotComments = checkComments(link);
-			let includesPoliticsOrOpinion = false;
-			let hasRightElements = false;
-			const href = $(link).attr('href');
-			if (href !== undefined) {
-				includesPoliticsOrOpinion = (href.includes("/politics/") || href.includes("/opinion/")) && !href.includes("index.html");
-				const descendants = $(link).find('*').toArray();
-				hasRightElements = hasUndefinedElements(descendants) || hasProperTextElements(descendants);
-			}
-			return includesPoliticsOrOpinion && hasRightElements && isNotComments;
+		return $('a').not('.button').toArray().filter(link => {
+			const descendants = $(link).find('*').toArray();
+			return link.href && checkComments(link) && checkLinkSection(link) && checkDescendants(descendants)
 		})
 	}
 
 	function embedIcons() {
-		debugger;
 		let $links = getLinks();
 		var href;
 		var slug;
