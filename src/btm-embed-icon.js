@@ -42,21 +42,18 @@ $(function() {
 		return result;
 	}
 
-
-  function getLinks() {
-		var $a;
-		var $a = $("a");
-      $a = $a.filter(function(index){
-				 var includesPoliticsOrOpinion = false;
-				 var hasRightElements = false;
-    	   var href = $(this).attr("href");
-				 if (href !== undefined){
-					 var elements = $(this).find('*').toArray();
-					 includesPoliticsOrOpinion = (href.includes("/politics/") || href.includes("/opinion/")) && !href.includes("index.html");
-					 hasRightElements = hasUndefinedElements(elements) || hasProperTextElements(elements);
-			 	}
-				 return includesPoliticsOrOpinion && hasRightElements;
-    	});
+	function getLinks() {
+		var $a = $("a").filter(function (index) {
+			var includesPoliticsOrOpinion = false;
+			var hasRightElements = false;
+			var href = $(this).attr("href");
+			if (href !== undefined) {
+				var elements = $(this).find('*').toArray();
+				includesPoliticsOrOpinion = (href.includes("/politics/") || href.includes("/opinion/")) && !href.includes("index.html");
+				hasRightElements = hasUndefinedElements(elements) || hasProperTextElements(elements);
+			}
+			return includesPoliticsOrOpinion && hasRightElements;
+		});
 		return $a;
 	}
 
