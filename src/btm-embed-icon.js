@@ -15,10 +15,6 @@ $(function() {
 		, elapsedTime
 		, startTime = new Date(); //this is initialized at the current time
 
-	function embedIconsInterval() {
-		setInterval(embedIcons, 5000);
-	}
-
 	function hasUndefinedElements(elements){
 		return elements[0] === undefined;
 	}
@@ -135,10 +131,7 @@ $(function() {
 								function (response) { });
 							window.open(href);
 						}
-
 					})
-
-
 		}
 
 	function toggleSummary(event) {
@@ -150,8 +143,9 @@ $(function() {
 		$cache.collapse('toggle');
 	}
 
-	if (window.location.hostname !== "www.facebook.com"){
-		embedIconsInterval();
+	/* Fires embedIcons as long as the user is not on Facebook. */
+	if (domain !== 'facebook.com'){
+		setInterval(embedIcons, 5000);
 	}
 
 	function closeHover(event) {
