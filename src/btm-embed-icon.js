@@ -39,18 +39,17 @@ $(function() {
 	}
 
 	function getLinks() {
-		var $a = $("a").filter(function (index) {
-			var includesPoliticsOrOpinion = false;
-			var hasRightElements = false;
-			var href = $(this).attr("href");
+		return $('a').filter(link => {
+			let includesPoliticsOrOpinion = false;
+			let hasRightElements = false;
+			const href = $(link).attr('href');
 			if (href !== undefined) {
-				var elements = $(this).find('*').toArray();
 				includesPoliticsOrOpinion = (href.includes("/politics/") || href.includes("/opinion/")) && !href.includes("index.html");
-				hasRightElements = hasUndefinedElements(elements) || hasProperTextElements(elements);
+				const descendants = $(link).find('*').toArray();
+				hasRightElements = hasUndefinedElements(descendants) || hasProperTextElements(descendants);
 			}
 			return includesPoliticsOrOpinion && hasRightElements;
-		});
-		return $a;
+		})
 	}
 
 	function embedIcons() {
@@ -143,11 +142,6 @@ $(function() {
 		$cache.collapse('toggle');
 	}
 
-	/* Fires embedIcons as long as the user is not on Facebook. */
-	if (domain !== 'facebook.com'){
-		setInterval(embedIcons, 5000);
-	}
-
 	function closeHover(event) {
 		this.fadeOut();
 	}
@@ -171,6 +165,11 @@ $(function() {
 
 	function hidePopover(event) {
 		$link = this;
+	}
+
+	/* Fires embedIcons as long as the user is not on Facebook. */
+	if (domain !== 'facebook.com') {
+		setInterval(embedIcons, 5000);
 	}
 
 })
