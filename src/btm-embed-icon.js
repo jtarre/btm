@@ -1,8 +1,10 @@
 /* ---------- STYLES + HELPER FUNCTIONS --------- */
 
-import { getPopoverHtml } from './helpers/inline-styles.js'
+import { getPopoverHtml } from './helpers/inline-styles'
 
-import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches} from './helpers/site-constants.js'
+import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches} from './helpers/site-constants'
+
+import { checkComments, hasUndefinedElements, hasProperTextElements } from './helpers/getLinks-helpers'
 
 $(function() {
 
@@ -15,31 +17,10 @@ $(function() {
 		, elapsedTime
 		, startTime = new Date(); //this is initialized at the current time
 
-	function hasUndefinedElements(elements){
-		return elements[0] === undefined;
-	}
-
-	function hasProperTextElements(elements){
-		var result = false;
-
-		elements.forEach(function(element){
-
-			if (element['childNodes'][0] !== undefined){
-				if (element['childNodes'][0]['nodeName'] === '#text' && $(element['childNodes'][0]).parents('figcaption').length === 0){
-					result = true;
-				}
-			}
-			if (element['nextSibling'] !== null){
-				if (element['nextSibling']['nodeName'] === '#text' && element['nodeName'] !== "DIV" && $.trim(element['nextSibling']['textContent']) !== ""){
-					result = true;
-				}
-			}
-		});
-		return result;
-	}
-
 	function getLinks() {
-		return $('a').filter(link => {
+		debugger
+		return $('a').toArray().filter(link => {
+			let isNotComments = checkComments(link);
 			let includesPoliticsOrOpinion = false;
 			let hasRightElements = false;
 			const href = $(link).attr('href');
@@ -48,16 +29,17 @@ $(function() {
 				const descendants = $(link).find('*').toArray();
 				hasRightElements = hasUndefinedElements(descendants) || hasProperTextElements(descendants);
 			}
-			return includesPoliticsOrOpinion && hasRightElements;
+			return includesPoliticsOrOpinion && hasRightElements && isNotComments;
 		})
 	}
 
 	function embedIcons() {
+		debugger;
 		let $links = getLinks();
 		var href;
 		var slug;
 		var $element;
-		$links.each(function(index, element) { // this is for nytimes only. not general
+		$links.forEach(element => { // this is for nytimes only. not general
 			$element = $(element);
 			href = $element.attr('href');
 			slug = getSlug(href);
