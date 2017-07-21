@@ -2,7 +2,7 @@
 
 import { popoverStyle, popoverTitleStyle, btnPrimaryStyle, getPopoverHtml } from './link_hover_helpers/inline-styles.js'
 
-import { spectrumSites, siteTitles, searcher, getSlug, createPopup, siteSearches } from './link_hover_helpers/site-constants.js'
+import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './link_hover_helpers/site-constants.js'
 
 $(function () {
 	// if(chrome && chrome.runtime && chrome.runtime.onUpdateAvailble) {
