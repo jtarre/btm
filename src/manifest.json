@@ -33,7 +33,7 @@
       ],
       "js": [
         "external/jquery-3.2.0.js",
-        "btm-facebook.js",
+        "btmFacebook.bundle.js",
         "btmIcon.bundle.js",
         "btmPage.bundle.js",
         "external/bootstrap-3.3.7-dist/js/bootstrap.js"

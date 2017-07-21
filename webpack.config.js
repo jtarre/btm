@@ -4,8 +4,8 @@ const path = require('path')
 module.exports = {
   entry: {
     btmIcon: './src/btm-embed-icon.js',
-    btmPage: './src/btm-article-page.js'
-
+    btmPage: './src/btm-article-page.js',
+    btmFacebook: './src/btm-facebook.js'
   },
   output: {
     path: path.resolve(__dirname, 'src'),
@@ -25,6 +25,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin(),
+    //new webpack.optimize.UglifyJsPlugin(),
   ]
 }
