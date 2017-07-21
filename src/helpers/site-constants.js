@@ -30,6 +30,29 @@ const banana = 'CRQkZe76Sgs3SBySazIA'
 
 const searcher = `&key=${banana.split('').reverse().join().replace(/,/g, '')}_${chipmunk}`
 
+const NYT = "nytimes.com"
+		, FOX = "foxnews.com"
+		, NATLRV = "nationalreview.com"
+		, WSJ = "wsj.com"
+		, NYP = "nypost.com"
+		, CNN = "cnn.com"
+		, HILL = "thehill.com"
+		, FISCAL = "thefiscaltimes.com"
+		, FORBES = "forbes.com"
+		, ECONOMIST = "economist.com"
+		, POLITICO = "politico.com"
+		, VICE = "vice.com"
+		, WASHTIMES = "washingtontimes.com"
+		, VOX = "vox.com"
+		, NBC = "nbcnews.com"
+
+export const siteConstants = {
+	NYT: {
+		spectrumSites: [FOX, NATLRV, WSJ, NYP],
+		siteTitle: 'New York Times'
+	}
+}
+
 export const spectrumSites = {
 	"nytimes.com": ["foxnews.com", "nationalreview.com", "wsj.com", "nypost.com"],
 	"cnn.com": ["thehill.com", "thefiscaltimes.com", "forbes.com", "economist.com"],
