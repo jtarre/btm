@@ -30,7 +30,7 @@ const extractWordsWithAllowedPOSTags = (slug) => {
 const banana = 'CRQkZe76Sgs3SBySazIA'
 		, chipmunk = 'A7LZZG82AFeyBt8FW8'
 
-export searcher = `&key=${banana.split('').reverse().join().replace(/,/g, '')}_${chipmunk}`
+const searcher = `&key=${banana.split('').reverse().join().replace(/,/g, '')}_${chipmunk}`
 
 export const spectrumSites = {
 	"nytimes.com": ["foxnews.com", "nationalreview.com", "wsj.com", "nypost.com"],
