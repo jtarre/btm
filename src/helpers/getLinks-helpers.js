@@ -3,7 +3,8 @@ export const checkComments = (link) => {
 }
 
 export const checkLinkSection = (link) => {
-  return link.href && (link.href.includes("/politics/") || link.href.includes("/opinion/")) && !link.href.includes("index.html");
+  return link.href && (link.href.includes("/politics/") || link.href.includes("/opinion/"))
+          && !link.href.includes("index.html") && $(link).parents('p').length === 0;
 }
 
 const checkUndefinedDescendants = (descendants) => {
@@ -12,9 +13,12 @@ const checkUndefinedDescendants = (descendants) => {
 
 const checkHasProperTextElements = (descendants) => {
   let result = false;
+  let firstChildOfDescendant = undefined;
   descendants.forEach(descendant => {
     if (descendant['childNodes'][0] !== undefined) {
-      if (descendant['childNodes'][0]['nodeName'] === '#text' && $(descendant['childNodes'][0]).parents('figcaption').length === 0) {
+      firstChildOfDescendant = descendant['childNodes'][0];
+      if (firstChildOfDescendant['nodeName'] === '#text' &&
+          $(firstChildOfDescendant).parents('figcaption').length === 0) {
         result = true;
       }
     }
