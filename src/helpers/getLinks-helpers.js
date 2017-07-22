@@ -4,7 +4,8 @@ export const checkComments = (link) => {
 
 export const checkLinkSection = (link) => {
   return link.href && (link.href.includes("/politics/") || link.href.includes("/opinion/"))
-          && !link.href.includes("index.html") && $(link).parents('p').length === 0;
+          && !link.href.includes("index.html") && $(link).parents('p').length === 0
+          && !link.href.endsWith("#");
 }
 
 const checkUndefinedDescendants = (descendants) => {
