@@ -1,5 +1,3 @@
-const crypto = require('crypto-js')
-
 const pos = require('pos');
 const tagger = new pos.Tagger();
 const allowedPOSTags = ["NN", "NNP", "NNPS", "NNS", "JJ"];

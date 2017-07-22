@@ -1,6 +1,6 @@
-import { getPopoverHtml } from './link_hover_helpers/inline-styles.js'
+import { getPopoverHtml } from './helpers/inline-styles.js'
 
-import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches} from './link_hover_helpers/site-constants.js'
+import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches} from './helpers/site-constants.js'
 $(function() {
 
 	const domain = window.location.hostname.split('www.')[1]
