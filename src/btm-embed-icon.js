@@ -1,5 +1,7 @@
 /* ---------- STYLES + HELPER FUNCTIONS --------- */
 
+import _ from 'lodash'
+
 import { getPopoverHtml, popoverBTMStyle } from './helpers/inline-styles'
 
 import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants'
@@ -18,9 +20,13 @@ $(function () {
 		, startTime = new Date(); //this is initialized at the current time
 
 	function getLinks() {
-		return $('a').not('.button').toArray().filter(link => {
-			const descendants = $(link).find('*').toArray();
-			return link.href && checkComments(link) && checkLinkSection(link) && checkDescendants(descendants)
+		const allLinks = $('a').not('.button').toArray()
+			.filter(link => {
+				const descendants = $(link).find('*').toArray();
+				return link.href && checkComments(link) && checkLinkSection(link) && checkDescendants(descendants)
+			})
+		return _.uniqBy(allLinks, (link) => {
+			return link.href
 		})
 	}
 
