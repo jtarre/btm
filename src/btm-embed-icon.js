@@ -6,7 +6,7 @@ import { getPopoverHtml, popoverBTMStyle } from './helpers/inline-styles'
 
 import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants'
 
-import { checkComments, checkLinkSection, checkDescendants } from './helpers/getLinks-helpers'
+import { checkIsArticle, checkLinkSection, checkDescendants } from './helpers/getLinks-helpers'
 
 $(function () {
 
@@ -23,7 +23,7 @@ $(function () {
 		const allLinks = $('a').not('.button').toArray()
 			.filter(link => {
 				const descendants = $(link).find('*').toArray();
-				return link.href && checkComments(link) && checkLinkSection(link) && checkDescendants(descendants)
+				return link.href && checkIsArticle(link) && checkLinkSection(link) && checkDescendants(descendants)
 			})
 		return _.uniqBy(allLinks, link => link.href)
 	}
