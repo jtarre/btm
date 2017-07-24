@@ -36,7 +36,7 @@ $(function () {
 			const $element = $(element)
 				, href = $element.attr('href')
 				, slug = getSlug(href)
-				, placement = "right" //TODO: generate placement dynamically
+				, placement = "right"
 				, $btm_button = $(`<a href="javascript:void(0);"><img src=${btmImg} style="height: 20px; width: 20px; vertical-align: middle"></a>`)
 				, popoverTemplate = getPopoverHtml(slug)
 				, loading = `<div id="btm-popover-body-${slug}"><div id="btm-loading-${slug}"><p>Loading...</p></div></div>`;
@@ -47,8 +47,18 @@ $(function () {
 				html: "true",
 				template: popoverTemplate,
 				title: `<span style=${popoverBTMStyle}>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>`,
-				placement: placement,
-				content: loading
+				placement: (popover, parent) => {
+					const distFromRight = $(window).width() - $(parent).offset().left
+					console.log("distFromRight", distFromRight)
+					return (distFromRight < 250) ? "left" : "right"
+				},
+				content: loading,
+				constraints: [
+					{
+						to: 'scrollParent',
+						pin: true
+					}
+				]
 			})
 
 			if (!$element.next().is('a') && $element.attr('class') !== 'popup-link') {
