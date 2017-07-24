@@ -49,16 +49,9 @@ $(function () {
 				title: `<span style=${popoverBTMStyle}>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>`,
 				placement: (popover, parent) => {
 					const distFromRight = $(window).width() - $(parent).offset().left
-					console.log("distFromRight", distFromRight)
-					return (distFromRight < 250) ? "left" : "right"
+					return (distFromRight < 350) ? "left" : "right"
 				},
 				content: loading,
-				constraints: [
-					{
-						to: 'scrollParent',
-						pin: true
-					}
-				]
 			})
 
 			if (!$element.next().is('a') && $element.attr('class') !== 'popup-link') {
