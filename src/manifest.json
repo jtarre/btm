@@ -36,7 +36,7 @@
         "btmFacebook.bundle.js",
         "btmIcon.bundle.js",
         "btmPage.bundle.js",
-        "external/bootstrap-3.3.7-dist/js/bootstrap.js"
+        "external/bootstrap-3.3.7-dist/js/bootstrap.min.js"
       ]
     }
   ],

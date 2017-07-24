@@ -1,10 +1,12 @@
 /* ---------- STYLES + HELPER FUNCTIONS --------- */
 
+import _ from 'lodash'
+
 import { getPopoverHtml, popoverBTMStyle } from './helpers/inline-styles'
 
 import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants'
 
-import { checkComments, checkLinkSection, checkDescendants } from './helpers/getLinks-helpers'
+import { checkIsArticle, checkLinkSection, checkDescendants } from './helpers/getLinks-helpers'
 
 $(function () {
 
@@ -18,10 +20,12 @@ $(function () {
 		, startTime = new Date(); //this is initialized at the current time
 
 	function getLinks() {
-		return $('a').not('.button').toArray().filter(link => {
-			const descendants = $(link).find('*').toArray();
-			return link.href && checkComments(link) && checkLinkSection(link) && checkDescendants(descendants)
-		})
+		const allLinks = $('a').not('.button').toArray()
+			.filter(link => {
+				const descendants = $(link).find('*').toArray();
+				return link.href && checkIsArticle(link) && checkLinkSection(link) && checkDescendants(descendants)
+			})
+		return _.uniqBy(allLinks, link => link.href)
 	}
 
 	function embedIcons() {
@@ -32,7 +36,7 @@ $(function () {
 			const $element = $(element)
 				, href = $element.attr('href')
 				, slug = getSlug(href)
-				, placement = "right" //TODO: generate placement dynamically
+				, placement = "right"
 				, $btm_button = $(`<a href="javascript:void(0);"><img src=${btmImg} style="height: 20px; width: 20px; vertical-align: middle"></a>`)
 				, popoverTemplate = getPopoverHtml(slug)
 				, loading = `<div id="btm-popover-body-${slug}"><div id="btm-loading-${slug}"><p>Loading...</p></div></div>`;
@@ -43,8 +47,11 @@ $(function () {
 				html: "true",
 				template: popoverTemplate,
 				title: `<span style=${popoverBTMStyle}>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>`,
-				placement: placement,
-				content: loading
+				placement: (popover, parent) => {
+					const distFromRight = $(window).width() - $(parent).offset().left
+					return (distFromRight < 350) ? "left" : "right"
+				},
+				content: loading,
 			})
 
 			if (!$element.next().is('a') && $element.attr('class') !== 'popup-link') {

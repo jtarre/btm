@@ -1,5 +1,5 @@
-export const checkComments = (link) => {
-  return link.href && !link.href.includes('comments')
+export const checkIsArticle = (link) => {
+  return link.href && !link.href.includes('/comments/') && !link.href.includes('/video/')
 }
 
 export const checkLinkSection = (link) => {
