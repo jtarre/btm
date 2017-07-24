@@ -25,9 +25,7 @@ $(function () {
 				const descendants = $(link).find('*').toArray();
 				return link.href && checkComments(link) && checkLinkSection(link) && checkDescendants(descendants)
 			})
-		return _.uniqBy(allLinks, (link) => {
-			return link.href
-		})
+		return _.uniqBy(allLinks, link => link.href)
 	}
 
 	function embedIcons() {
