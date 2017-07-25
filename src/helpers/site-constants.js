@@ -224,7 +224,7 @@ const createItemHtml = (site, link, title, description, date, slug) => {
 	else {
 		html =
 			`<p style="${html_style}"><strong style='font-family: PT Serif, serif; font-weight: bold'>${site}${date}</strong></br>` +
-			`<a style="${anchor_style}" class='collapse-link' data-toggle='collapse' data-cache="${cache}">${title}<span id="btm-span-${cache}" class='fa fa-caret-down' style="font-family: FontAwesome"></span></a></p>` +
+			`<a style="${anchor_style}" class='collapse-link' data-toggle='collapse' data-cache="${cache}">${title}<span id="btm-span-${cache}" class='fa fa-caret-down' style="font-family: FontAwesome; margin-left: 0.5em;"></span></a></p>` +
 			`<div class='collapse' id='${slug}-${site_id}-collapse'>` +
 			"<div class='well'>" +
 			`<h4 style='font-family: PT Serif, serif;color:black;font-size:12px' +><a class='popup-link' target='_blank' href='${link}'>Read entire article</a>` +

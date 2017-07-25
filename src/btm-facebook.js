@@ -1,6 +1,7 @@
 import { getPopoverHtml, popoverTitleStyle, popoverBTMStyle } from './helpers/inline-styles.js'
 
 import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches} from './helpers/site-constants.js'
+
 $(function() {
 
 	const domain = window.location.hostname.split('www.')[1]
@@ -9,7 +10,6 @@ $(function() {
 
 	var facebook_links = {};
 	var slug_list = {};
-
 
 	function checkFacebookLinks() {
 		let $links = $('a');
@@ -61,14 +61,12 @@ $(function() {
 							const sites = spectrumSites['nytimes.com'] //hard-coded for NYT only
 									, sitePromises = siteSearches(sites, slug);
 
-							$('.btm-close').on('click', function () { $btm_button.popover('hide') });
+							$('.btm-close').on('click', () => { $btm_button.popover('hide') });
 
 							Promise.all(sitePromises)
 								.then(results => {
 									$(`#btm-loading-${slug}`).hide();
-									var popup = createPopup(results, slug);
-									// add popup to page
-									$(`#btm-popover-body-${slug}`).after(popup);
+									$(`#btm-popover-body-${slug}`).after(createPopup(results, slug));
 									$('.collapse-link').on('click', toggleSummary);
 									$('.popup-link').on('click', openArticleLink);
 								})
