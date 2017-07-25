@@ -20,7 +20,7 @@ $(function() {
 	}
 
 	function facebookInterval() {
-		setInterval(checkFacebookLinks, 5000);
+		setInterval(checkFacebookLinks, 1000);
 	}
 
 	function checkFacebookLinks() {
