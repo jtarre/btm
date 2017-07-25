@@ -105,7 +105,7 @@ $(function () {
 		if ($link.hasClass('fa-caret-down') || $link.hasClass('fa-caret-up')) $link = $link.parent();
 		var cache = $link.data('cache');
 		var $cache = $(`#${cache}`);
-		var $caret = $(`#btm-span-${cache}`).attr("style", "font-family: FontAwesome")
+		var $caret = $(`#btm-span-${cache}`).attr("style", "font-family: FontAwesome; margin-left: 0.5em")
 		$cache.collapse('toggle');
 		if ($caret.hasClass('fa-caret-up')) {
 			$caret.addClass('fa-caret-down').removeClass('fa-caret-up')
