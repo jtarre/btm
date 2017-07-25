@@ -218,8 +218,8 @@ const createItemHtml = (site, link, title, description, date, slug) => {
 	var cache = slug + "-" + site_id + "-collapse";
 	if (title == undefined || description == undefined){
 		html =
-			"<p style='" + html_style + "'><strong style='font-family: PT Serif, serif; font-weight: bold'>" + site + date + "</strong></br>" +
-			"<a style='" + anchor_style + "'>No Results</a></p>";
+			`<p style='${html_style}'><strong style='font-family: PT Serif, serif; font-weight: bold'>${site}${date}</strong></br>` +
+			`<a style='${anchor_style}'>No Results</a></p>`;
 	}
 	else {
 		html =
@@ -237,14 +237,14 @@ const createItemHtml = (site, link, title, description, date, slug) => {
 }
 
 // css and html for each news snippet
-export const createPopup = (search_results, slug, style_addition) => {
-	if (!style_addition) style_addition = "";
+export const createPopup = (results, slug, styleAddition) => {
 
-	var html = "<div style='margin:10px;font-family: Helvetica Neue, Helvetica, Arial, sans-serif;" + style_addition + "'><ul class='list-unstyled'>";
+	styleAddition = styleAddition || "";
 
-	var html_style =
+	let html = `<div style='margin:10px;font-family: Helvetica Neue, Helvetica, Arial, sans-serif; ${styleAddition}'><ul class='list-unstyled'>`;
+
+	const html_style =
 		"color: black;" +
-		// "padding: 1px;" +
 		"font-family: Helvetica Neue, Helvetica, Arial, sans-serif;" +
 		"font-size: 14px;" +
 		"font-style: normal;" +
@@ -253,40 +253,29 @@ export const createPopup = (search_results, slug, style_addition) => {
 		"text-align: left;" +
 		"text-align: start;";
 
-	var site_title;
-
-	search_results.forEach((search_result) => {
-		var result;
-		if (search_result !== undefined){
-			var result = search_result;
-			var site = result["queries"]["request"][0]["siteSearch"];
-			var item = result.items !== undefined ? result.items[0]: "";
-		}
-
+	results.forEach(result => {
+		const site = result["queries"]["request"][0]["siteSearch"];
 		if (result) {
-			html += "<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>" + itemTemplate(site, item, slug) + "</li>";
+			const item = result.items !== undefined ? result.items[0] : "";
+			html += `<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>${itemTemplate(site, item, slug)}</li>`;
 		} else {
-			site_title = siteTitles[site];
-
-			html += "<li><p style='" + html_style + "'><strong style='font-family: PT Serif;color:black;font-size:12px'>" + site_title + "</strong></br><span style='font-family: PT Serif;color:black;font-size:12px'>No Results</span></li>"
+			html += `<li><p style='${html_style}'><strong style='font-family: PT Serif;color:black;font-size:12px'>${siteTitles[site]}</strong></br><span style='font-family: PT Serif;color:black;font-size:12px'>No Results</span></li>`
 		}
 	});
-	html += "<ul></div>";
-	return html;
-}
-
-export const siteSearches = (sites, slug) => {
-	return sites.map(function(site) {
-		var site_ajax = siteSearch(site, slug);
-		return site_ajax;
-	})
+	return html += "</ul></div>";
 }
 
 const siteSearch = (site, search) => {
-	var google_url = 'https://www.googleapis.com/customsearch/v1?q=' + search + ' &cx=013013877924597244999%3Atbq0ixuctim&dateRestrict=m[7]&siteSearch=' + site + searcher;
+	var google_url = `https://www.googleapis.com/customsearch/v1?q=${search}&cx=013013877924597244999%3Atbq0ixuctim&dateRestrict=m[7]&siteSearch=${site}${searcher}`;
 	return $.ajax({
 		type: 'get',
 		url: google_url,
 		dataType: 'json'
 	})
 }
+
+export const siteSearches = (sites, slug) => {
+	return sites.map(site => siteSearch(site, slug))
+}
+
+

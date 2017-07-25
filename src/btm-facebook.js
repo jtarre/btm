@@ -38,26 +38,31 @@ $(function() {
 					facebook_links[href] = 1;
 					if(href.indexOf('www.nytimes.com') > 0 && !slug_list.hasOwnProperty(slug)) {
 						slug_list[slug] = 1;
-						$newsfeed_post = $element.closest('.fbUserContent').first(); // this is wrong level of abstraction. where to start. let's make the thing work.
+						$newsfeed_post = $element.closest('.fbUserContent').first();
 						$post_text = $newsfeed_post.find('.userContent');
-						var btmimg = chrome.runtime.getURL('icons/btm_logo.png');
-						var $btm_button = $(`<p><a href="javascript:void(0);"><img src="${btmimg}" height="24" width="26"></a></p>`);
-						var popover_html = getPopoverHtml(slug);
-						var content = `<div id="btm-popover-body-${slug}"><div id="btm-loading-${slug}"><p>Loading...</p></div></div>`;
-						$btm_button.popover({trigger: "click",
-								container: "body",
-								html: "true",
-								template: popover_html,
-								title:`<span style=${popoverBTMStyle}>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>`,
-								content: content
-							})
+						const btmimg = chrome.runtime.getURL('icons/btm_logo.png')
+								, $btm_button = $(`<p><a href="javascript:void(0);"><img src="${btmimg}" height="24" width="26"></a></p>`)
+								, popover_html = getPopoverHtml(slug)
+								, loading = `<div id="btm-popover-body-${slug}"><div id="btm-loading-${slug}"><p>Loading...</p></div></div>`;
+
+						$btm_button.popover({
+							trigger: "click",
+							container: "body",
+							html: "true",
+							template: popover_html,
+							title: `<span style=${popoverBTMStyle}>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>`,
+							content: loading
+						})
+
 						$post_text.first().append($btm_button);
 						$btm_button.on('shown.bs.popover', initPopover.bind($btm_button, slug, href));
 
 						function initPopover(slug, href) {
-							var sites = spectrumSites['nytimes.com']; //hard-coded for NYT only
-							var sitePromises = siteSearches(sites, slug);
+							const sites = spectrumSites['nytimes.com'] //hard-coded for NYT only
+									, sitePromises = siteSearches(sites, slug);
+
 							$('.btm-close').on('click', function () { $btm_button.popover('hide') });
+
 							Promise.all(sitePromises)
 								.then(results => {
 									$(`#btm-loading-${slug}`).hide();
