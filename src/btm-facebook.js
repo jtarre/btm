@@ -112,23 +112,6 @@ $(function() {
 
 	facebookInterval();
 
-	function toggleArticles(slug, event) {
-		if($('#btm-popover-body-' + slug + ':hidden').length > 0)
-			toggleVisible($('#btm-popover-body-' + slug), $('#btm-btn-' + slug));
-		else
-			toggleInvisible($('#btm-popover-body-' + slug), $('#btm-btn-' + slug));
-
-		function toggleVisible($container, $button) {
-			$button.text('HIDE');
-			$container.fadeIn();
-		}
-
-		function toggleInvisible($container, $button) {
-			$button.text('SHOW ALTERNATIVES');
-			$container.fadeOut();
-		}
-	}
-
 	function openArticleLink(event) {
 		event.preventDefault();
 		var $link = $(event.target);
