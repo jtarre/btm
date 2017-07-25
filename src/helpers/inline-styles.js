@@ -27,7 +27,7 @@ export const popoverStyle =
 	"-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);" +
 	"box-shadow: 0 5px 10px rgba(0, 0, 0, .2);" +
 	"line-break: auto;" +
-	"z-index: 25";
+	"z-index: 25"
 
 export const popoverTitleStyle =
 	"color: black;" +
@@ -42,7 +42,7 @@ export const popoverTitleStyle =
 	"margin: 0;" +
 	"background-color: #f7f7f7;" +
 	"border-bottom: 1px solid #ebebeb;" +
-	"border-radius: 5px 5px 0 0;";
+	"border-radius: 5px 5px 0 0;"
 
 export const popoverBTMStyle =
 	"color: black;" +
@@ -62,9 +62,18 @@ export const btnPrimaryStyle =
 	"border-color: black;" +
 	"margin: 10px";
 
-export const getPopoverHtml = (slug) => ('<div data-slug="' + slug + '" class="popover" role="tooltip" style="' + popoverStyle + '">' +
-	'<div class="arrow"></div>' +
-	'<h3 style="' + popoverTitleStyle + '" class="popover-title"><span>&times;</span></h3>' +
-	'<div data-slug="' + slug + '" class="popover-content">' +
-	'</div>' +
-	'</div>')
+export const getPopoverHtml = (slug) =>
+(`<div
+		data-slug="${slug}"
+		class="popover"
+		role="tooltip"
+		style="${popoverStyle}">` +
+		`<div class="arrow"></div>` +
+		`<h3
+			style="${popoverTitleStyle}" class="popover-title">` +
+			`<span>&times;</span>` +
+		`</h3>` +
+		`<div
+			data-slug="${slug}"
+			class="popover-content"></div>` +
+	`</div>`)

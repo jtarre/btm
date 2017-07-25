@@ -2,7 +2,7 @@
 
 import _ from 'lodash'
 
-import { getPopoverHtml, popoverBTMStyle } from './helpers/inline-styles'
+import { getPopoverHtml, popoverBTMStyle, caretStyle } from './helpers/inline-styles'
 
 import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants'
 
@@ -102,13 +102,16 @@ $(function () {
 	function toggleSummary(event) {
 		event.preventDefault();
 		var $link = $(event.target);
-		if($link.hasClass('fa-caret-down') || $link.hasClass('fa-caret-up')) $link = $link.parent();
+		if ($link.hasClass('fa-caret-down') || $link.hasClass('fa-caret-up')) $link = $link.parent();
 		var cache = $link.data('cache');
-		var $cache = $('#' + cache);
-		var $caret = $('#btm-span-' + cache);
+		var $cache = $(`#${cache}`);
+		var $caret = $(`#btm-span-${cache}`)
 		$cache.collapse('toggle');
-		if($caret.hasClass('fa-caret-up')) $caret.addClass('fa-caret-down').removeClass('fa-caret-up');
-		else $caret.addClass('fa-caret-up').removeClass('fa-caret-down');
+		if ($caret.hasClass('fa-caret-up')) {
+			$caret.addClass('fa-caret-down').removeClass('fa-caret-up')
+		} else {
+			$caret.addClass('fa-caret-up').removeClass('fa-caret-down')
+		}
 	}
 
 	function closeHover(event) {
