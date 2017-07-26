@@ -34,9 +34,9 @@ $(function () {
 				, $newsfeed_post = $element.closest('.fbUserContent').first()
 				, $post_text = $newsfeed_post.find('.userContent')
 				, btmimg = chrome.runtime.getURL('icons/btm_logo.png')
-				, $btm_button = $(`<p><a href="javascript:void(0);"><img src="{btmimg}" height="24" width="26"></a></p>`)
+				, $btm_button = $(`<p><a href="javascript:void(0);"><img src="${btmimg}" height="24" width="26"></a></p>`)
 				, popover_html = getPopoverHtml(slug)
-				, loading = `<div id="btm-popover-body-${slug}"><divid="btm-loading-${slug}"><p>Loading...</p></div></div>`;
+				, loading = `<div id="btm-popover-body-${slug}"><div id="btm-loading-${slug}"><p>Loading...</p></div></div>`;
 
 			$btm_button.popover({
 				trigger: "click",
