@@ -92,7 +92,7 @@ $(function () {
 
 	/* Fires embedIcons as long as the user is not on Facebook. */
 	if (domain !== 'facebook.com') {
-		setInterval(embedIcons, 5000);
+		setInterval(embedIcons, 3000);
 	}
 
 })
