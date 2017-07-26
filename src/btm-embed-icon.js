@@ -8,6 +8,8 @@ import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from '.
 
 import { checkIsArticle, checkLinkSection, checkDescendants } from './helpers/getLinks-helpers'
 
+/* ---------- IIFE --------- */
+
 $(function () {
 
 	const domain = window.location.hostname.split('www.')[1]
