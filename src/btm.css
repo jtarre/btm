@@ -13,6 +13,11 @@
     cursor: pointer;
 }
 
+.btm-pull-right {
+  float: right !important;
+}
+
+/* Other */
 
 .collapse {
   display: none;
@@ -512,10 +517,6 @@ fieldset[disabled] .btn-link:focus {
   list-style: none;
 }
 
-.btm-pull-right {
-  float: right !important;
-}
-
 
 .popover > .arrow,
 .popover > .arrow:after {
@@ -616,3 +617,4 @@ fieldset[disabled] .btn-link:focus {
   padding: 9px;
   border-radius: 3px;
 }
+

@@ -2,19 +2,19 @@
   "manifest_version": 2,
   "name": "Bridge the Media",
   "description": "Get outside your bubble. Expand your horizons. Read across the political spectrum",
-  "version": "1.7",
+  "version": "2.0",
   "icons": {
-    "16": "btm_logo.png",
-    "48": "btm_logo.png",
-    "128": "btm_logo.png"
+    "16": "icons/btm_logo.png",
+    "48": "icons/btm_logo.png",
+    "128": "icons/btm_logo.png"
   },
   "browser_action": {
-    "default_icon": "btm_logo_32.png",
-    "default_popup": "popup.html",
+    "default_icon": "icons/btm_logo_32.png",
+    "default_popup": "popup/popup.html",
     "default_title": "Bridge the Media"
   },
   "background": {
-    "page": "popup.html",
+    "page": "popup/popup.html",
     "persistent": false
   },
   "content_scripts": [
@@ -28,14 +28,15 @@
         "http://www.facebook.com/*"
       ],
       "css": [
-        "font-awesome-4.7.0/css/font-awesome.css",
-        "popup.css"
+        "external/font-awesome-4.7.0/css/font-awesome.css",
+        "btm.css"
       ],
       "js": [
-        "jquery-3.2.0.js",
-        "link_hover.js",
-        "btm-facebook.js",
-        "bootstrap-3.3.7-dist/js/bootstrap.js"
+        "external/jquery-3.2.0.js",
+        "btmFacebook.bundle.js",
+        "btmIcon.bundle.js",
+        "btmPage.bundle.js",
+        "external/bootstrap-3.3.7-dist/js/bootstrap.min.js"
       ]
     }
   ],
@@ -46,10 +47,9 @@
     "https://cse.google.com/*"
   ],
   "web_accessible_resources": [
-    "font-awesome-4.7.0/fonts/fontawesome*",
-    "btm_logo_24.png",
-    "btm_logo_32.png",
-    "btm_logo.png"
+    "external/font-awesome-4.7.0/fonts/fontawesome*",
+    "icons/*.png",
+    "btm.css"
   ],
   "content_security_policy": "script-src 'self' https://cse.google.com https://www.google.com https://code.jquery.com https://ssl.google-analytics.com; object-src 'self'"
 }
