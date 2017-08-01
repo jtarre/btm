@@ -13,7 +13,6 @@ import { toggleSummary } from './helpers/embed-helpers.js'
 /* ---------- IIFE --------- */
 
 $(() => {
-
 	const domain = window.location.hostname.split('www.')[1]
 		, originTitle = siteTitles[domain] !== undefined ? siteTitles[domain] : domain;
 
@@ -35,7 +34,7 @@ $(() => {
 				, slug = getSlug(href)
 				, $newsfeed_post = $element.closest('.fbUserContent').first()
 				, $post_text = $newsfeed_post.find('.userContent')
-				, btmimg = chrome.runtime.getURL('icons/btm_logo.png')
+				, btmImg = chrome.runtime.getURL('icons/btm_logo.png')
 				, $btm_button = $(`<p><a href="javascript:void(0);"><img src=${btmImg} style="height: 20px; width: 20px; vertical-align: middle; margin-left: 0.1em"></a></p>`)
 				, popover_html = getPopoverHtml(slug)
 				, loading = `<div id="btm-popover-body-${slug}"><div id="btm-loading-${slug}"><p>Loading...</p></div></div>`;

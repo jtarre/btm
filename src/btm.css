@@ -19,7 +19,7 @@
 
 /* Other */
 
-.collapse {
+/* .collapse {
   display: none;
 }
 .collapse.in {
@@ -44,7 +44,7 @@ tbody.collapse.in {
   -webkit-transition-property: height, visibility;
        -o-transition-property: height, visibility;
           transition-property: height, visibility;
-}
+} */
 
 .btn > .caret,
 .dropup > .btn > .caret {
@@ -617,4 +617,3 @@ fieldset[disabled] .btn-link:focus {
   padding: 9px;
   border-radius: 3px;
 }
-
