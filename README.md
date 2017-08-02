@@ -22,19 +22,10 @@ Dev version: v.2.0
 - popup.js - Google Analytics logic lives here
 - List of content scripts and css files injected into facebook, nytimes, or fox is listed in manifest.json
 
-## Refactoring Effort
+## Development
 
-- Branch: dev/master/embed-icon
-
-The goal is to separate the logic for embedding the BTM icon/Show Alternatives button from obtaining recommendations into separate modules.
-
-- recommendation-fetcher.js
-	- should be responsible for making API requests to recommendation source
-	- should be responsible for parsing and transforming results of API request
-- embed-recommendations.js
-	- should be responsible for all embedding logic
-	- should be responsible for registering events that use recommendation-fetcher for obtaining recommendations
-	- should be responsible for rendering recommendations into html that makes up the BTM popover
+1. ```npm install``` to install new dependencies
+2. ```npm run build-watch``` to automatically regenerate a `bundle.js` with code changes
 
 
 ## Deployment
@@ -47,4 +38,17 @@ The goal is to separate the logic for embedding the BTM icon/Show Alternatives b
 ## Testing
 
 - Currently using Mocha + Chai - see recommendation-fetcher-spec.js for an example
-- To run tests: ```npm test```
+- To run all tests: ```npm test```
+- To run a specific suite: ```mocha <example.spec.js>```
+
+## Linting
+
+- BTM uses ESlint with Airbnb style guide
+- To lint against a file: ```./node_modules/.bin/eslint <yourfile.js>```
+
+## Contributing Guidelines
+
+1. There are two main branches: btm-stable (production) and master (dev)
+2. For a bug fix, branch off of btm-stable, merge into btm-stable, then merge btm-stable into master
+3. For new features, branch off of master and merge into master
+4. New code on master will be merged into btm-stable, and btm-stable will be deployed.
