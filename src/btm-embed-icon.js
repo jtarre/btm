@@ -1,5 +1,3 @@
-/* ---------- STYLES + HELPER FUNCTIONS --------- */
-
 import { getPopoverHtml, getBTMIcon, getLoading, getPopoverTitle } from './helpers/inline-elements'
 
 import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants'
@@ -8,8 +6,6 @@ import { getLinks } from './helpers/getLinks-helpers'
 
 import { toggleSummary } from './helpers/embed-helpers'
 
-/* ---------- IIFE --------- */
-
 $(() => {
   const domain = window.location.hostname.split('www.')[1]
     , pathname = window.location.pathname
@@ -17,6 +13,8 @@ $(() => {
     , source = siteTitles[domain] || domain;
 
   let startTime = new Date(); //this is initialized at the current time
+
+  $('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');</style>")
 
   function embedIcons() {
     const $links = getLinks()

@@ -10,8 +10,12 @@ $(() => {
   const domain = window.location.hostname.split('www.')[1]
     , pathname = window.location.pathname
     , originUrl = `http://${domain}${pathname}`
-    , originTitle = siteTitles[domain] || domain
-    , hrefs = {};
+    , source = siteTitles[domain] || domain
+    , btmImg = chrome.runtime.getURL('icons/btm_logo.png');
+
+  $('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');</style>")
+
+  let hrefs = {};
 
   let startTime = new Date(); //this is initialized at the current time
 
@@ -25,8 +29,7 @@ $(() => {
         , slug = getSlug(href)
         , $newsfeed_post = $element.closest('.fbUserContent').first()
         , $post_text = $newsfeed_post.find('.userContent')
-        , btmImg = chrome.runtime.getURL('icons/btm_logo.png')
-        , $btm_button = `<p>${getBTMIcon(btmImg)}</p>`;
+        , $btm_button = getBTMIcon(btmImg);
 
       $btm_button.popover({
         trigger: "click",
@@ -46,7 +49,7 @@ $(() => {
 
       function initPopover() {
         $('.btm-close').on('click', () => { $btm_button.popover('hide') });
-        Promise.all(siteSearches(spectrumSites['nytimes.com'], slug)) //hard-coded for NYT only
+        Promise.all(siteSearches(spectrumSites['nytimes.com'], slug)) //hard-coded for FB posts from NYT only
           .then(results => {
             $(`#btm-loading-${slug}`).hide();
             $(`#btm-popover-body-${slug}`).after(createPopup(results, slug));
@@ -54,12 +57,62 @@ $(() => {
             $('.popup-link').on('click', openArticleLink);
           })
         chrome.runtime.sendMessage({
-          source: originTitle,
+          source,
           type: "BTM Icon Click"
         });
       }
     })
   }
+
+  function initNewsPageHover() {
+    const pathnameArr = pathname.split('/');
+    let btmHover, btmButton, slug, side;
+    if (pathnameArr.length > 5) { // it's a news page, at least for fox news, need to add hover to bottom left of page
+      switch (domain) {
+        case 'foxnews.com':
+          slug = pathnameArr[pathnameArr.length - 1].replace('.html', '');
+          side = 'left';
+          break;
+        case 'nytimes.com':
+          slug = pathnameArr[pathnameArr.length - 1].replace('.html', '');
+          side = 'right';
+          break;
+        default:
+          side = 'right';
+          break;
+      }
+
+      btmButton = `<button id="btm-btn-${slug}" class="google-search btn btn-primary btm-btn" href="javascript:void(0);" data-slug=${slug}>SHOW ALTERNATIVES</button>`;
+
+      btmHover =
+        `<div
+          class="btm-popover"
+          data-slug=${slug}
+          style="position:fixed; ${side}:50px; bottom:10px;">
+          <h3 class="btm-popover-title">BRIDGE THE MEDIA</h3>
+          <div id="btm-hover-${slug}>
+            <div style="max-height:450px;overflow:scroll;" id="btm-popover-body-${slug}" />
+            ${btmButton}
+          </div>
+        </div>`
+    }
+
+    $('body').append($(btmHover));
+    var sitePromises = siteSearches(spectrumSites[domain], slug);
+    Promise.all(sitePromises)
+      .then((search_results) => {
+        var popup = createPopup(search_results, slug);
+        // // add popup to page
+        $('#btm-popover-body-' + slug).css('display', 'none');
+        $('#btm-popover-body-' + slug).append(popup);
+        $('.collapse-link').on('click', toggleSummary);
+        $('.popup-link').on('click', openArticleLink);
+        $('.btm-close').on('click', closeHover.bind($('#btm-hover-' + slug)));
+
+      })
+    $('.google-search').on('click', toggleArticles.bind($(btmHover), slug));
+  }
+
 
 
   if (domain === "facebook.com") {

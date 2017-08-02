@@ -1,5 +1,3 @@
-/* ---------- STYLES + HELPER FUNCTIONS --------- */
-
 import uniqBy from 'lodash.uniqby'
 
 import { getPopoverHtml, getBTMIcon, getLoading, getPopoverTitle } from './helpers/inline-elements'
@@ -10,14 +8,14 @@ import { checkIsArticle, checkLinkSection } from './helpers/getLinks-helpers'
 
 import { toggleSummary } from './helpers/embed-helpers'
 
-/* ---------- IIFE --------- */
-
 $(() => {
   const domain = window.location.hostname.split('www.')[1]
     , originTitle = siteTitles[domain] || domain
     , btmImg = chrome.runtime.getURL('icons/btm_logo.png')
 
-  const hrefs = {}
+  $('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');</style>")
+
+  let hrefs = {}
 
   function checkFacebookLinks() {
     let $links = $('a').toArray().filter(link => link.href && !hrefs.hasOwnProperty(link.href) && link.href.includes('nytimes.com') && checkIsArticle(link) && checkLinkSection(link))
