@@ -1,13 +1,3 @@
-export const popoverBTMStyle =
-	"color: black;" +
-	"font-family: Josefin Sans, serif;" +
-	"font-size: 16px;" +
-	"font-style: normal;" +
-	"font-weight: bolder;" +
-	"line-height: 1.42857143;" +
-	"text-align: left;" +
-	"text-align: start;";
-
 export const btnPrimaryStyle =
 	"color: #4665B0;" +
 	"background-color: #FECC08;" +

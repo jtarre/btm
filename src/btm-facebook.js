@@ -2,7 +2,7 @@
 
 import _ from 'lodash'
 
-import { getPopoverHtml, popoverBTMStyle } from './helpers/inline-styles.js'
+import { getPopoverHtml } from './helpers/inline-styles.js'
 
 import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants.js'
 
@@ -48,7 +48,7 @@ $(() => {
 					const distFromRight = $(window).width() - $(parent).offset().left
 					return (distFromRight < 350) ? "left" : "right"
 				},
-				title: `<span style=${popoverBTMStyle}>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>`,
+				title: `<span class="btm-header">BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>`,
 				content: loading
 			})
 

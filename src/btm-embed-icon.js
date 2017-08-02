@@ -1,9 +1,6 @@
 /* ---------- STYLES + HELPER FUNCTIONS --------- */
 
-import {
-	getPopoverHtml,
-	popoverBTMStyle
-} from './helpers/inline-styles'
+import { getPopoverHtml } from './helpers/inline-styles'
 
 import {
 	spectrumSites,
@@ -45,7 +42,7 @@ $(function () {
 				container: "body",
 				html: "true",
 				template: popoverTemplate,
-				title: `<span style=${popoverBTMStyle}>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>`,
+				title: `<span class="btm-header">BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>`,
 				placement: (popover, parent) => {
 					const distFromRight = $(window).width() - $(parent).offset().left
 					return (distFromRight < 350) ? "left" : "right"
