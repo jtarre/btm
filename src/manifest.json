@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Bridge the Media",
   "description": "Get outside your bubble. Expand your horizons. Read across the political spectrum",
-  "version": "2.0",
+  "version": "2.0.2",
   "icons": {
     "16": "icons/btm_logo.png",
     "48": "icons/btm_logo.png",
