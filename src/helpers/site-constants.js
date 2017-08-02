@@ -2,31 +2,31 @@ const pos = require('pos');
 const tagger = new pos.Tagger();
 const allowedPOSTags = ["NN", "NNP", "NNPS", "NNS", "JJ"];
 
+const extractWordsWithAllowedPOSTags = (slug) => {
+	let spaces = slug.split("-").join(" ");
+	const words = new pos.Lexer().lex(spaces);
+	let taggedWords = tagger.tag(words);
+	taggedWords = taggedWords.filter(word => {
+		if (allowedPOSTags.indexOf(word[1]) > -1) {
+			return true
+		}
+	});
+	taggedWords = taggedWords.map(word => word[0]);
+	return taggedWords.join("-");
+}
+
 export const getSlug = (href) => {
 	const href_segments = href.split("/");
 	let slug = '';
-	slug = href_segments[href_segments.length-1];
+	slug = href_segments[href_segments.length - 1];
 	slug = slug.replace(/\d+/g, "");
 	slug = slug.split(".", 1);
 	slug = slug[0];
 	return extractWordsWithAllowedPOSTags(slug);
 }
 
-const extractWordsWithAllowedPOSTags = (slug) => {
-	let spaces = slug.split("-").join(" ");
-	const words = new pos.Lexer().lex(spaces);
-	let taggedWords = tagger.tag(words);
-	taggedWords = taggedWords.filter(word => {
-		if(allowedPOSTags.indexOf(word[1]) > -1){
-				return true
-			}
-		});
-	taggedWords = taggedWords.map(word => word[0]);
-	return taggedWords.join("-");
-}
-
 const banana = 'CRQkZe76Sgs3SBySazIA'
-		, chipmunk = 'A7LZZG82AFeyBt8FW8'
+	, chipmunk = 'A7LZZG82AFeyBt8FW8'
 
 const searcher = `&key=${banana.split('').reverse().join().replace(/,/g, '')}_${chipmunk}`
 
@@ -65,15 +65,15 @@ const getPopupDetails = (publisher, item) => {
 	var description;
 	var date;
 
-	switch(publisher) {
+	switch (publisher) {
 		case "foxnews.com":
 			link = item.link;
-			headline= item.title;
+			headline = item.title;
 
-			if(item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["dc.description"]) description = item.pagemap.metatags[0]["dc.description"];
+			if (item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["dc.description"]) description = item.pagemap.metatags[0]["dc.description"];
 			else description = item.snippet;
 
-			if(item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]['dc.date']) {
+			if (item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]['dc.date']) {
 				date = item.pagemap.metatags[0]['dc.date'];
 				date = new Date(date);
 				date = date.toDateString();
@@ -84,15 +84,15 @@ const getPopupDetails = (publisher, item) => {
 			link = item.link;
 
 			/** headline**/
-			if(item && item.pagemap && item.pagemap.article && item.pagemap.article[0].headline) headline= item.pagemap.article[0].headline;
-			else headline= item.title;
+			if (item && item.pagemap && item.pagemap.article && item.pagemap.article[0].headline) headline = item.pagemap.article[0].headline;
+			else headline = item.title;
 
 			/** Description **/
-			if(item && item.pagemap && item.pagemap.article && item.pagemap.article[0].articlebody) description = item.pagemap.article[0].articlebody;
+			if (item && item.pagemap && item.pagemap.article && item.pagemap.article[0].articlebody) description = item.pagemap.article[0].articlebody;
 			else description = item.snippet;
 
 			/** Date **/
-			if(item && item.pagemap && item.pagemap.article && item.pagemap.article[0].datepublished) {
+			if (item && item.pagemap && item.pagemap.article && item.pagemap.article[0].datepublished) {
 				date = item.pagemap.article[0].datepublished;
 				date = new Date(date);
 				date = date.toDateString();
@@ -101,13 +101,13 @@ const getPopupDetails = (publisher, item) => {
 
 		case "nypost.com":
 			link = item.link;
-			headline= item.title;
+			headline = item.title;
 			/** Description **/
-			if(item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["og:description"]) description = item.pagemap.metatags[0]["og:description"];
+			if (item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["og:description"]) description = item.pagemap.metatags[0]["og:description"];
 			else description = item.snippet;
 
 			/** Date **/
-			if(item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]['article:published_time']) {
+			if (item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]['article:published_time']) {
 				date = item.pagemap.metatags[0]['article:published_time'];
 				date = new Date(date);
 				date = date.toDateString();
@@ -116,14 +116,14 @@ const getPopupDetails = (publisher, item) => {
 
 		case "wsj.com":
 			link = item.link;
-			headline= item.title;
+			headline = item.title;
 
 			/** Description **/
-			if(item && item.pagemap && item.pagemap.webpage && item.pagemap.webpage[0].description) description = item.pagemap.webpage[0].description;
+			if (item && item.pagemap && item.pagemap.webpage && item.pagemap.webpage[0].description) description = item.pagemap.webpage[0].description;
 			else description = item.snippet;
 
 			/** Date **/
-			if(item && item.pagemap && item.pagemap.webpage && item.pagemap.webpage[0].datecreated) {
+			if (item && item.pagemap && item.pagemap.webpage && item.pagemap.webpage[0].datecreated) {
 				date = item.pagemap.webpage[0].datecreated;
 				date = new Date(date);
 				date = date.toDateString();
@@ -140,10 +140,10 @@ const getPopupDetails = (publisher, item) => {
 		case "theatlantic.com":
 			link = item.link;
 			headline = item.title;
-			if(item && item.pagemap && item.pagemap.newsarticle && item.pagemap.newsarticle[0].description) description = item.pagemap.newsarticle[0].description;
+			if (item && item.pagemap && item.pagemap.newsarticle && item.pagemap.newsarticle[0].description) description = item.pagemap.newsarticle[0].description;
 			else description = item.snippet;
 
-			if(item && item.pagemap && item.pagemap.newsarticle && item.pagemap.newsarticle[0].datepublished) {
+			if (item && item.pagemap && item.pagemap.newsarticle && item.pagemap.newsarticle[0].datepublished) {
 				date = item.pagemap.newsarticle[0].datepublished;
 				date = new Date(date);
 				date = date.toDateString();
@@ -152,13 +152,13 @@ const getPopupDetails = (publisher, item) => {
 		case "vice.com":
 			link = item.link;
 			headline = item.title;
-			if(item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["og:description"]) description = item.pagemap.metatags[0]["og:description"];
+			if (item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["og:description"]) description = item.pagemap.metatags[0]["og:description"];
 			else description = item.snippet;
 			break;
 		case "slate.com":
 			link = item.link;
 			headline = item.title;
-			if(item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["og:description"]) description = item.pagemap.metatags[0]["og:description"];
+			if (item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["og:description"]) description = item.pagemap.metatags[0]["og:description"];
 			else description = item.snippet;
 			break;
 		case "huffingtonpost.com":
@@ -201,7 +201,7 @@ const createItemHtml = (site, link, title, description, date, slug) => {
 	if (date) date = " | " + date;
 	else date = " | date unavailable";
 	var html_style =
-	"color: black;" +
+		"color: black;" +
 		// "padding: 1px;" +
 		"font-family: PT serif, serif;" +
 		"font-size: 12px;" +
@@ -210,13 +210,13 @@ const createItemHtml = (site, link, title, description, date, slug) => {
 		"line-height: 1.42857143;" +
 		"text-align: left;" +
 		"text-align: start;";
-	 var anchor_style =
+	var anchor_style =
 		"font-family: PT Serif, serif;" +
 		"color: black;" +
 		"font-size: 12px;";
 
 	var cache = slug + "-" + site_id + "-collapse";
-	if (title == undefined || description == undefined){
+	if (title == undefined || description == undefined) {
 		html =
 			`<p style='${html_style}'><strong style='font-family: PT Serif, serif; font-weight: bold'>${site}${date}</strong></br>` +
 			`<a style='${anchor_style}'>No Results</a></p>`;
@@ -277,5 +277,3 @@ const siteSearch = (site, search) => {
 export const siteSearches = (sites, slug) => {
 	return sites.map(site => siteSearch(site, slug))
 }
-
-
