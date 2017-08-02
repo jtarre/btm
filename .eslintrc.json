@@ -1,3 +1,16 @@
 {
-    "extends": "airbnb-base"
+    "extends": "airbnb-base",
+    "rules": {
+        "semi": "off",
+        "comma-dangle": "off",
+        "one-var": "off",
+        "comma-style": "off",
+        "arrow-parens": "off",
+        "quotes": "off"
+    },
+    "globals": {
+        "$": false,
+        "window": false,
+        "chrome": false
+    }
 }
