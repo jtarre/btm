@@ -1,6 +1,6 @@
 /* ---------- STYLES + HELPER FUNCTIONS --------- */
 
-import { popoverStyle, popoverTitleStyle, btnPrimaryStyle, getPopoverHtml } from './helpers/inline-styles.js'
+import { popoverTitleStyle, btnPrimaryStyle, getPopoverHtml } from './helpers/inline-styles.js'
 
 import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants.js'
 
@@ -55,7 +55,7 @@ $(function () {
 				'</button>';
 
 			btmHover =
-				'<div data-slug="' + slug + '" style="' + popoverStyle + ';position:fixed;' + side + ':50px;bottom:10px;">' +
+				'<div class="btm-popover" data-slug="' + slug + '" style="position:fixed;' + side + ':50px;bottom:10px;">' +
 				'<h3 style="' + popoverTitleStyle + '">' +
 				'BRIDGE THE MEDIA' +
 				'</h3>' +

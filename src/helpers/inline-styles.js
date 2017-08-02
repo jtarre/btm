@@ -1,34 +1,3 @@
-export const popoverStyle =
-	"width: 250px;" +
-	"max-width: 276px;" +
-	"color: black;" +
-	"padding: 1px;" +
-	"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;" +
-	"font-size: 14px;" +
-	"font-style: normal;" +
-	"font-weight: normal;" +
-	"line-height: 1.42857143;" +
-	"text-align: left;" +
-	"text-align: start;" +
-	"text-decoration: none;" +
-	"text-shadow: none;" +
-	"text-transform: none;" +
-	"letter-spacing: normal;" +
-	"word-break: normal;" +
-	"word-spacing: normal;" +
-	"word-wrap: normal;" +
-	"white-space: normal;" +
-	"background-color: #fff;" +
-	"-webkit-background-clip: padding-box;" +
-	"background-clip: padding-box;" +
-	"border: 1px solid #ccc;" +
-	"border: 1px solid rgba(0, 0, 0, .2);" +
-	"border-radius: 6px;" +
-	"-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);" +
-	"box-shadow: 0 5px 10px rgba(0, 0, 0, .2);" +
-	"line-break: auto;" +
-	"z-index: 25"
-
 export const popoverTitleStyle =
 	"color: black;" +
 	"font-family: Josefin Sans, serif;" +
@@ -65,9 +34,9 @@ export const btnPrimaryStyle =
 export const getPopoverHtml = (slug) =>
 (`<div
 		data-slug="${slug}"
-		class="popover"
+		class="popover btm-popover"
 		role="tooltip"
-		style="${popoverStyle}">` +
+		>` +
 		`<div class="arrow"></div>` +
 		`<h3
 			style="${popoverTitleStyle}" class="popover-title">` +
