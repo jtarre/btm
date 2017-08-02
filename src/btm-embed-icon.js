@@ -14,7 +14,7 @@ $(() => {
 
   let startTime = new Date(); //this is initialized at the current time
 
-  $('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');</style>")
+  $('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans|PT+Serif');</style>")
 
   function embedIcons() {
     const $links = getLinks()

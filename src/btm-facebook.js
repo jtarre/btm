@@ -13,7 +13,7 @@ $(() => {
     , originTitle = siteTitles[domain] || domain
     , btmImg = chrome.runtime.getURL('icons/btm_logo.png')
 
-  $('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');</style>")
+  $('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans|PT+Serif');</style>")
 
   let hrefs = {}
 
