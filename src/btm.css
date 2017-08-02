@@ -88,6 +88,17 @@
   margin: 10px";
 }
 
+.btm-result {
+  color: black;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: left;
+  text-align: start
+}
+
 
 /* ---------- Customized Bootstrap styles ---------- */
 

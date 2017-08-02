@@ -49,24 +49,17 @@ export const siteTitles = {
 }
 
 const getPopupDetails = (publisher, item) => {
-  var site_title = siteTitles[publisher];
-  var link;
-  var headline;
-  var description;
-  var date;
+  const site_title = siteTitles[publisher];
+  let link, headline, description, date;
 
   switch (publisher) {
     case "foxnews.com":
       link = item.link;
       headline = item.title;
 
-      if (item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["dc.description"]) description = item.pagemap.metatags[0]["dc.description"];
-      else description = item.snippet;
-
-      if (item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]['dc.date']) {
-        date = item.pagemap.metatags[0]['dc.date'];
-        date = new Date(date);
-        date = date.toDateString();
+      if (item && item.pagemap && item.pagemap.metatags) {
+        description = item.pagemap.metatags[0]['dc.description'] || item.snippet;
+        date = item.pagemap.metatags[0]['dc.date'] ? new Date(item.pagemap.metatags[0]['dc.date']).toDateString() : ''
       }
       break;
 
@@ -163,14 +156,13 @@ const getPopupDetails = (publisher, item) => {
       break;
   }
 
-  var details = {
-    site_title: site_title,
-    link: link,
-    headline: headline,
-    description: description,
-    date: date
+  return {
+    site_title,
+    link,
+    headline,
+    description,
+    date
   };
-  return details;
 }
 
 const itemTemplate = (publisher, item, slug) => {
@@ -227,32 +219,19 @@ const createItemHtml = (site, link, title, description, date, slug) => {
 }
 
 // css and html for each news snippet
-export const createPopup = (results, slug, styleAddition) => {
-
-  styleAddition = styleAddition || "";
-
+export const createPopup = (results, slug, styleAddition = "") => {
   let html = `<div style='margin:10px;font-family: Helvetica Neue, Helvetica, Arial, sans-serif; ${styleAddition}'><ul class='list-unstyled'>`;
-
-  const html_style =
-    "color: black;" +
-    "font-family: Helvetica Neue, Helvetica, Arial, sans-serif;" +
-    "font-size: 14px;" +
-    "font-style: normal;" +
-    "font-weight: normal;" +
-    "line-height: 1.42857143;" +
-    "text-align: left;" +
-    "text-align: start;";
 
   results.forEach(result => {
     const site = result["queries"]["request"][0]["siteSearch"];
-    if (result) {
-      const item = result.items !== undefined ? result.items[0] : "";
-      html += `<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>${itemTemplate(site, item, slug)}</li>`;
+    if (result.items) {
+      const item = result.items[0]
+      html += `<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>${itemTemplate(site, item, slug)}</li>`
     } else {
-      html += `<li><p style='${html_style}'><strong style='font-family: PT Serif;color:black;font-size:12px'>${siteTitles[site]}</strong></br><span style='font-family: PT Serif;color:black;font-size:12px'>No Results</span></li>`
+      html += `<li><p class="btm-result"><strong style='font-family: PT Serif;color:black;font-size:12px'>${siteTitles[site]}</strong></br><span style='font-family: PT Serif;color:black;font-size:12px'>No Results</span></li>`
     }
   });
-  return html += "</ul></div>";
+  return `${html}</ul></div>`;
 }
 
 const siteSearch = (site, slug) => $.ajax({

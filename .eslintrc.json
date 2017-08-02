@@ -4,6 +4,7 @@
         "semi": "off",
         "comma-dangle": "off",
         "one-var": "off",
+        "one-var-declaration-per-line": "off",
         "comma-style": "off",
         "arrow-parens": "off",
         "quotes": "off"
