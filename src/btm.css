@@ -79,6 +79,15 @@
   text-align: start;
 }
 
+.btm-btn {
+  color: #4665B0;
+  background-color: #FECC08;
+  font-size:14px;
+  font-family: PT Serif, serif;
+  border-color: black;
+  margin: 10px";
+}
+
 
 /* ---------- Customized Bootstrap styles ---------- */
 

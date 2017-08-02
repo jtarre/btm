@@ -1,11 +1,3 @@
-export const btnPrimaryStyle =
-	"color: #4665B0;" +
-	"background-color: #FECC08;" +
-	"font-size:14px" +
-	"font-family: PT Serif, serif" +
-	"border-color: black;" +
-	"margin: 10px";
-
 export const getPopoverHtml = (slug) =>
 (`<div
 		data-slug="${slug}"
