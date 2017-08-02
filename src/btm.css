@@ -70,7 +70,7 @@
 
 .btm-header {
   color: black;
-  font-family: Josefin Sans, serif;
+  font-family: Josefin Sans, serif !important;
   font-size: 16px;
   font-style: normal;
   font-weight: bolder;
