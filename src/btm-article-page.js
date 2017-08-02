@@ -1,28 +1,12 @@
 /* ---------- STYLES + HELPER FUNCTIONS --------- */
 
-import { popoverStyle, popoverTitleStyle, btnPrimaryStyle, getPopoverHtml } from './helpers/inline-styles.js'
+import { getPopoverHtml } from './helpers/inline-styles.js'
 
 import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants.js'
 
 $(function () {
-	// if(chrome && chrome.runtime && chrome.runtime.onUpdateAvailble) {
-	// 	chrome.runtime.onUpdateAvailable.addListener(function(details) {
-	// 	  chrome.runtime.reload();
-	// 	});
-	// }
-
-
 	/** Current Algorithm **/
 	/** on a per site basis **/
-	/*
-	Switch statements abound
-	1. Identify the links - initAnchor (switch)
-	2. Identify the slugs - getSlug (switch)
-	displayPopup
-	3. Google search based on site searches - siteSearches
-	4. Create Popup - createPopup / create_item_template (getPopupDetails (switch)) / createItemHtml
-
-	 */
 
 	const domain = window.location.hostname.split('www.')[1]
 		, pathname = window.location.pathname
@@ -50,19 +34,19 @@ $(function () {
 					break;
 			}
 
-			btmButton = '<button id="btm-btn-' + slug + '" style="' + btnPrimaryStyle + '" class="google-search btn btn-primary" href="javascript:void(0);" data-slug="' + slug + '">' +
-				'SHOW ALTERNATIVES' +
-				'</button>';
+			btmButton = `<button id="btm-btn-${slug}" class="google-search btn btn-primary btm-btn" href="javascript:void(0);" data-slug=${slug}>SHOW ALTERNATIVES</button>`;
 
 			btmHover =
-				'<div data-slug="' + slug + '" style="' + popoverStyle + ';position:fixed;' + side + ':50px;bottom:10px;">' +
-				'<h3 style="' + popoverTitleStyle + '">' +
-				'BRIDGE THE MEDIA' +
-				'</h3>' +
-				'<div id="btm-hover-' + slug + '">' +
-				"<div style='max-height:450px;overflow:scroll;'id='btm-popover-body-" + slug + "'></div>" + btmButton +
-				"</div>" +
-				'</div>';
+				`<div
+					class="btm-popover"
+					data-slug=${slug}
+					style="position:fixed; ${side}:50px; bottom:10px;">
+					<h3 class="btm-popover-title">BRIDGE THE MEDIA</h3>
+					<div id="btm-hover-${slug}>
+						<div style="max-height:450px;overflow:scroll;" id="btm-popover-body-${slug}" />
+						${btmButton}
+					</div>
+				</div>`
 		}
 
 		$('body').append($(btmHover));

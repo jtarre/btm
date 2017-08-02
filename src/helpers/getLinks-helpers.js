@@ -1,3 +1,5 @@
+/* ------ Helpers ------ */
+
 export const checkIsArticle = (link) => {
   return link.href && !link.href.includes('/comments/') && !link.href.includes('/video/')
 }
@@ -34,4 +36,17 @@ const checkHasProperTextElements = (descendants) => {
 
 export const checkDescendants = (descendants) => {
   return checkUndefinedDescendants(descendants) || checkHasProperTextElements(descendants)
+}
+
+/* ------ getLinks() ------ */
+
+import _ from 'lodash';
+
+export const getLinks = () => {
+  const allLinks = $('a').not('.button').toArray()
+    .filter(link => {
+      const descendants = $(link).find('*').toArray();
+      return link.href && checkIsArticle(link) && checkLinkSection(link) && checkDescendants(descendants)
+    })
+  return _.uniqBy(allLinks, link => link.href)
 }

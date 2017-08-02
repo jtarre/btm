@@ -2,16 +2,17 @@
 
 import _ from 'lodash'
 
-import { getPopoverHtml, popoverTitleStyle, popoverBTMStyle } from './helpers/inline-styles.js'
+import { getPopoverHtml } from './helpers/inline-styles.js'
 
 import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants.js'
 
 import { checkIsArticle, checkLinkSection } from './helpers/getLinks-helpers.js'
 
+import { toggleSummary } from './helpers/embed-helpers.js'
+
 /* ---------- IIFE --------- */
 
-$(function () {
-
+$(() => {
 	const domain = window.location.hostname.split('www.')[1]
 		, originTitle = siteTitles[domain] !== undefined ? siteTitles[domain] : domain;
 
@@ -33,8 +34,8 @@ $(function () {
 				, slug = getSlug(href)
 				, $newsfeed_post = $element.closest('.fbUserContent').first()
 				, $post_text = $newsfeed_post.find('.userContent')
-				, btmimg = chrome.runtime.getURL('icons/btm_logo.png')
-				, $btm_button = $(`<p><a href="javascript:void(0);"><img src="${btmimg}" height="24" width="26"></a></p>`)
+				, btmImg = chrome.runtime.getURL('icons/btm_logo.png')
+				, $btm_button = $(`<p><a href="javascript:void(0);"><img src=${btmImg} style="height: 20px; width: 20px; vertical-align: middle; margin-left: 0.1em"></a></p>`)
 				, popover_html = getPopoverHtml(slug)
 				, loading = `<div id="btm-popover-body-${slug}"><div id="btm-loading-${slug}"><p>Loading...</p></div></div>`;
 
@@ -43,27 +44,26 @@ $(function () {
 				container: "body",
 				html: "true",
 				template: popover_html,
-				title: `<span style=${popoverBTMStyle}>BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>`,
+				placement: (popover, parent) => {
+					const distFromRight = $(window).width() - $(parent).offset().left
+					return (distFromRight < 350) ? "left" : "right"
+				},
+				title: `<span class="btm-header">BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>`,
 				content: loading
 			})
 
 			$post_text.first().append($btm_button);
-			$btm_button.on('shown.bs.popover', initPopover.bind($btm_button, slug, href));
+			$btm_button.on('shown.bs.popover', initPopover.bind($btm_button, slug));
 
-			function initPopover(slug, href) {
-				const sites = spectrumSites['nytimes.com'] //hard-coded for NYT only
-					, sitePromises = siteSearches(sites, slug);
-
+			function initPopover() {
 				$('.btm-close').on('click', () => { $btm_button.popover('hide') });
-
-				Promise.all(sitePromises)
+				Promise.all(siteSearches(spectrumSites['nytimes.com'], slug)) //hard-coded for NYT only
 					.then(results => {
 						$(`#btm-loading-${slug}`).hide();
 						$(`#btm-popover-body-${slug}`).after(createPopup(results, slug));
 						$('.collapse-link').on('click', toggleSummary);
 						$('.popup-link').on('click', openArticleLink);
 					})
-
 				chrome.runtime.sendMessage({
 					source: originTitle,
 					type: "BTM Icon Click"
@@ -72,34 +72,16 @@ $(function () {
 		})
 	}
 
-	function toggleSummary(event) {
-		event.preventDefault();
-		var $link = $(event.target);
-		if ($link.hasClass('fa-caret-down') || $link.hasClass('fa-caret-up')) $link = $link.parent();
-		var cache = $link.data('cache');
-		var $cache = $(`#${cache}`);
-		var $caret = $(`#btm-span-${cache}`).attr("style", "font-family: FontAwesome; margin-left: 0.5em")
-		$cache.collapse('toggle');
-		if ($caret.hasClass('fa-caret-up')) {
-			$caret.addClass('fa-caret-down').removeClass('fa-caret-up')
-		} else {
-			$caret.addClass('fa-caret-up').removeClass('fa-caret-down')
-		}
-	}
-
 	function openArticleLink(event) {
 		event.preventDefault();
-		var $link = $(event.target);
-		var href = $link.attr('href');
-		let originUrl = href;
+		const href = $(event.target).attr('href');
 		chrome.runtime.sendMessage({
 			targetUrl: href,
 			type: "Outbound Link Click",
 			source: "Facebook",
-			originUrl: originUrl,
+			originUrl: href,
 			elapsedTime: 0
-		},
-			function (response) { });
+		});
 		window.open(href);
 	}
 
