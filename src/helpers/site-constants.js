@@ -7,7 +7,7 @@ const extractWordsWithAllowedPOSTags = (slug) => {
   const spaces = slug.split("-").join(" ");
   const words = new pos.Lexer().lex(spaces);
   let taggedWords = tagger.tag(words);
-  taggedWords = taggedWords.filter(word => (allowedPOSTags.indexOf(word[0]) > -1));
+  taggedWords = taggedWords.filter(word => (allowedPOSTags.indexOf(word[1]) > -1));
   taggedWords = taggedWords.map(word => word[0]);
   return taggedWords.join("-");
 }
@@ -19,8 +19,6 @@ export const getSlug = (href) => {
   slug = slug.replace(/\d+/g, "");
   slug = slug.split(".", 1);
   slug = slug[0];
-  console.log("slug", slug)
-  console.log("extracted slug", extractWordsWithAllowedPOSTags(slug))
   return extractWordsWithAllowedPOSTags(slug);
 }
 
