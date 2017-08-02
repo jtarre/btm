@@ -1,3 +1,5 @@
+import getPopupDetails from './getPopupDetails'
+
 const pos = require('pos');
 
 const tagger = new pos.Tagger();
@@ -10,8 +12,8 @@ const extractWordsWithAllowedPOSTags = (slug) => {
 }
 
 export const getSlug = (href) => {
-  const href_segments = href.split("/")
-    , slug = href_segments[href_segments.length - 1].replace(/\d+/g, "").split(".", 1)[0];
+  const hrefSegments = href.split("/")
+    , slug = hrefSegments[hrefSegments.length - 1].replace(/\d+/g, "").split(".", 1)[0];
   return extractWordsWithAllowedPOSTags(slug);
 }
 
@@ -48,174 +50,38 @@ export const siteTitles = {
   "nytimes.com": "NY Times"
 }
 
-const getPopupDetails = (publisher, item) => {
-  const site_title = siteTitles[publisher];
-  let link, headline, description, date;
-
-  switch (publisher) {
-    case "foxnews.com":
-      link = item.link;
-      headline = item.title;
-
-      if (item && item.pagemap && item.pagemap.metatags) {
-        description = item.pagemap.metatags[0]['dc.description'] || item.snippet;
-        date = item.pagemap.metatags[0]['dc.date'] ? new Date(item.pagemap.metatags[0]['dc.date']).toDateString() : ''
-      }
-      break;
-
-    case "nationalreview.com":
-      link = item.link;
-
-      /** headline**/
-      if (item && item.pagemap && item.pagemap.article && item.pagemap.article[0].headline) headline = item.pagemap.article[0].headline;
-      else headline = item.title;
-
-      /** Description **/
-      if (item && item.pagemap && item.pagemap.article && item.pagemap.article[0].articlebody) description = item.pagemap.article[0].articlebody;
-      else description = item.snippet;
-
-      /** Date **/
-      if (item && item.pagemap && item.pagemap.article && item.pagemap.article[0].datepublished) {
-        date = item.pagemap.article[0].datepublished;
-        date = new Date(date);
-        date = date.toDateString();
-      }
-      break;
-
-    case "nypost.com":
-      link = item.link;
-      headline = item.title;
-      /** Description **/
-      if (item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["og:description"]) description = item.pagemap.metatags[0]["og:description"];
-      else description = item.snippet;
-
-      /** Date **/
-      if (item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]['article:published_time']) {
-        date = item.pagemap.metatags[0]['article:published_time'];
-        date = new Date(date);
-        date = date.toDateString();
-      }
-      break;
-
-    case "wsj.com":
-      link = item.link;
-      headline = item.title;
-
-      /** Description **/
-      if (item && item.pagemap && item.pagemap.webpage && item.pagemap.webpage[0].description) description = item.pagemap.webpage[0].description;
-      else description = item.snippet;
-
-      /** Date **/
-      if (item && item.pagemap && item.pagemap.webpage && item.pagemap.webpage[0].datecreated) {
-        date = item.pagemap.webpage[0].datecreated;
-        date = new Date(date);
-        date = date.toDateString();
-      }
-      break;
-    case "thehill.com":
-      break;
-    case "thefiscaltimes.com":
-      break;
-    case "forbes.com":
-      break;
-    case "economist.com":
-      break;
-    case "theatlantic.com":
-      link = item.link;
-      headline = item.title;
-      if (item && item.pagemap && item.pagemap.newsarticle && item.pagemap.newsarticle[0].description) description = item.pagemap.newsarticle[0].description;
-      else description = item.snippet;
-
-      if (item && item.pagemap && item.pagemap.newsarticle && item.pagemap.newsarticle[0].datepublished) {
-        date = item.pagemap.newsarticle[0].datepublished;
-        date = new Date(date);
-        date = date.toDateString();
-      }
-      break;
-    case "vice.com":
-      link = item.link;
-      headline = item.title;
-      if (item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["og:description"]) description = item.pagemap.metatags[0]["og:description"];
-      else description = item.snippet;
-      break;
-    case "slate.com":
-      link = item.link;
-      headline = item.title;
-      if (item && item.pagemap && item.pagemap.metatags && item.pagemap.metatags[0]["og:description"]) description = item.pagemap.metatags[0]["og:description"];
-      else description = item.snippet;
-      break;
-    case "huffingtonpost.com":
-      break;
-    case "thedailybeast.com":
-      break;
-    case "reason.com":
-      break;
-    case "telegraph.co.uk":
-      break;
-    default:
-      break;
+const createItemHtml = (site, link, title, description, date, slug) => {
+  const siteName = site.replace(/\s/g, "")
+    , dateString = date ? ` | ${date}` : ' | date unavailable'
+    , cache = `${slug}-${siteName}-collapse`
+  if (!title || !description) {
+    return (`<p class="btm-site-header">
+        <strong style='font-family: PT Serif, serif; font-weight: bold'>${site}${dateString}</strong>
+        </br>
+        <a class="btm-anchor">No Results</a>
+      </p>`)
   }
-
-  return {
-    site_title,
-    link,
-    headline,
-    description,
-    date
-  };
+  return (`<p class="btm-site-header">
+        <strong style='font-family: PT Serif, serif; font-weight: bold'>${site}${dateString}</strong>
+        </br>
+        <a class='collapse-link btm-anchor' data-toggle='collapse' data-cache="${cache}">
+          ${title}
+          <span id="btm-span-${cache}" class='fa fa-caret-down' style="font-family: FontAwesome; margin-left: 0.5em;"></span>
+        </a>
+      </p>
+      <div class='collapse' id='${slug}-${siteName}-collapse'>
+        <div class='well'>
+          <h4 class="btm-anchor">
+            <a class='popup-link' target='_blank' href='${link}'>Read entire article</a>
+          </h4>
+          <p class="btm-anchor">${description}</p>
+        </div>
+      </div>`)
 }
 
 const itemTemplate = (publisher, item, slug) => {
-
-  var popup_details = getPopupDetails(publisher, item);
-  return createItemHtml(popup_details.site_title,
-    popup_details.link,
-    popup_details.headline,
-    popup_details.description,
-    popup_details.date, slug);
-}
-
-const createItemHtml = (site, link, title, description, date, slug) => {
-  var html;
-  var site_id = site.replace(/\s/g, "");
-  var random = Math.random() * 100;
-  random = random.toString();
-  if (date) date = " | " + date;
-  else date = " | date unavailable";
-  var html_style =
-    "color: black;" +
-    // "padding: 1px;" +
-    "font-family: PT serif, serif;" +
-    "font-size: 12px;" +
-    "font-style: normal;" +
-    "font-weight: normal;" +
-    "line-height: 1.42857143;" +
-    "text-align: left;" +
-    "text-align: start;";
-  var anchor_style =
-    "font-family: PT Serif, serif;" +
-    "color: black;" +
-    "font-size: 12px;";
-
-  var cache = slug + "-" + site_id + "-collapse";
-  if (title == undefined || description == undefined) {
-    html =
-      `<p style='${html_style}'><strong style='font-family: PT Serif, serif; font-weight: bold'>${site}${date}</strong></br>` +
-      `<a style='${anchor_style}'>No Results</a></p>`;
-  }
-  else {
-    html =
-      `<p style="${html_style}"><strong style='font-family: PT Serif, serif; font-weight: bold'>${site}${date}</strong></br>` +
-      `<a style="${anchor_style}" class='collapse-link' data-toggle='collapse' data-cache="${cache}">${title}<span id="btm-span-${cache}" class='fa fa-caret-down' style="font-family: FontAwesome; margin-left: 0.5em;"></span></a></p>` +
-      `<div class='collapse' id='${slug}-${site_id}-collapse'>` +
-      "<div class='well'>" +
-      `<h4 style='font-family: PT Serif, serif;color:black;font-size:12px' +><a class='popup-link' target='_blank' href='${link}'>Read entire article</a>` +
-      "</h4>" +
-      `<p style='font-family: PT Serif, serif; color: black; font-size: 12px'>${description}</p>` +
-      "</div>" +
-      "</div>";
-  }
-  return html;
+  const { siteTitle, link, headline, description, date } = getPopupDetails(publisher, item);
+  return createItemHtml(siteTitle, link, headline, description, date, slug);
 }
 
 // css and html for each news snippet
@@ -228,7 +94,7 @@ export const createPopup = (results, slug, styleAddition = "") => {
       const item = result.items[0]
       html += `<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>${itemTemplate(site, item, slug)}</li>`
     } else {
-      html += `<li><p class="btm-result"><strong style='font-family: PT Serif;color:black;font-size:12px'>${siteTitles[site]}</strong></br><span style='font-family: PT Serif;color:black;font-size:12px'>No Results</span></li>`
+      html += `<li><p class="btm-result"><strong class="btm-anchor">${siteTitles[site]}</strong></br><span class="btm-anchor">No Results</span></li>`
     }
   });
   return `${html}</ul></div>`;

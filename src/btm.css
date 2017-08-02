@@ -99,6 +99,23 @@
   text-align: start
 }
 
+.btm-site-header {
+  color: black;
+  font-family: PT serif, serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: left;
+  text-align: start
+}
+
+.btm-anchor {
+  font-family: PT Serif, serif;
+  color: black;
+  font-size: 12px
+}
+
 
 /* ---------- Customized Bootstrap styles ---------- */
 
