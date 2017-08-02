@@ -6,19 +6,12 @@ const allowedPOSTags = ["NN", "NNP", "NNPS", "NNS", "JJ"];
 const extractWordsWithAllowedPOSTags = (slug) => {
   const spaces = slug.split("-").join(" ");
   const words = new pos.Lexer().lex(spaces);
-  let taggedWords = tagger.tag(words);
-  taggedWords = taggedWords.filter(word => (allowedPOSTags.indexOf(word[1]) > -1));
-  taggedWords = taggedWords.map(word => word[0]);
-  return taggedWords.join("-");
+  return tagger.tag(words).filter(word => (allowedPOSTags.indexOf(word[1]) > -1)).map(word => word[0]).join("-");
 }
 
 export const getSlug = (href) => {
-  const href_segments = href.split("/");
-  let slug = '';
-  slug = href_segments[href_segments.length - 1];
-  slug = slug.replace(/\d+/g, "");
-  slug = slug.split(".", 1);
-  slug = slug[0];
+  const href_segments = href.split("/")
+    , slug = href_segments[href_segments.length - 1].replace(/\d+/g, "").split(".", 1)[0];
   return extractWordsWithAllowedPOSTags(slug);
 }
 
