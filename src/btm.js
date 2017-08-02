@@ -1,39 +1,32 @@
-/* ---------- STYLES + HELPER FUNCTIONS --------- */
-
 import uniqBy from 'lodash.uniqby'
-
-import { getPopoverHtml, getBTMIcon, getLoading, getPopoverTitle } from './helpers/inline-elements'
 
 import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants'
 
 import { checkIsArticle, checkLinkSection } from './helpers/getLinks-helpers'
 
-import { toggleSummary } from './helpers/embed-helpers'
-
-/* ---------- IIFE --------- */
+import { getPopoverHtml, getBTMIcon, getLoading, getPopoverTitle } from './helpers/inline-elements'
 
 $(() => {
   const domain = window.location.hostname.split('www.')[1]
+    , pathname = window.location.pathname
+    , originUrl = `http://${domain}${pathname}`
     , originTitle = siteTitles[domain] || domain
-    , btmImg = chrome.runtime.getURL('icons/btm_logo.png')
+    , hrefs = {};
 
-  const hrefs = {}
+  let startTime = new Date(); //this is initialized at the current time
 
   function checkFacebookLinks() {
     let $links = $('a').toArray().filter(link => link.href && !hrefs.hasOwnProperty(link.href) && link.href.includes('nytimes.com') && checkIsArticle(link) && checkLinkSection(link))
-
     $links = uniqBy($links, link => link.href) // filters out duplicates
-
     $links.forEach(element => { // this is for nytimes only. not general
-
       hrefs[element.href] = true;
-
       const $element = $(element)
         , href = $element.attr('href')
         , slug = getSlug(href)
         , $newsfeed_post = $element.closest('.fbUserContent').first()
         , $post_text = $newsfeed_post.find('.userContent')
-        , $btm_button = getBTMIcon(btmImg)
+        , btmImg = chrome.runtime.getURL('icons/btm_logo.png')
+        , $btm_button = `<p>${getBTMIcon(btmImg)}</p>`;
 
       $btm_button.popover({
         trigger: "click",
@@ -68,21 +61,12 @@ $(() => {
     })
   }
 
-  function openArticleLink(event) {
-    event.preventDefault();
-    const href = $(event.target).attr('href');
-    chrome.runtime.sendMessage({
-      targetUrl: href,
-      type: "Outbound Link Click",
-      source: "Facebook",
-      originUrl: href,
-      elapsedTime: 0
-    });
-    window.open(href);
-  }
 
   if (domain === "facebook.com") {
     setInterval(checkFacebookLinks, 1000)
+  } else if (pathname.includes('/opinion/') || pathname.includes('/politics/')) {
+    initNewsPageHover()
+  } else {
+    setInterval(embedIcons, 3000);
   }
-
 })

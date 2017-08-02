@@ -1,6 +1,6 @@
 /* ---------- STYLES + HELPER FUNCTIONS --------- */
 
-import { getPopoverHtml } from './helpers/inline-styles'
+import { getPopoverHtml } from './helpers/inline-elements'
 
 import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants'
 
