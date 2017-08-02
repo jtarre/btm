@@ -19,6 +19,8 @@ export const getSlug = (href) => {
   slug = slug.replace(/\d+/g, "");
   slug = slug.split(".", 1);
   slug = slug[0];
+  console.log("slug", slug)
+  console.log("extracted slug", extractWordsWithAllowedPOSTags(slug))
   return extractWordsWithAllowedPOSTags(slug);
 }
 

@@ -1,7 +1,7 @@
 // recommendation-fetcher.spec.js
 'use strict';
 var expect = require('chai').expect;
-var RecommendationFetcher = require('./recommendation-fetcher.js');
+var RecommendationFetcher = require('../recommendation-fetcher.js');
 var exampleRecommendation = {
    "kind": "customsearch#result",
    "title": "'Moonlight' won best picture because of Oscars' version of Electoral ...",
