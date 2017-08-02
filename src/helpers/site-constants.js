@@ -255,15 +255,10 @@ export const createPopup = (results, slug, styleAddition) => {
   return html += "</ul></div>";
 }
 
-const siteSearch = (site, search) => {
-  var google_url = `https://www.googleapis.com/customsearch/v1?q=${search}&cx=013013877924597244999%3Atbq0ixuctim&dateRestrict=m[7]&siteSearch=${site}${searcher}`;
-  return $.ajax({
-    type: 'get',
-    url: google_url,
-    dataType: 'json'
-  })
-}
+const siteSearch = (site, slug) => $.ajax({
+  type: 'get',
+  url: `https://www.googleapis.com/customsearch/v1?q=${slug}&cx=013013877924597244999%3Atbq0ixuctim&dateRestrict=m[7]&siteSearch=${site}${searcher}`,
+  dataType: 'json'
+})
 
-export const siteSearches = (sites, slug) => {
-  return sites.map(site => siteSearch(site, slug))
-}
+export const siteSearches = (sites, slug) => sites.map(site => siteSearch(site, slug))
