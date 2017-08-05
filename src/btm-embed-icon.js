@@ -1,29 +1,20 @@
-/* ---------- STYLES + HELPER FUNCTIONS --------- */
+import { getPopoverHtml, getBTMIcon, getLoading, getPopoverTitle } from './helpers/inline-elements'
 
-import { getPopoverHtml } from './helpers/inline-styles'
+import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants'
 
-import {
-	spectrumSites,
-	siteTitles,
-	getSlug,
-	createPopup,
-	siteSearches
-} from './helpers/site-constants'
+import { getLinks } from './helpers/getLinks-helpers'
 
-import { getLinks } from './helpers/getLinks-helpers.js'
+import { toggleSummary } from './helpers/embed-helpers'
 
-import { toggleSummary } from './helpers/embed-helpers.js'
-
-/* ---------- IIFE --------- */
-
-$(function () {
-
+$(() => {
 	const domain = window.location.hostname.split('www.')[1]
 		, pathname = window.location.pathname
-		, originUrl = originUrl || `http://${domain}${pathname}`
-		, originTitle = siteTitles[domain] || domain;
+		, originUrl = `http://${domain}${pathname}`
+		, source = siteTitles[domain] || domain;
 
 	let startTime = new Date(); //this is initialized at the current time
+
+	$('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans|PT+Serif');</style>")
 
 	function embedIcons() {
 		const $links = getLinks()
@@ -33,21 +24,19 @@ $(function () {
 			const $element = $(element)
 				, href = $element.attr('href')
 				, slug = getSlug(href)
-				, $btm_button = $(`<a href="javascript:void(0);"><img src=${btmImg} style="height: 20px; width: 20px; vertical-align: middle; margin-left: 0.1em"></a>`)
-				, popoverTemplate = getPopoverHtml(slug)
-				, loading = `<div id="btm-popover-body-${slug}"><div id="btm-loading-${slug}"><p>Loading...</p></div></div>`;
+				, $btm_button = getBTMIcon(btmImg)
 
 			$btm_button.popover({
 				trigger: "click",
 				container: "body",
 				html: "true",
-				template: popoverTemplate,
-				title: `<span class="btm-header">BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>`,
+				template: getPopoverHtml(slug),
+				title: getPopoverTitle(),
 				placement: (popover, parent) => {
 					const distFromRight = $(window).width() - $(parent).offset().left
 					return (distFromRight < 350) ? "left" : "right"
 				},
-				content: loading
+				content: getLoading(slug)
 			})
 
 			if (!$element.next().is('a') && $element.attr('class') !== 'popup-link') {
@@ -66,7 +55,7 @@ $(function () {
 						$('.popup-link').on('click', openArticleLink);
 					})
 				chrome.runtime.sendMessage({
-					source: originTitle,
+					source,
 					type: "BTM Icon Click"
 				});
 			}
@@ -79,8 +68,8 @@ $(function () {
 		chrome.runtime.sendMessage({
 			targetUrl: href,
 			type: "Outbound Link Click",
-			source: originTitle,
-			originUrl: originUrl,
+			source,
+			originUrl,
 			elapsedTime: Math.round((new Date() - startTime) / 60000)
 		});
 		startTime = new Date(); // reset startTime
@@ -91,5 +80,4 @@ $(function () {
 	if (domain !== 'facebook.com') {
 		setInterval(embedIcons, 3000);
 	}
-
 })

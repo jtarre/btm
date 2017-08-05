@@ -1,29 +1,26 @@
-/* ---------- STYLES + HELPER FUNCTIONS --------- */
+import uniqBy from 'lodash.uniqby'
 
-import _ from 'lodash'
+import { getPopoverHtml, getBTMIcon, getLoading, getPopoverTitle } from './helpers/inline-elements'
 
-import { getPopoverHtml } from './helpers/inline-styles.js'
+import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants'
 
-import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants.js'
+import { checkIsArticle, checkLinkSection } from './helpers/getLinks-helpers'
 
-import { checkIsArticle, checkLinkSection } from './helpers/getLinks-helpers.js'
-
-import { toggleSummary } from './helpers/embed-helpers.js'
-
-/* ---------- IIFE --------- */
+import { toggleSummary } from './helpers/embed-helpers'
 
 $(() => {
 	const domain = window.location.hostname.split('www.')[1]
-		, originTitle = siteTitles[domain] !== undefined ? siteTitles[domain] : domain;
+		, originTitle = siteTitles[domain] || domain
+		, btmImg = chrome.runtime.getURL('icons/btm_logo.png')
+
+	$('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans|PT+Serif');</style>")
 
 	let hrefs = {}
 
 	function checkFacebookLinks() {
-		let $links = $('a').toArray().filter(link => {
-			return link.href && !hrefs.hasOwnProperty(link.href) && link.href.includes('nytimes.com') && checkIsArticle(link) && checkLinkSection(link);
-		})
+		let $links = $('a').toArray().filter(link => link.href && !hrefs.hasOwnProperty(link.href) && link.href.includes('nytimes.com') && checkIsArticle(link) && checkLinkSection(link))
 
-		$links = _.uniqBy($links, link => link.href) //filters out duplicates
+		$links = uniqBy($links, link => link.href) // filters out duplicates
 
 		$links.forEach(element => { // this is for nytimes only. not general
 
@@ -34,22 +31,19 @@ $(() => {
 				, slug = getSlug(href)
 				, $newsfeed_post = $element.closest('.fbUserContent').first()
 				, $post_text = $newsfeed_post.find('.userContent')
-				, btmImg = chrome.runtime.getURL('icons/btm_logo.png')
-				, $btm_button = $(`<p><a href="javascript:void(0);"><img src=${btmImg} style="height: 20px; width: 20px; vertical-align: middle; margin-left: 0.1em"></a></p>`)
-				, popover_html = getPopoverHtml(slug)
-				, loading = `<div id="btm-popover-body-${slug}"><div id="btm-loading-${slug}"><p>Loading...</p></div></div>`;
+				, $btm_button = getBTMIcon(btmImg)
 
 			$btm_button.popover({
 				trigger: "click",
 				container: "body",
 				html: "true",
-				template: popover_html,
+				template: getPopoverHtml(slug),
 				placement: (popover, parent) => {
 					const distFromRight = $(window).width() - $(parent).offset().left
 					return (distFromRight < 350) ? "left" : "right"
 				},
-				title: `<span class="btm-header">BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>`,
-				content: loading
+				title: getPopoverTitle(),
+				content: getLoading(slug)
 			})
 
 			$post_text.first().append($btm_button);

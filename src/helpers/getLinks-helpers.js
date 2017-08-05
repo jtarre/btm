@@ -1,42 +1,27 @@
 /* ------ Helpers ------ */
 
-export const checkIsArticle = (link) => {
-  return link.href && !link.href.includes('/comments/') && !link.href.includes('/video/')
-}
+export const checkIsArticle = (link) => (link.href && !link.href.includes('/comments/') && !link.href.includes('/video/'))
 
-export const checkLinkSection = (link) => {
-  return link.href && (link.href.includes("/politics/") || link.href.includes("/opinion/"))
+export const checkLinkSection = (link) => (link.href && (link.href.includes("/politics/") || link.href.includes("/opinion/"))
           && !link.href.includes("index.html") && $(link).parents('p').length === 0
-          && !link.href.endsWith("#");
-}
+          && !link.href.endsWith("#"))
 
-const checkUndefinedDescendants = (descendants) => {
-  return descendants[0] === undefined;
-}
+const checkUndefinedDescendants = (descendants) => (descendants[0] === undefined)
 
+// TODO: Revisit. This superfluously runs a forEach. Can we return true and exit the loop the moment we hit a true value?
 const checkHasProperTextElements = (descendants) => {
-  let result = false;
-  let firstChildOfDescendant = undefined;
+  let result = false
   descendants.forEach(descendant => {
-    if (descendant['childNodes'][0] !== undefined) {
-      firstChildOfDescendant = descendant['childNodes'][0];
-      if (firstChildOfDescendant['nodeName'] === '#text' &&
-          $(firstChildOfDescendant).parents('figcaption').length === 0) {
-        result = true;
-      }
-    }
-    if (descendant['nextSibling'] !== null) {
-      if (descendant['nextSibling']['nodeName'] === '#text' && descendant['nodeName'] !== "DIV" && $.trim(descendant['nextSibling']['textContent']) !== "") {
-        result = true;
-      }
-    }
-  });
-  return result;
+    const firstChild = descendant.childNodes[0]
+      , nextSib = descendant.nextSibling;
+    if (firstChild && firstChild['nodeName'] === '#text' && $(firstChild).parents('figcaption').length === 0) { result = true }
+    if (nextSib && nextSib['nodeName'] === '#text' && descendant['nodeName'] !== "DIV" && $.trim(nextSib['textContent']) !== "") { result = true }
+  })
+  return result
 }
 
-export const checkDescendants = (descendants) => {
-  return checkUndefinedDescendants(descendants) || checkHasProperTextElements(descendants)
-}
+export const checkDescendants = (descendants) =>
+  (checkUndefinedDescendants(descendants) || checkHasProperTextElements(descendants))
 
 /* ------ getLinks() ------ */
 

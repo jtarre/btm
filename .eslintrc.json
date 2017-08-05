@@ -1,0 +1,25 @@
+{
+	"extends": "airbnb-base",
+	"rules": {
+		"semi": "off",
+		"comma-dangle": "off",
+		"one-var": "off",
+		"one-var-declaration-per-line": "off",
+		"comma-style": "off",
+		"arrow-parens": "off",
+		"quotes": "off",
+		"indent": [
+			"error",
+			"tab",
+			{
+				"SwitchCase": 1
+			}
+		],
+		"no-tabs": "off"
+	},
+	"globals": {
+		"$": false,
+		"window": false,
+		"chrome": false
+	}
+}
