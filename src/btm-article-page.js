@@ -1,8 +1,8 @@
 /* ---------- STYLES + HELPER FUNCTIONS --------- */
 
-import { getPopoverHtml } from './helpers/inline-styles.js'
+import { getPopoverHtml } from './helpers/inline-elements'
 
-import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants.js'
+import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants'
 
 $(function () {
 	/** Current Algorithm **/
@@ -16,10 +16,12 @@ $(function () {
 		, endTime //this will be set when the user clicks on a recommendation
 		, startTime = new Date(); //this is initialized at the current time
 
+	$('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans|PT+Serif');</style>")
+
 	function initNewsPageHover() {
 		const pathnameArr = pathname.split('/');
 		let btmHover, btmButton, slug, side;
-		if (pathnameArr.length > 5) { // it's a news page, at least for fox news, need to add hover to bottom left of page
+		if (pathnameArr.length > 5) { // it's a news page, need to add hover to bottom left of page
 			switch (domain) {
 				case 'foxnews.com':
 					slug = pathnameArr[pathnameArr.length - 1].replace('.html', '');
@@ -38,15 +40,15 @@ $(function () {
 
 			btmHover =
 				`<div
-					class="btm-popover"
-					data-slug=${slug}
-					style="position:fixed; ${side}:50px; bottom:10px;">
-					<h3 class="btm-popover-title">BRIDGE THE MEDIA</h3>
-					<div id="btm-hover-${slug}>
-						<div style="max-height:450px;overflow:scroll;" id="btm-popover-body-${slug}" />
-						${btmButton}
-					</div>
-				</div>`
+          class="btm-popover"
+          data-slug=${slug}
+          style="position:fixed; ${side}:50px; bottom:10px;">
+          <h3 class="btm-popover-title">BRIDGE THE MEDIA</h3>
+          <div id="btm-hover-${slug}>
+            <div style="max-height:450px;overflow:scroll;" id="btm-popover-body-${slug}" />
+            ${btmButton}
+          </div>
+        </div>`
 		}
 
 		$('body').append($(btmHover));
@@ -88,7 +90,7 @@ $(function () {
 		}
 	}
 
-	if (pathname.includes("/opinion/") || pathname.includes("/politics/")){
+	if (pathname.includes("/opinion/") || pathname.includes("/politics/")) {
 		initNewsPageHover();
 	}
 
