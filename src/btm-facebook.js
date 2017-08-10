@@ -64,7 +64,7 @@ $(() => {
 
 			function initPopover() {
 				$('.btm-close').on('click', () => { $btmButton.popover('hide') });
-				Promise.all(siteSearches(spectrumSites[publisher], slug)) // hard-coded for NYT only
+				Promise.all(siteSearches(spectrumSites[publisher], slug))
 					.then(results => {
 						$(`#btm-loading-${slug}`).hide();
 						$(`#btm-popover-body-${slug}`).after(createPopup(results, slug));
