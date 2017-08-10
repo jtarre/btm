@@ -107,3 +107,5 @@ const siteSearch = (site, slug) => $.ajax({
 })
 
 export const siteSearches = (sites, slug) => sites.map(site => siteSearch(site, slug))
+
+export const getPublisher = (url) => url.substring(url.indexOf("www.")+4, url.indexOf(".com")+4)

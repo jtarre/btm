@@ -2,9 +2,9 @@ import uniqBy from 'lodash.uniqby'
 
 import { getPopoverHtml, getBTMIcon, getLoading, getPopoverTitle } from './helpers/inline-elements'
 
-import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants'
+import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches, getPublisher } from './helpers/site-constants'
 
-import { checkIsArticle, checkLinkSection } from './helpers/getLinks-helpers'
+import { checkIsArticle, checkLinkSection, checkIsProperSource } from './helpers/getLinks-helpers'
 
 import { toggleSummary } from './helpers/embed-helpers'
 
@@ -15,25 +15,26 @@ $(() => {
 
 	$('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans|PT+Serif');</style>")
 
-	let hrefs = {}
+	const hrefs = {}
 
 	function checkFacebookLinks() {
-		let $links = $('a').toArray().filter(link => link.href && !hrefs.hasOwnProperty(link.href) && link.href.includes('nytimes.com') && checkIsArticle(link) && checkLinkSection(link))
+		/* eslint no-prototype-builtins: "error" */
+		let $links = $('a').toArray().filter(link => link.href && !Object.prototype.hasOwnProperty.call(hrefs, link.href) && checkIsProperSource(link) && checkIsArticle(link) && checkLinkSection(link))
 
 		$links = uniqBy($links, link => link.href) // filters out duplicates
 
 		$links.forEach(element => { // this is for nytimes only. not general
-
 			hrefs[element.href] = true;
 
 			const $element = $(element)
 				, href = $element.attr('href')
 				, slug = getSlug(href)
-				, $newsfeed_post = $element.closest('.fbUserContent').first()
-				, $post_text = $newsfeed_post.find('.userContent')
-				, $btm_button = getBTMIcon(btmImg)
+				, $newsfeedPost = $element.closest('.fbUserPost').first()
+				, $postText = $newsfeedPost.find('.userContent')
+				, $btmButton = getBTMIcon(btmImg)
+				, publisher = getPublisher(href)
 
-			$btm_button.popover({
+			$btmButton.popover({
 				trigger: "click",
 				container: "body",
 				html: "true",
@@ -46,12 +47,24 @@ $(() => {
 				content: getLoading(slug)
 			})
 
-			$post_text.first().append($btm_button);
-			$btm_button.on('shown.bs.popover', initPopover.bind($btm_button, slug));
+			$postText.first().append($btmButton);
+
+			function openArticleLink(event) {
+				event.preventDefault();
+				const url = $(event.target).attr('href');
+				chrome.runtime.sendMessage({
+					targetUrl: url,
+					type: "Outbound Link Click",
+					source: "Facebook",
+					originUrl: url,
+					elapsedTime: 0
+				});
+				window.open(url);
+			}
 
 			function initPopover() {
-				$('.btm-close').on('click', () => { $btm_button.popover('hide') });
-				Promise.all(siteSearches(spectrumSites['nytimes.com'], slug)) //hard-coded for NYT only
+				$('.btm-close').on('click', () => { $btmButton.popover('hide') });
+				Promise.all(siteSearches(spectrumSites[publisher], slug))
 					.then(results => {
 						$(`#btm-loading-${slug}`).hide();
 						$(`#btm-popover-body-${slug}`).after(createPopup(results, slug));
@@ -63,24 +76,12 @@ $(() => {
 					type: "BTM Icon Click"
 				});
 			}
-		})
-	}
 
-	function openArticleLink(event) {
-		event.preventDefault();
-		const href = $(event.target).attr('href');
-		chrome.runtime.sendMessage({
-			targetUrl: href,
-			type: "Outbound Link Click",
-			source: "Facebook",
-			originUrl: href,
-			elapsedTime: 0
-		});
-		window.open(href);
+			$btmButton.on('shown.bs.popover', initPopover.bind($btmButton, slug));
+		})
 	}
 
 	if (domain === "facebook.com") {
 		setInterval(checkFacebookLinks, 1000)
 	}
-
 })

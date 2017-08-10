@@ -6,6 +6,8 @@ export const checkLinkSection = (link) => (link.href && (link.href.includes("/po
           && !link.href.includes("index.html") && $(link).parents('p').length === 0
           && !link.href.endsWith("#"))
 
+export const checkIsProperSource = (link) => (link.href && (link.href.includes('nytimes.com') || link.href.includes('foxnews.com')));
+
 const checkUndefinedDescendants = (descendants) => (descendants[0] === undefined)
 
 // TODO: Revisit. This superfluously runs a forEach. Can we return true and exit the loop the moment we hit a true value?
