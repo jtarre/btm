@@ -17,11 +17,11 @@ $(() => {
 	function initPageHover() {
 		const pathnameArr = pathname.split('/');
 		let btmPopover, btmButton, slug, side;
-		if (pathnameArr.length > 5) { // it's a news page, need to add hover to bottom left of page
+		if (pathnameArr.length > 5) {
 			switch (domain) {
 				case 'foxnews.com':
 					slug = pathnameArr[pathnameArr.length - 1].replace('.html', '');
-					side = 'left';
+					side = 'right';
 					break;
 				case 'nytimes.com':
 					slug = pathnameArr[pathnameArr.length - 1].replace('.html', '');
@@ -45,7 +45,7 @@ $(() => {
 				`<div
           class="btm-popover"
           data-slug=${slug}
-          style="position:fixed; ${side}:50px; top:100px">
+          style="position:fixed; ${side}:50px; top:100px; z-index: 1000">
 					<div class="btm-popover-title">
 						BRIDGE THE MEDIA
 						<span class='btm-close btm-pull-right'>&times;</span>
