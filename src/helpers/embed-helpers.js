@@ -1,4 +1,4 @@
-export const openArticleLink = (event, source) => {
+export const openArticleLink = (event, source, startTime) => {
 	event.preventDefault()
 	const targetUrl = $(event.target).attr('href')
 	chrome.runtime.sendMessage({
@@ -6,29 +6,12 @@ export const openArticleLink = (event, source) => {
 		type: 'Outbound Link Click',
 		source,
 		originUrl: window.location,
-		elapsedTime: 0
+		elapsedTime: Math.round((new Date() - startTime) / 60000)
 	})
 	window.open(targetUrl)
 }
 
-export const toggleArticles = (slug, event) => {
-	function toggleVisible($container, $button) {
-		chrome.runtime.sendMessage({
-			source: window.location,
-			type: "Show Alternatives Click"
-		});
-		$button.text('HIDE');
-		$container.fadeIn();
-	}
-	function toggleInvisible($container, $button) {
-		$button.text('SHOW ALTERNATIVES');
-		$container.fadeOut();
-	}
-	if ($(`#btm-popover-body-${slug}:hidden`).length > 0)
-		toggleVisible($(`#btm-popover-body-${slug}`), $(`#btm-btn-${slug}`));
-	else
-		toggleInvisible($(`#btm-popover-body-${slug}`), $(`#btm-btn-${slug}`));
-}
+
 
 export const toggleSummary = (event) => {
 	event.preventDefault();

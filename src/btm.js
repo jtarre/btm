@@ -6,10 +6,12 @@ import { checkIsArticle, checkLinkSection } from './helpers/getLinks-helpers'
 
 import { getPopoverHtml, getBTMIcon, getLoading, getPopoverTitle } from './helpers/inline-elements'
 
+import { openArticleLink } from './helpers/embed-helpers'
+
 $(() => {
 	const domain = window.location.hostname.split('www.')[1]
+		, originTitle = siteTitles[domain] || domain
 		, pathname = window.location.pathname
-		, originUrl = `http://${domain}${pathname}`
 		, source = siteTitles[domain] || domain
 		, btmImg = chrome.runtime.getURL('icons/btm_logo.png');
 
@@ -18,7 +20,7 @@ $(() => {
 	let hrefs = {};
 	let startTime = new Date(); //this is initialized at the current time
 
-	function checkFacebookLinks() {
+		function checkFacebookLinks() {
 		/* eslint no-prototype-builtins: "error" */
 		let $links = $('a').toArray().filter(link => link.href && !Object.prototype.hasOwnProperty.call(hrefs, link.href) && checkIsProperSource(link) && checkIsArticle(link) && checkLinkSection(link))
 
@@ -50,20 +52,6 @@ $(() => {
 
 			$postText.first().append($btmButton);
 
-
-			// function openArticleLink(event) {
-			// 	event.preventDefault();
-			// 	const url = $(event.target).attr('href');
-			// 	chrome.runtime.sendMessage({
-			// 		targetUrl: url,
-			// 		type: "Outbound Link Click",
-			// 		source: "Facebook",
-			// 		originUrl: url,
-			// 		elapsedTime: 0
-			// 	});
-			// 	window.open(url);
-			// }
-
 			function initPopover() {
 				$('.btm-close').on('click', () => { $btmButton.popover('hide') });
 				Promise.all(siteSearches(spectrumSites[publisher], slug))
@@ -78,7 +66,6 @@ $(() => {
 					type: "BTM Icon Click"
 				});
 			}
-
 			$btmButton.on('shown.bs.popover', initPopover.bind($btmButton, slug));
 		})
 	}
