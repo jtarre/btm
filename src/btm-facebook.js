@@ -6,7 +6,7 @@ import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches, getPubli
 
 import { checkIsArticle, checkLinkSection, checkIsProperSource } from './helpers/getLinks-helpers'
 
-import { toggleSummary } from './helpers/embed-helpers'
+import { toggleSummary, openArticleLink } from './helpers/embed-helpers'
 
 $(() => {
 	const domain = window.location.hostname.split('www.')[1]
@@ -49,19 +49,6 @@ $(() => {
 
 			$postText.first().append($btmButton);
 
-			function openArticleLink(event) {
-				event.preventDefault();
-				const url = $(event.target).attr('href');
-				chrome.runtime.sendMessage({
-					targetUrl: url,
-					type: "Outbound Link Click",
-					source: "Facebook",
-					originUrl: url,
-					elapsedTime: 0
-				});
-				window.open(url);
-			}
-
 			function initPopover() {
 				$('.btm-close').on('click', () => { $btmButton.popover('hide') });
 				Promise.all(siteSearches(spectrumSites[publisher], slug))
@@ -69,7 +56,7 @@ $(() => {
 						$(`#btm-loading-${slug}`).hide();
 						$(`#btm-popover-body-${slug}`).after(createPopup(results, slug));
 						$('.collapse-link').on('click', toggleSummary);
-						$('.popup-link').on('click', openArticleLink);
+						$('.popup-link').on('click', (event) => openArticleLink(event, 'Facebook'));
 					})
 				chrome.runtime.sendMessage({
 					source: originTitle,

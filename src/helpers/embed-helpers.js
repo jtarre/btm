@@ -1,3 +1,16 @@
+export const openArticleLink = (event, source) => {
+	event.preventDefault()
+	const targetUrl = $(event.target).attr('href')
+	chrome.runtime.sendMessage({
+		targetUrl,
+		type: 'Outbound Link Click',
+		source,
+		originUrl: window.location,
+		elapsedTime: 0
+	})
+	window.open(targetUrl)
+}
+
 export const toggleArticles = (slug, event) => {
 	function toggleVisible($container, $button) {
 		chrome.runtime.sendMessage({
