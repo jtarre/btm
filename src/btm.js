@@ -1,12 +1,12 @@
 import uniqBy from 'lodash.uniqby'
 
-import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants'
+import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches, getPublisher } from './helpers/site-constants'
 
 import { checkIsArticle, checkLinkSection } from './helpers/getLinks-helpers'
 
-import { getPopoverHtml, getBTMIcon, getLoading, getPopoverTitle } from './helpers/inline-elements'
+import { getPopoverHtml, getBTMIcon, getLoading, getPopoverTitle, getArticlePagePopover } from './helpers/inline-elements'
 
-import { openArticleLink } from './helpers/embed-helpers'
+import { toggleSummary, openArticleLink } from './helpers/embed-helpers'
 
 $(() => {
 	const domain = window.location.hostname.split('www.')[1]
@@ -17,10 +17,10 @@ $(() => {
 
 	$('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');</style>")
 
-	let hrefs = {};
-	let startTime = new Date(); //this is initialized at the current time
+	const hrefs = {}
+		, startTime = new Date(); //this is initialized at the current time
 
-		function checkFacebookLinks() {
+	function checkFacebookLinks() {
 		/* eslint no-prototype-builtins: "error" */
 		let $links = $('a').toArray().filter(link => link.href && !Object.prototype.hasOwnProperty.call(hrefs, link.href) && checkIsProperSource(link) && checkIsArticle(link) && checkLinkSection(link))
 
@@ -62,22 +62,23 @@ $(() => {
 						$('.popup-link').on('click', (event) => openArticleLink(event, 'Facebook'));
 					})
 				chrome.runtime.sendMessage({
-					source: 'Facebook',
+					source: originTitle,
 					type: "BTM Icon Click"
 				});
 			}
+
 			$btmButton.on('shown.bs.popover', initPopover.bind($btmButton, slug));
 		})
 	}
 
-	function initNewsPageHover() {
+	function initPageHover() {
 		const pathnameArr = pathname.split('/');
-		let btmHover, btmButton, slug, side;
-		if (pathnameArr.length > 5) { // it's a news page, at least for fox news, need to add hover to bottom left of page
+		let slug, side;
+		if (pathnameArr.length > 5) {
 			switch (domain) {
 				case 'foxnews.com':
 					slug = pathnameArr[pathnameArr.length - 1].replace('.html', '');
-					side = 'left';
+					side = 'right';
 					break;
 				case 'nytimes.com':
 					slug = pathnameArr[pathnameArr.length - 1].replace('.html', '');
@@ -87,36 +88,26 @@ $(() => {
 					side = 'right';
 					break;
 			}
-
-			btmButton = `<button id="btm-btn-${slug}" class="google-search btn btn-primary btm-btn" href="javascript:void(0);" data-slug=${slug}>SHOW ALTERNATIVES</button>`;
-
-			btmHover =
-				`<div
-          class="btm-popover"
-          data-slug=${slug}
-          style="position:fixed; ${side}:50px; bottom:10px;">
-          <h3 class="btm-popover-title">BRIDGE THE MEDIA</h3>
-          <div id="btm-hover-${slug}>
-            <div style="max-height:450px;overflow:scroll;" id="btm-popover-body-${slug}" />
-            ${btmButton}
-          </div>
-        </div>`
 		}
 
-		$('body').append($(btmHover));
-		var sitePromises = siteSearches(spectrumSites[domain], slug);
-		Promise.all(sitePromises)
-			.then((search_results) => {
-				var popup = createPopup(search_results, slug);
-				// // add popup to page
-				$('#btm-popover-body-' + slug).css('display', 'none');
-				$('#btm-popover-body-' + slug).append(popup);
-				$('.collapse-link').on('click', toggleSummary);
-				$('.popup-link').on('click', openArticleLink);
-				$('.btm-close').on('click', closeHover.bind($('#btm-hover-' + slug)));
+		$('body').append($(getArticlePagePopover(slug, side)));
+		$('.btm-close').on('click', () => {
+			$('.btm-popover').fadeOut()
+		});
 
+		$('.google-search').on('click', () => {
+			$('.google-search').fadeOut()
+			chrome.runtime.sendMessage({
+				source,
+				type: "Show Alternatives Click"
 			})
-		$('.google-search').on('click', toggleArticles.bind($(btmHover), slug));
+			Promise.all(siteSearches(spectrumSites[domain], slug))
+				.then(results => {
+					$(`#btm-popover-body-${slug}`).append(createPopup(results, slug));
+					$('.collapse-link').on('click', toggleSummary);
+					$('.popup-link').on('click', (event) => openArticleLink(event, window.location, startTime));
+				})
+		});
 	}
 
 	function embedIcons() {
@@ -168,7 +159,7 @@ $(() => {
 	if (domain === "facebook.com") {
 		setInterval(checkFacebookLinks, 1000)
 	} else if (pathname.includes('/opinion/') || pathname.includes('/politics/')) {
-		initNewsPageHover()
+		initPageHover()
 	} else {
 		setInterval(embedIcons, 3000);
 	}

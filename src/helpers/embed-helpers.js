@@ -11,8 +11,6 @@ export const openArticleLink = (event, source, startTime) => {
 	window.open(targetUrl)
 }
 
-
-
 export const toggleSummary = (event) => {
 	event.preventDefault();
 	let $link = $(event.target);
