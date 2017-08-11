@@ -2,7 +2,7 @@ import uniqBy from 'lodash.uniqby'
 
 import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches, getPublisher } from './helpers/site-constants'
 
-import { checkIsArticle, checkLinkSection } from './helpers/getLinks-helpers'
+import { getLinks, checkIsArticle, checkLinkSection, checkIsProperSource } from './helpers/getLinks-helpers'
 
 import { getPopoverHtml, getBTMIcon, getLoading, getPopoverTitle, getArticlePagePopover } from './helpers/inline-elements'
 
@@ -18,7 +18,7 @@ $(() => {
 	$('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');</style>")
 
 	const hrefs = {}
-		, startTime = new Date(); //this is initialized at the current time
+		, startTime = new Date(); // this is initialized at the current time
 
 	function checkFacebookLinks() {
 		/* eslint no-prototype-builtins: "error" */
@@ -26,7 +26,7 @@ $(() => {
 
 		$links = uniqBy($links, link => link.href) // filters out duplicates
 
-		$links.forEach(element => { // this is for nytimes only. not general
+		$links.forEach(element => {
 			hrefs[element.href] = true;
 
 			const $element = $(element)
@@ -75,7 +75,7 @@ $(() => {
 		const pathnameArr = pathname.split('/');
 		let slug, side;
 		if (pathnameArr.length > 5) {
-			switch (domain) {
+			switch (domain) { // currently hard-coded for NYT and FOX
 				case 'foxnews.com':
 					slug = pathnameArr[pathnameArr.length - 1].replace('.html', '');
 					side = 'right';
@@ -96,13 +96,13 @@ $(() => {
 		});
 
 		$('.google-search').on('click', () => {
-			$('.google-search').fadeOut()
 			chrome.runtime.sendMessage({
 				source,
 				type: "Show Alternatives Click"
 			})
 			Promise.all(siteSearches(spectrumSites[domain], slug))
 				.then(results => {
+					$('.google-search').fadeOut()
 					$(`#btm-popover-body-${slug}`).append(createPopup(results, slug));
 					$('.collapse-link').on('click', toggleSummary);
 					$('.popup-link').on('click', (event) => openArticleLink(event, window.location, startTime));
@@ -112,7 +112,6 @@ $(() => {
 
 	function embedIcons() {
 		const $links = getLinks()
-			, btmImg = chrome.runtime.getURL('icons/btm_logo.png');
 
 		$links.forEach(element => { // this is for nytimes only. not general
 			const $element = $(element)
@@ -146,7 +145,7 @@ $(() => {
 						$(`#btm-loading-${slug}`).hide();
 						$(`#btm-popover-body-${slug}`).after(createPopup(results, slug));
 						$('.collapse-link').on('click', toggleSummary);
-						$('.popup-link').on('click', openArticleLink);
+						$('.popup-link').on('click', (event) => openArticleLink(event, source, startTime));
 					})
 				chrome.runtime.sendMessage({
 					source,

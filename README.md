@@ -6,12 +6,13 @@ Our Google Chrome Extension encourages citizens to be more informed participants
 
 Current [production version](https://chrome.google.com/webstore/detail/bridge-the-media/cbjilbjbnknaboggkkdficoholohdcco): v.1.7
 
-Dev version: v.2.0.5
+Dev version: v.2.0.6
 - Webpack integration
 - Key tucked into searcher const
 - Embedded icons
 - Google Search API slug only includes nouns
 - Bugs addressed for v.2 release
+- Restructures as bundle.js only
 
 ## Important files in production
 
