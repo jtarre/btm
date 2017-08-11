@@ -50,26 +50,33 @@ $(() => {
 						BRIDGE THE MEDIA
 						<span class='btm-close btm-pull-right'>&times;</span>
 					</span>
-          <div id="btm-hover-${slug}>
-            <div style="max-height:450px;overflow:scroll;" id="btm-popover-body-${slug}" />
-            ${btmButton}
-          </div>
+          <div id="btm-hover-${slug}">
+						<div
+							style="max-height:450px;overflow:scroll;" id="btm-popover-body-${slug}"
+						/>
+            	${btmButton}
+          	</div>
         </div>`
 		}
 
 		$('body').append($(btmPopover));
 		$('.btm-close').on('click', () => {
-			$('.btm-popover').css('display', 'none')
+			$('.btm-popover').fadeOut()
 		});
 
-		Promise.all(siteSearches(spectrumSites[domain], slug))
-			.then(results => {
-				$(`#btm-popover-body-${slug}`).css('display', 'none');
-				$(`#btm-popover-body-${slug}`).append(createPopup(results, slug));
-				$('.collapse-link').on('click', toggleSummary);
-				$('.popup-link').on('click', openArticleLink);
+		$('.google-search').on('click', () => {
+			$('.google-search').fadeOut()
+			chrome.runtime.sendMessage({
+				source: window.location,
+				type: "Show Alternatives Click"
 			})
-		$('.google-search').on('click', toggleArticles.bind($(btmPopover), slug));
+			Promise.all(siteSearches(spectrumSites[domain], slug))
+				.then(results => {
+					$(`#btm-popover-body-${slug}`).append(createPopup(results, slug));
+					$('.collapse-link').on('click', toggleSummary);
+					$('.popup-link').on('click', openArticleLink);
+				})
+		});
 	}
 
 	function openArticleLink(event) {
