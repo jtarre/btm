@@ -37,13 +37,13 @@ $(() => {
 		});
 
 		$('.google-search').on('click', () => {
-			$('.google-search').fadeOut()
 			chrome.runtime.sendMessage({
 				source,
 				type: "Show Alternatives Click"
 			})
 			Promise.all(siteSearches(spectrumSites[domain], slug))
 				.then(results => {
+					$('.google-search').fadeOut()
 					$(`#btm-popover-body-${slug}`).append(createPopup(results, slug));
 					$('.collapse-link').on('click', toggleSummary);
 					$('.popup-link').on('click', (event) => openArticleLink(event, window.location, startTime));
