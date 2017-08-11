@@ -46,10 +46,10 @@ $(() => {
           class="btm-popover"
           data-slug=${slug}
           style="position:fixed; ${side}:50px; top:100px">
-					<span class="btm-header">
+					<div class="btm-popover-title">
 						BRIDGE THE MEDIA
 						<span class='btm-close btm-pull-right'>&times;</span>
-					</span>
+					</div>
           <div id="btm-hover-${slug}">
 						<div
 							style="max-height:450px;overflow:scroll;" id="btm-popover-body-${slug}"
