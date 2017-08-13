@@ -67,7 +67,7 @@ $(() => {
 				});
 			}
 
-			$btmButton.on('shown.bs.popover', initPopover.bind($btmButton, slug));
+			$btmButton.on('shown.bs.popover', () => initPopover(slug));
 		})
 	}
 
@@ -137,9 +137,6 @@ $(() => {
 			if (!$element.next().is('a') && $element.attr('class') !== 'popup-link') {
 				$btm_button.insertAfter($element);
 			}
-
-			$btm_button.on('shown.bs.popover', initPopover.bind($btm_button, slug, href));
-
 			function initPopover() {
 				$('.btm-close').on('click', () => { $btm_button.popover('hide') });
 				Promise.all(siteSearches(spectrumSites[domain], slug))
@@ -154,6 +151,8 @@ $(() => {
 					type: "BTM Icon Click"
 				});
 			}
+
+			$btm_button.on('shown.bs.popover', () => initPopover(slug, href));
 		})
 	}
 
