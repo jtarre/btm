@@ -134,9 +134,14 @@ $(() => {
 				content: getLoading(slug)
 			})
 
-			if (!$element.next().is('a') && $element.attr('class') !== 'popup-link') {
-				$btm_button.insertAfter($element);
+			if ($element.find('h2.headline a').toArray().length === 0) {
+				if ($element.find('h2.headline').toArray().length > 0) {
+					$btm_button.appendTo($element.find('h2.headline').toArray()[0])
+				} else if (!$element.next().is('a') && $element.attr('class') !== 'popup-link') {
+					$btm_button.insertAfter($element);
+				}
 			}
+
 			function initPopover() {
 				$('.btm-close').on('click', () => { $btm_button.popover('hide') });
 				Promise.all(siteSearches(spectrumSites[domain], slug))
