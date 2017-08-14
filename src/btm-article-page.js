@@ -1,22 +1,20 @@
-import { getPopoverHtml, getBTMIcon, getLoading, getPopoverTitle } from './helpers/inline-elements'
+import { getArticlePagePopover } from './helpers/inline-elements'
 
 import { spectrumSites, siteTitles, createPopup, siteSearches } from './helpers/site-constants'
 
-import { toggleSummary, toggleArticles } from './helpers/embed-helpers'
+import { toggleSummary, openArticleLink } from './helpers/embed-helpers'
 
 $(() => {
 	const domain = window.location.hostname.split('www.')[1]
 		, pathname = window.location.pathname
-		, originUrl = `http://${domain}${pathname}`
-		, source = siteTitles[domain] || domain;
-
-	let startTime = new Date(); //this is initialized at the current time
+		, source = siteTitles[domain] || domain
+		, startTime = new Date(); // this is initialized at the current time
 
 	$('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans|PT+Serif');</style>")
 
 	function initPageHover() {
 		const pathnameArr = pathname.split('/');
-		let btmPopover, btmButton, slug, side;
+		let slug, side;
 		if (pathnameArr.length > 5) {
 			switch (domain) {
 				case 'foxnews.com':
@@ -31,66 +29,26 @@ $(() => {
 					side = 'right';
 					break;
 			}
-
-			btmButton = `<button
-				id="btm-btn-${slug}"
-				style="margin: 1em;"
-				class="google-search btn btn-primary btm-btn"
-				href="javascript:void(0);"
-				data-slug=${slug}>
-					SHOW ALTERNATIVES
-				</button>`;
-
-			btmPopover =
-				`<div
-          class="btm-popover"
-          data-slug=${slug}
-          style="position:fixed; ${side}:50px; top:100px; z-index: 1000">
-					<div class="btm-popover-title">
-						BRIDGE THE MEDIA
-						<span class='btm-close btm-pull-right'>&times;</span>
-					</div>
-          <div id="btm-hover-${slug}">
-						<div
-							style="max-height:450px;overflow:scroll;" id="btm-popover-body-${slug}"
-						/>
-            	${btmButton}
-          	</div>
-        </div>`
 		}
 
-		$('body').append($(btmPopover));
+		$('body').append($(getArticlePagePopover(slug, side)));
 		$('.btm-close').on('click', () => {
 			$('.btm-popover').fadeOut()
 		});
 
 		$('.google-search').on('click', () => {
-			$('.google-search').fadeOut()
 			chrome.runtime.sendMessage({
-				source: window.location,
+				source,
 				type: "Show Alternatives Click"
 			})
 			Promise.all(siteSearches(spectrumSites[domain], slug))
 				.then(results => {
+					$('.google-search').fadeOut()
 					$(`#btm-popover-body-${slug}`).append(createPopup(results, slug));
 					$('.collapse-link').on('click', toggleSummary);
-					$('.popup-link').on('click', openArticleLink);
+					$('.popup-link').on('click', (event) => openArticleLink(event, window.location, startTime));
 				})
 		});
-	}
-
-	function openArticleLink(event) {
-		event.preventDefault();
-		const href = $(event.target).attr('href');
-		chrome.runtime.sendMessage({
-			targetUrl: href,
-			type: "Outbound Link Click",
-			source,
-			originUrl,
-			elapsedTime: Math.round((new Date() - startTime) / 60000)
-		});
-		startTime = new Date(); // reset startTime
-		window.open(href);
 	}
 
 	if (pathname.includes("/opinion/") || pathname.includes("/politics/")) {

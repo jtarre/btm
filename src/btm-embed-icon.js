@@ -4,15 +4,13 @@ import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from '.
 
 import { getLinks } from './helpers/getLinks-helpers'
 
-import { toggleSummary } from './helpers/embed-helpers'
+import { toggleSummary, openArticleLink } from './helpers/embed-helpers'
 
 $(() => {
 	const domain = window.location.hostname.split('www.')[1]
-		, pathname = window.location.pathname
-		, originUrl = `http://${domain}${pathname}`
 		, source = siteTitles[domain] || domain;
 
-	let startTime = new Date(); //this is initialized at the current time
+	const startTime = new Date(); //this is initialized at the current time
 
 	$('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans|PT+Serif');</style>")
 
@@ -52,7 +50,7 @@ $(() => {
 						$(`#btm-loading-${slug}`).hide();
 						$(`#btm-popover-body-${slug}`).after(createPopup(results, slug));
 						$('.collapse-link').on('click', toggleSummary);
-						$('.popup-link').on('click', openArticleLink);
+						$('.popup-link').on('click', (event) => openArticleLink(event, source, startTime));
 					})
 				chrome.runtime.sendMessage({
 					source,
@@ -60,20 +58,6 @@ $(() => {
 				});
 			}
 		})
-	}
-
-	function openArticleLink(event) {
-		event.preventDefault();
-		const href = $(event.target).attr('href');
-		chrome.runtime.sendMessage({
-			targetUrl: href,
-			type: "Outbound Link Click",
-			source,
-			originUrl,
-			elapsedTime: Math.round((new Date() - startTime) / 60000)
-		});
-		startTime = new Date(); // reset startTime
-		window.open(href);
 	}
 
 	/* Fires embedIcons as long as the user is not on Facebook. */
