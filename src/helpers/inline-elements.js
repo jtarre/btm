@@ -4,8 +4,7 @@ export const getLoading = (slug) => (`<div id="btm-popover-body-${slug}"><div id
 
 export const getPopoverTitle = () => (`<span class="btm-header">BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>`)
 
-export const getPopoverHtml = (slug) =>
-  (`<div
+export const getPopoverHtml = (slug) => (`<div
     data-slug="${slug}"
     class="popover btm-popover"
     role="tooltip">

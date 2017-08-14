@@ -1,31 +1,27 @@
-/* ---------- STYLES + HELPER FUNCTIONS --------- */
+import { getPopoverHtml, getBTMIcon, getLoading, getPopoverTitle } from './helpers/inline-elements'
 
-import { getPopoverHtml } from './helpers/inline-elements'
+import { spectrumSites, siteTitles, createPopup, siteSearches } from './helpers/site-constants'
 
-import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches } from './helpers/site-constants'
+import { toggleSummary, toggleArticles } from './helpers/embed-helpers'
 
-$(function () {
-	/** Current Algorithm **/
-	/** on a per site basis **/
-
+$(() => {
 	const domain = window.location.hostname.split('www.')[1]
 		, pathname = window.location.pathname
-		, originTitle = siteTitles[domain] !== undefined ? siteTitles[domain] : domain;
+		, originUrl = `http://${domain}${pathname}`
+		, source = siteTitles[domain] || domain;
 
-	let originUrl //url of current website
-		, endTime //this will be set when the user clicks on a recommendation
-		, startTime = new Date(); //this is initialized at the current time
+	let startTime = new Date(); //this is initialized at the current time
 
 	$('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans|PT+Serif');</style>")
 
-	function initNewsPageHover() {
+	function initPageHover() {
 		const pathnameArr = pathname.split('/');
-		let btmHover, btmButton, slug, side;
-		if (pathnameArr.length > 5) { // it's a news page, need to add hover to bottom left of page
+		let btmPopover, btmButton, slug, side;
+		if (pathnameArr.length > 5) {
 			switch (domain) {
 				case 'foxnews.com':
 					slug = pathnameArr[pathnameArr.length - 1].replace('.html', '');
-					side = 'left';
+					side = 'right';
 					break;
 				case 'nytimes.com':
 					slug = pathnameArr[pathnameArr.length - 1].replace('.html', '');
@@ -36,96 +32,68 @@ $(function () {
 					break;
 			}
 
-			btmButton = `<button id="btm-btn-${slug}" class="google-search btn btn-primary btm-btn" href="javascript:void(0);" data-slug=${slug}>SHOW ALTERNATIVES</button>`;
+			btmButton = `<button
+				id="btm-btn-${slug}"
+				style="margin: 1em;"
+				class="google-search btn btn-primary btm-btn"
+				href="javascript:void(0);"
+				data-slug=${slug}>
+					SHOW ALTERNATIVES
+				</button>`;
 
-			btmHover =
+			btmPopover =
 				`<div
           class="btm-popover"
           data-slug=${slug}
-          style="position:fixed; ${side}:50px; bottom:10px;">
-          <h3 class="btm-popover-title">BRIDGE THE MEDIA</h3>
-          <div id="btm-hover-${slug}>
-            <div style="max-height:450px;overflow:scroll;" id="btm-popover-body-${slug}" />
-            ${btmButton}
-          </div>
+          style="position:fixed; ${side}:50px; top:100px; z-index: 1000">
+					<div class="btm-popover-title">
+						BRIDGE THE MEDIA
+						<span class='btm-close btm-pull-right'>&times;</span>
+					</div>
+          <div id="btm-hover-${slug}">
+						<div
+							style="max-height:450px;overflow:scroll;" id="btm-popover-body-${slug}"
+						/>
+            	${btmButton}
+          	</div>
         </div>`
 		}
 
-		$('body').append($(btmHover));
-		var sitePromises = siteSearches(spectrumSites[domain], slug);
-		Promise.all(sitePromises)
-			.then((search_results) => {
-				var popup = createPopup(search_results, slug);
-				// // add popup to page
-				$('#btm-popover-body-' + slug).css('display', 'none');
-				$('#btm-popover-body-' + slug).append(popup);
-				$('.collapse-link').on('click', toggleSummary);
-				$('.popup-link').on('click', openArticleLink);
-				$('.btm-close').on('click', closeHover.bind($('#btm-hover-' + slug)));
+		$('body').append($(btmPopover));
+		$('.btm-close').on('click', () => {
+			$('.btm-popover').fadeOut()
+		});
 
+		$('.google-search').on('click', () => {
+			$('.google-search').fadeOut()
+			chrome.runtime.sendMessage({
+				source: window.location,
+				type: "Show Alternatives Click"
 			})
-		$('.google-search').on('click', toggleArticles.bind($(btmHover), slug));
-	}
-
-	function closeHover(event) {
-		this.fadeOut();
-	}
-
-	function toggleArticles(slug, event) {
-		if ($('#btm-popover-body-' + slug + ':hidden').length > 0)
-			toggleVisible($('#btm-popover-body-' + slug), $('#btm-btn-' + slug));
-		else
-			toggleInvisible($('#btm-popover-body-' + slug), $('#btm-btn-' + slug));
-
-		function toggleVisible($container, $button) {
-			chrome.runtime.sendMessage({ source: originTitle, type: "Show Alternatives Click" }, function (response) {
-			});
-			$button.text('HIDE');
-			$container.fadeIn();
-		}
-
-		function toggleInvisible($container, $button) {
-			$button.text('SHOW ALTERNATIVES');
-			$container.fadeOut();
-		}
-	}
-
-	if (pathname.includes("/opinion/") || pathname.includes("/politics/")) {
-		initNewsPageHover();
-	}
-
-	function toggleSummary(event) {
-		event.preventDefault();
-		var $link = $(event.target);
-		if ($link.hasClass('fa-caret-down') || $link.hasClass('fa-caret-up')) $link = $link.parent();
-
-		var cache = $link.data('cache');
-		var $cache = $('#' + cache);
-		var $caret = $('#btm-span-' + cache);
-		$cache.collapse('toggle');
-
-		if ($caret.hasClass('fa-caret-up')) $caret.addClass('fa-caret-down').removeClass('fa-caret-up');
-		else $caret.addClass('fa-caret-up').removeClass('fa-caret-down');
+			Promise.all(siteSearches(spectrumSites[domain], slug))
+				.then(results => {
+					$(`#btm-popover-body-${slug}`).append(createPopup(results, slug));
+					$('.collapse-link').on('click', toggleSummary);
+					$('.popup-link').on('click', openArticleLink);
+				})
+		});
 	}
 
 	function openArticleLink(event) {
 		event.preventDefault();
-		var $link = $(event.target);
-		var href = $link.attr('href');
-		originUrl = (originUrl !== undefined ? originUrl : 'http://' + domain + pathname);
-		endTime = new Date();
-		var elapsedTime = Math.round((endTime - startTime) / 60000); // calculate elapsedTime in minutes
-		startTime = new Date(); // reset startTime
+		const href = $(event.target).attr('href');
 		chrome.runtime.sendMessage({
 			targetUrl: href,
 			type: "Outbound Link Click",
-			source: originTitle,
-			originUrl: originUrl,
-			elapsedTime: elapsedTime
-		},
-			function (response) { });
+			source,
+			originUrl,
+			elapsedTime: Math.round((new Date() - startTime) / 60000)
+		});
+		startTime = new Date(); // reset startTime
 		window.open(href);
 	}
 
-
+	if (pathname.includes("/opinion/") || pathname.includes("/politics/")) {
+		initPageHover();
+	}
 })
