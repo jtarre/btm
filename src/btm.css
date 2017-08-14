@@ -116,6 +116,13 @@
   font-size: 12px
 }
 
+.collapse-link {
+  cursor: pointer;
+}
+
+.popup-link {
+  cursor: pointer;
+}
 
 /* ---------- Customized Bootstrap styles ---------- */
 
