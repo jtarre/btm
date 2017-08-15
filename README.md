@@ -4,23 +4,16 @@ A nonpartisan tool for the well-rounded news reader.
 
 Our Google Chrome Extension encourages citizens to be more informed participants in American democracy through balanced media. Let us recommend articles to complete your political perspective.
 
-Current [production version](https://chrome.google.com/webstore/detail/bridge-the-media/cbjilbjbnknaboggkkdficoholohdcco): v.1.7
+Current [production version](https://chrome.google.com/webstore/detail/bridge-the-media/cbjilbjbnknaboggkkdficoholohdcco): v.2.0.7
 
-Dev version: v.2.0.6
-- Webpack integration
-- Key tucked into searcher const
-- Embedded icons
-- Google Search API slug only includes nouns
-- Bugs addressed for v.2 release
-- Restructures as bundle.js only
+Dev version:
+
+- BTM popover redesign
+- Expansion to more news publications
 
 ## Important files in production
 
-- btm-facebook.js - Responsible for BTM icon embeddings on Facebook
-- btm-embed-icon.js:
-	- responsible for placing BTM icons on news page sites next to political/opinion headlines
-- btm-article-page.js:
-	- responsible for placing Show Alternatives button on bottom-left or bottom-right of an specific article's page
+- btm.js - Responsible for placing BTM icons and Show Alternatives Button
 - popup.js - Google Analytics logic lives here
 - List of content scripts and css files injected into facebook, nytimes, or fox is listed in manifest.json
 
