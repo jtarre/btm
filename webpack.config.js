@@ -3,7 +3,6 @@ const path = require('path')
 	, LiveReloadPlugin = require('webpack-livereload-plugin')
 	, ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-
 module.exports = {
 	entry: ['./js/btm.js', './stylesheets/index.scss'],
 	output: {
@@ -29,7 +28,7 @@ module.exports = {
 	plugins: [
 		new LiveReloadPlugin({ appendScriptTag: true }),
 		new ExtractTextPlugin({
-			filename: 'styles.css',
+			filename: 'btm.css',
 			allChunks: true
 		}),
 		// new webpack.optimize.UglifyJsPlugin(),
