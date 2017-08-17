@@ -1,8 +1,11 @@
 export const getBTMIcon = (btmImg) => ($(`<a href="javascript:void(0);" class="btm-icon"><img src=${btmImg} style="height: 20px; width: 20px; vertical-align: middle; margin-left: 0.1em"></a>`))
 
-export const getLoading = (slug) => (`<div id="btm-popover-body-${slug}"><div id="btm-loading-${slug}" style="text-align: center;"><p>Loading...</p></div></div>`)
+export const getLoading = (slug) => (`<div id="btm-popover-body-${slug}"><div id="btm-loading-${slug}" class="btm-loading"><p>Loading...</p></div></div>`)
 
-export const getPopoverTitle = () => (`<span class="btm-header">BRIDGE THE MEDIA<span class='btm-close btm-pull-right'>&times;</span></span>`)
+export const getPopoverTitle = () => (`<div class="btm-popover-title">
+<span class="btm-header">BRIDGE THE MEDIA</span>
+<span class='btm-close'>&times;</span>
+</div>`)
 
 export const getPopoverHtml = (slug) => (`<div
     data-slug="${slug}"
@@ -20,7 +23,7 @@ export const getPopoverHtml = (slug) => (`<div
 const getAltsBtn = (slug) => (`<button
 	  id="btm-btn-${slug}"
 	  style="margin: 1em;"
-	  class="google-search btn  btn-primary btm-btn"
+	  class="google-search btn btn-primary btm-btn"
 	  href="javascript:void(0);"
 	  data-slug=${slug}>
 	  	SHOW ALTERNATIVES
