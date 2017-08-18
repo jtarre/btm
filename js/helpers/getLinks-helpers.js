@@ -3,7 +3,7 @@
 export const checkIsArticleHead = (link) => (link.href && !link.href.includes('/comments/') && !link.href.includes('/video/') && $(link).parents('p').length === 0)
 
 export const checkLinkSection = (url) => (url &&
-	(url.includes("/world/") || url.includes("/us/") || url.include("/politics/") || url.include("/opinion/")) &&
+	(url.includes("/world/") || url.includes("/us/") || url.includes("/politics/") || url.includes("/opinion/")) &&
 	!url.includes("index.html") && !url.endsWith("#"))
 
 export const checkIsProperSource = (link) => (link.href && (link.href.includes('nytimes.com') || link.href.includes('foxnews.com')));
