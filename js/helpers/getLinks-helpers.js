@@ -2,7 +2,7 @@
 
 export const checkIsArticle = (link) => (link.href && !link.href.includes('/comments/') && !link.href.includes('/video/'))
 
-export const checkLinkSection = (link) => (link.href && (link.href.includes("/politics/") || link.href.includes("/opinion/"))
+export const checkLinkSection = (link) => (link.href && (link.href.includes("/world/") || link.href.includes("/us/") || link.href.includes("/politics/") || link.href.includes("/opinion/"))
           && !link.href.includes("index.html") && $(link).parents('p').length === 0
           && !link.href.endsWith("#"))
 
