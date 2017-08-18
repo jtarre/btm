@@ -2,8 +2,8 @@ export const getBTMIcon = (btmImg) => ($(`<a href="javascript:void(0);" class="b
 
 export const getLoading = (slug) => (`<div id="btm-popover-body-${slug}"><div id="btm-loading-${slug}" class="btm-loading"><p>Loading...</p></div></div>`)
 
-export const getPopoverTitle = () => (`<div class="btm-popover-title">
-  <div class="title-bg"></div>
+export const getPopoverTitle = (btmBg) => (`<div class="btm-popover-title">
+  <img src=${btmBg} />
   <span class="btm-header">BRIDGE THE MEDIA</span>
   <span class='btm-close'><i class="fa fa-times" aria-hidden="true"></i></span>
 </div>`)

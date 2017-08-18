@@ -20,29 +20,34 @@ $box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
 }
 
 .btm-popover-title {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
-  align-items: center;
+  display: inline-block;
+  width: -webkit-fill-available;
   font-family: Josefin Sans, serif;
   font-size: 16px;
   padding: 1em;
   margin: 0;
-  .title-bg {
-    z-index: 26;
-    background-image: url('../src/assets/header-bg.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+  background-image: url('../src/assets/header-bg.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  img {
+    visibility: hidden;
+    z-index: 26
+  }
+  .btm-header, .btm-close {
+    position: absolute;
+    z-index: 27;
+    font-size: 1em;
   }
   .btm-header {
-    z-index: 27;
+    top: 1.6em;
     font-family: Josefin Sans, serif !important;
     font-size: 16px;
   }
   .btm-close {
+    top: 1.5em;
+    right: 1.6em;
     z-index: 27;
-    font-size: 1em;
     font-weight: bold;
     text-decoration: none;
     cursor: pointer;

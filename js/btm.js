@@ -13,7 +13,8 @@ $(() => {
 		, originTitle = siteTitles[domain] || domain
 		, pathname = window.location.pathname
 		, source = siteTitles[domain] || domain
-		, btmImg = chrome.runtime.getURL('assets/btm_logo.png');
+		, btmImg = chrome.runtime.getURL('assets/btm_logo.png')
+		, btmBg = chrome.runtime.getURL('assets/header-bg.svg');
 
 	$('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');</style>")
 
@@ -46,7 +47,7 @@ $(() => {
 					const distFromRight = $(window).width() - $(parent).offset().left
 					return (distFromRight < 350) ? "left" : "right"
 				},
-				title: getPopoverTitle(),
+				title: getPopoverTitle(btmBg),
 				content: getLoading(slug)
 			})
 
@@ -126,7 +127,7 @@ $(() => {
 				container: "body",
 				html: "true",
 				template: getPopoverHtml(slug),
-				title: getPopoverTitle(),
+				title: getPopoverTitle(btmBg),
 				placement: (popover, parent) => {
 					const distFromRight = $(window).width() - $(parent).offset().left
 					return (distFromRight < 350) ? "left" : "right"
