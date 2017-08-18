@@ -23,27 +23,31 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover; }
-  .btm-popover-title img {
+  .btm-popover-title .btm-header-bg {
     visibility: hidden;
     z-index: 26; }
-  .btm-popover-title .btm-header, .btm-popover-title .btm-close {
+  .btm-popover-title .btm-header, .btm-popover-title .btm-header-icon, .btm-popover-title .btm-close {
     position: absolute;
-    z-index: 27;
-    font-size: 1em; }
+    z-index: 27; }
+  .btm-popover-title .btm-header-icon {
+    top: 0.5em;
+    left: 0.5em;
+    width: 3em; }
   .btm-popover-title .btm-header {
-    top: 1.6em;
-    font-family: Josefin Sans, serif !important;
-    font-size: 16px; }
-  .btm-popover-title .btm-close {
     top: 1.5em;
-    right: 1.6em;
-    z-index: 27;
+    left: 4em;
+    font-size: 16px;
+    font-family: Josefin Sans, serif !important; }
+  .btm-popover-title .btm-close {
+    top: 1.3em;
+    right: 1em;
+    font-size: 1em;
     font-weight: bold;
     text-decoration: none;
     cursor: pointer; }
-  .btm-popover-title i.fa::before {
-    width: 100%;
-    height: 100%; }
+    .btm-popover-title .btm-close i.fa::before {
+      width: 100%;
+      height: 100%; }
 
 .btm-btn {
   color: #4665B0;

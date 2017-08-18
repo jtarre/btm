@@ -13,7 +13,7 @@ $(() => {
 		, originTitle = siteTitles[domain] || domain
 		, pathname = window.location.pathname
 		, source = siteTitles[domain] || domain
-		, btmImg = chrome.runtime.getURL('assets/btm_logo.png')
+		, btmIcon = chrome.runtime.getURL('assets/btm_logo.png')
 		, btmBg = chrome.runtime.getURL('assets/header-bg.svg');
 
 	$('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');</style>")
@@ -35,7 +35,7 @@ $(() => {
 				, slug = getSlug(href)
 				, $newsfeedPost = $element.closest('.fbUserPost').first()
 				, $postText = $newsfeedPost.find('.userContent')
-				, $btmButton = getBTMIcon(btmImg)
+				, $btmButton = getBTMIcon(btmIcon)
 				, publisher = getPublisher(href)
 
 			$btmButton.popover({
@@ -47,7 +47,7 @@ $(() => {
 					const distFromRight = $(window).width() - $(parent).offset().left
 					return (distFromRight < 350) ? "left" : "right"
 				},
-				title: getPopoverTitle(btmBg),
+				title: getPopoverTitle(btmBg, btmIcon),
 				content: getLoading(slug)
 			})
 
@@ -120,14 +120,14 @@ $(() => {
 			const $element = $(element)
 				, href = $element.attr('href')
 				, slug = getSlug(href)
-				, $btm_button = getBTMIcon(btmImg)
+				, $btm_button = getBTMIcon(btmIcon)
 
 			$btm_button.popover({
 				trigger: "click",
 				container: "body",
 				html: "true",
 				template: getPopoverHtml(slug),
-				title: getPopoverTitle(btmBg),
+				title: getPopoverTitle(btmBg, btmIcon),
 				placement: (popover, parent) => {
 					const distFromRight = $(window).width() - $(parent).offset().left
 					return (distFromRight < 350) ? "left" : "right"

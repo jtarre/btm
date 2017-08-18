@@ -30,31 +30,36 @@ $box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  img {
+  .btm-header-bg {
     visibility: hidden;
     z-index: 26
   }
-  .btm-header, .btm-close {
+  .btm-header, .btm-header-icon, .btm-close {
     position: absolute;
     z-index: 27;
-    font-size: 1em;
+  }
+  .btm-header-icon {
+    top: 0.5em;
+    left: 0.5em;
+    width: 3em;
   }
   .btm-header {
-    top: 1.6em;
-    font-family: Josefin Sans, serif !important;
+    top: 1.5em;
+    left: 4em;
     font-size: 16px;
+    font-family: Josefin Sans, serif !important;
   }
   .btm-close {
-    top: 1.5em;
-    right: 1.6em;
-    z-index: 27;
+    top: 1.3em;
+    right: 1em;
+    font-size: 1em;
     font-weight: bold;
     text-decoration: none;
     cursor: pointer;
-  }
-  i.fa::before {
-    width: 100%;
-    height: 100%
+    i.fa::before {
+      width: 100%;
+      height: 100%
+    }
   }
 }
 
