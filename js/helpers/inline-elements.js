@@ -3,9 +3,8 @@ export const getBTMIcon = (btmImg) => ($(`<a href="javascript:void(0);" class="b
 export const getLoading = (slug) => (`<div id="btm-popover-body-${slug}"><div id="btm-loading-${slug}" class="btm-loading"><p>Loading...</p></div></div>`)
 
 export const getPopoverTitle = () => (`<div class="btm-popover-title">
-<span class="btm-header">BRIDGE THE MEDIA</span>
-<span class='btm-close'><i class="fa fa-times" aria-hidden="true"></i>
-</span>
+  <span class="btm-header">BRIDGE THE MEDIA</span>
+  <span class='btm-close'><i class="fa fa-times" aria-hidden="true"></i></span>
 </div>`)
 
 export const getPopoverHtml = (slug) => (`<div

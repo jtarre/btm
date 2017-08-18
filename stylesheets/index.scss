@@ -22,6 +22,9 @@ $box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
 }
 
 .btm-popover-title {
+  background-image: url('../src/assets/header-bg.svg');
+  background-repeat: no-repeat;
+  background-position: center;
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
@@ -30,9 +33,11 @@ $box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
   font-size: 16px;
   padding: 1em;
   margin: 0;
-	background-color: #f7f7f7;
 	border-bottom: 1px solid #ebebeb;
   border-radius: 5px 5px 0 0;
+  .title-bg {
+    z-index: -1;
+  }
   .btm-header {
     font-family: Josefin Sans, serif !important;
     font-size: 16px;

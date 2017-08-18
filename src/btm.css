@@ -15,6 +15,9 @@
   z-index: 25; }
 
 .btm-popover-title {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 253.18 73.07'%3E%3Cdefs%3E%3Cstyle%3E.cls-1%7Bfill:%23d1d3d4;%7D.cls-2%7Bfill:%23e6e7e8;opacity:0.8;%7D%3C/style%3E%3C/defs%3E%3Ctitle%3EAsset 1%3C/title%3E%3Cg id='Layer_2' data-name='Layer 2'%3E%3Cg id='Layer_1-2' data-name='Layer 1'%3E%3Cpath class='cls-1' d='M0,40.64V7.94A7.94,7.94,0,0,1,7.94,0h237.3a7.94,7.94,0,0,1,7.94,7.94V68.66Z'/%3E%3Cpath class='cls-2' d='M0,73.07V7.94A7.94,7.94,0,0,1,7.94,0h237.3a7.94,7.94,0,0,1,7.94,7.94V30.07Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
@@ -23,9 +26,10 @@
   font-size: 16px;
   padding: 1em;
   margin: 0;
-  background-color: #f7f7f7;
   border-bottom: 1px solid #ebebeb;
   border-radius: 5px 5px 0 0; }
+  .btm-popover-title .title-bg {
+    z-index: -1; }
   .btm-popover-title .btm-header {
     font-family: Josefin Sans, serif !important;
     font-size: 16px; }
