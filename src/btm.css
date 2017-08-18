@@ -26,6 +26,9 @@
   background-color: #f7f7f7;
   border-bottom: 1px solid #ebebeb;
   border-radius: 5px 5px 0 0; }
+  .btm-popover-title .btm-header {
+    font-family: Josefin Sans, serif !important;
+    font-size: 16px; }
   .btm-popover-title .btm-close {
     font-size: 1em;
     font-weight: bold;
@@ -34,16 +37,6 @@
   .btm-popover-title i.fa::before {
     width: 100%;
     height: 100%; }
-
-.btm-header {
-  color: black;
-  font-family: Josefin Sans, serif !important;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: bolder;
-  line-height: 1em;
-  text-align: left;
-  text-align: start; }
 
 .btm-btn {
   color: #4665B0;
