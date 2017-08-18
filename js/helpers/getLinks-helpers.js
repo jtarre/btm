@@ -2,9 +2,10 @@
 
 export const checkIsArticle = (link) => (link.href && !link.href.includes('/comments/') && !link.href.includes('/video/'))
 
-export const checkLinkSection = (link) => (link.href && (link.href.includes("/world/") || link.href.includes("/us/") || link.href.includes("/politics/") || link.href.includes("/opinion/"))
-          && !link.href.includes("index.html") && $(link).parents('p').length === 0
-          && !link.href.endsWith("#"))
+export const checkLinkSection = (link) => (link.href &&
+(link.href.includes("/world/") || link.href.includes("/us/") || link.href.include("/politics/") || link.href.include("/opinion/")) &&
+!link.href.includes("index.html") &&
+$(link).parents('p').length === 0 && !link.href.endsWith("#"))
 
 export const checkIsProperSource = (link) => (link.href && (link.href.includes('nytimes.com') || link.href.includes('foxnews.com')));
 

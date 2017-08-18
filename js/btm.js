@@ -163,7 +163,7 @@ $(() => {
 
 	if (domain === "facebook.com") {
 		setInterval(checkFacebookLinks, 1000)
-	} else if ((!pathname.includes('/politics/index.html') && !pathname.includes('/opinion/index.html')) && (pathname.includes('/opinion/') || pathname.includes('/politics/'))) {
+	} else if (checkLinkSection(pathname)) {
 		initPageHover()
 	} else {
 		setInterval(embedIcons, 3000);
