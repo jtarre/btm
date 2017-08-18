@@ -6,7 +6,7 @@ import { getLinks, checkIsArticleHead, checkLinkSection, checkIsProperSource } f
 
 import { getPopoverHtml, getBTMIcon, getLoading, getPopoverTitle, getArticlePagePopover } from './helpers/inline-elements'
 
-import { reposition, toggleSummary, openArticleLink } from './helpers/embed-helpers'
+import { getPopoverSide, reposition, toggleSummary, openArticleLink } from './helpers/embed-helpers'
 
 $(() => {
 	const domain = window.location.hostname.split('www.')[1]
@@ -36,7 +36,7 @@ $(() => {
 				, $newsfeedPost = $element.closest('.fbUserPost').first()
 				, $postText = $newsfeedPost.find('.userContent')
 				, $btmButton = getBTMIcon(btmIcon, slug)
-				, publisher = getPublisher(href);
+				, publisher = getPublisher(href)
 			let side = "right";
 
 			$btmButton.popover({
@@ -124,21 +124,6 @@ $(() => {
 				, href = $element.attr('href')
 				, slug = getSlug(href)
 				, $btmButton = getBTMIcon(btmIcon, slug);
-			let side = "right";
-
-			$btmButton.popover({
-				trigger: "click",
-				container: "body",
-				html: "true",
-				template: getPopoverHtml(slug),
-				title: getPopoverTitle(btmBg, btmIcon),
-				placement: (popover, parent) => {
-					const distFromRight = $(window).width() - $(parent).offset().left
-					side = (distFromRight < 350) ? "left" : "right"
-					return side
-				},
-				content: getLoading(slug)
-			})
 
 			if ($element.find('h2.headline a').toArray().length === 0) {
 				if ($element.find('h2.headline').toArray().length > 0) {
@@ -147,6 +132,18 @@ $(() => {
 					$btmButton.insertAfter($element);
 				}
 			}
+
+			const side = getPopoverSide(slug)
+
+			$btmButton.popover({
+				trigger: "click",
+				container: "body",
+				html: "true",
+				template: getPopoverHtml(slug),
+				title: getPopoverTitle(btmBg, btmIcon),
+				placement: side,
+				content: getLoading(slug)
+			})
 
 			function initPopover() {
 				$('.btm-close').on('click', () => { $btmButton.popover('hide') });

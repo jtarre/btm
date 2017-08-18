@@ -1,3 +1,8 @@
+export const getPopoverSide = (slug) => {
+	const distFromRight = $(window).width() - $(`#btm-icon-${slug}`).offset().left
+	return (distFromRight < 350) ? "left" : "right"
+}
+
 export const reposition = (slug, side) => {
 	const iconOffset = $(`#btm-icon-${slug}`).offset()
 		, newOffset = Object.assign({}, iconOffset);
