@@ -139,7 +139,7 @@ $(() => {
 				trigger: "click",
 				container: "body",
 				html: "true",
-				template: getPopoverHtml(slug),
+				template: getPopoverHtml(slug, side),
 				title: getPopoverTitle(btmBg, btmIcon),
 				placement: side,
 				content: getLoading(slug)
