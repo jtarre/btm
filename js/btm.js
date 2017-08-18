@@ -2,7 +2,7 @@ import uniqBy from 'lodash.uniqby'
 
 import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches, getPublisher } from './helpers/site-constants'
 
-import { getLinks, checkIsArticle, checkLinkSection, checkIsProperSource } from './helpers/getLinks-helpers'
+import { getLinks, checkIsArticleHead, checkLinkSection, checkIsProperSource } from './helpers/getLinks-helpers'
 
 import { getPopoverHtml, getBTMIcon, getLoading, getPopoverTitle, getArticlePagePopover } from './helpers/inline-elements'
 
@@ -22,7 +22,7 @@ $(() => {
 
 	function checkFacebookLinks() {
 		/* eslint no-prototype-builtins: "error" */
-		let $links = $('a').toArray().filter(link => link.href && !Object.prototype.hasOwnProperty.call(hrefs, link.href) && checkIsProperSource(link) && checkIsArticle(link) && checkLinkSection(link))
+		let $links = $('a').toArray().filter(link => link.href && !Object.prototype.hasOwnProperty.call(hrefs, link.href) && checkIsProperSource(link) && checkIsArticleHead(link) && checkLinkSection(link.href))
 
 		$links = uniqBy($links, link => link.href) // filters out duplicates
 
@@ -163,7 +163,7 @@ $(() => {
 
 	if (domain === "facebook.com") {
 		setInterval(checkFacebookLinks, 1000)
-	} else if ((!pathname.includes('/politics/index.html') && !pathname.includes('/opinion/index.html')) && (pathname.includes('/opinion/') || pathname.includes('/politics/'))) {
+	} else if (checkLinkSection(pathname)) {
 		initPageHover()
 	} else {
 		setInterval(embedIcons, 3000);
