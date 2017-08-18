@@ -3,14 +3,14 @@
   width: 250px;
   max-width: 276px;
   color: black;
-  padding: 1px;
   line-height: 1em;
   background-color: white;
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
   -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  z-index: 25; }
+  position: absolute;
+  z-index: 1000; }
 
 .btm-popover-title {
   display: inline-block;
@@ -595,81 +595,15 @@ fieldset[disabled] .btn-link:focus {
   padding-left: 0;
   list-style: none; }
 
-.popover > .arrow,
-.popover > .arrow:after {
+.btm-arrow {
   position: absolute;
-  display: block;
+  top: 1em;
+  left: -1em;
   width: 0;
   height: 0;
-  border-color: transparent;
-  border-style: solid; }
-
-.popover > .arrow {
-  border-width: 11px; }
-
-.popover > .arrow:after {
-  content: "";
-  border-width: 10px; }
-
-.popover.top > .arrow {
-  bottom: -11px;
-  left: 50%;
-  margin-left: -11px;
-  border-top-color: #999;
-  border-top-color: rgba(0, 0, 0, 0.25);
-  border-bottom-width: 0; }
-
-.popover.top > .arrow:after {
-  bottom: 1px;
-  margin-left: -10px;
-  content: " ";
-  border-top-color: #fff;
-  border-bottom-width: 0; }
-
-.popover.right > .arrow {
-  top: 50%;
-  left: -11px;
-  margin-top: -11px;
-  border-right-color: #999;
-  border-right-color: rgba(0, 0, 0, 0.25);
-  border-left-width: 0; }
-
-.popover.right > .arrow:after {
-  bottom: -10px;
-  left: 1px;
-  content: " ";
-  border-right-color: #fff;
-  border-left-width: 0; }
-
-.popover.bottom > .arrow {
-  top: -11px;
-  left: 50%;
-  margin-left: -11px;
-  border-top-width: 0;
-  border-bottom-color: #999;
-  border-bottom-color: rgba(0, 0, 0, 0.25); }
-
-.popover.bottom > .arrow:after {
-  top: 1px;
-  margin-left: -10px;
-  content: " ";
-  border-top-width: 0;
-  border-bottom-color: #fff; }
-
-.popover.left > .arrow {
-  top: 50%;
-  right: -11px;
-  margin-top: -11px;
-  border-right-width: 0;
-  border-left-color: #999;
-  border-left-color: rgba(0, 0, 0, 0.25); }
-
-.popover.left > .arrow:after {
-  right: 1px;
-  bottom: -10px;
-  content: " ";
-  border-right-width: 0;
-  border-left-color: #fff; }
+  border-right: 1em solid #E6E7E8;
+  border-top: 1em solid transparent;
+  border-bottom: 1em solid transparent; }
 
 .well {
   min-height: 20px;

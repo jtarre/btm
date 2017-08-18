@@ -1,4 +1,4 @@
-export const getBTMIcon = (btmImg) => ($(`<a href="javascript:void(0);" class="btm-icon"><img src=${btmImg} style="height: 20px; width: 20px; vertical-align: middle; margin-left: 0.1em"></a>`))
+export const getBTMIcon = (btmImg, slug) => ($(`<a href="javascript:void(0);" class="btm-icon" id="btm-icon-${slug}"><img src=${btmImg} style="height: 20px; width: 20px; vertical-align: middle; margin-left: 0.1em"></a>`))
 
 export const getLoading = (slug) => (`<div id="btm-popover-body-${slug}"><div id="btm-loading-${slug}" class="btm-loading"><p>Loading...</p></div></div>`)
 
@@ -13,7 +13,7 @@ export const getPopoverHtml = (slug) => (`<div
     data-slug="${slug}"
     class="popover btm-popover"
     role="tooltip">
-    <div class="arrow" />
+    <div class="btm-arrow" />
     <h3 class="popover-title">
     </h3>
     <div
@@ -31,10 +31,9 @@ const getAltsBtn = (slug) => (`<button
 	  </button>`
 )
 
-export const getArticlePagePopover = (slug, side) => (`<div
+export const getArticlePagePopover = (slug) => (`<div
     class="btm-popover"
-    data-slug=${slug}
-    style="position: fixed; ${side}: 50px; top: 100px; z-index: 1000">
+    data-slug=${slug}>
 	  ${getPopoverTitle()}
     <div id="btm-hover-${slug}">
 	  	<div

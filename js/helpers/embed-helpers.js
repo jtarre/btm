@@ -1,3 +1,16 @@
+export const reposition = (slug, side) => {
+	const iconOffset = $(`#btm-icon-${slug}`).offset()
+		, newOffset = Object.assign({}, iconOffset);
+	newOffset.top -= 20;
+	if (side === 'right') {
+		newOffset.left += 40;
+	} else {
+		newOffset.left -= 40;
+	}
+	$(`[data-slug='${slug}']`).offset(newOffset)
+	$(`[data-slug='${slug}'].popover-content`).css("top", "0")
+}
+
 export const openArticleLink = (event, source, startTime) => {
 	event.preventDefault()
 	const targetUrl = $(event.target).attr('href')

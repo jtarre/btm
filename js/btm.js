@@ -6,7 +6,7 @@ import { getLinks, checkIsArticleHead, checkLinkSection, checkIsProperSource } f
 
 import { getPopoverHtml, getBTMIcon, getLoading, getPopoverTitle, getArticlePagePopover } from './helpers/inline-elements'
 
-import { toggleSummary, openArticleLink } from './helpers/embed-helpers'
+import { reposition, toggleSummary, openArticleLink } from './helpers/embed-helpers'
 
 $(() => {
 	const domain = window.location.hostname.split('www.')[1]
@@ -35,7 +35,7 @@ $(() => {
 				, slug = getSlug(href)
 				, $newsfeedPost = $element.closest('.fbUserPost').first()
 				, $postText = $newsfeedPost.find('.userContent')
-				, $btmButton = getBTMIcon(btmIcon)
+				, $btmButton = getBTMIcon(btmIcon, slug)
 				, publisher = getPublisher(href)
 
 			$btmButton.popover({
@@ -120,9 +120,10 @@ $(() => {
 			const $element = $(element)
 				, href = $element.attr('href')
 				, slug = getSlug(href)
-				, $btm_button = getBTMIcon(btmIcon)
+				, $btmButton = getBTMIcon(btmIcon, slug);
+			let	side = "right";
 
-			$btm_button.popover({
+			$btmButton.popover({
 				trigger: "click",
 				container: "body",
 				html: "true",
@@ -130,25 +131,27 @@ $(() => {
 				title: getPopoverTitle(btmBg, btmIcon),
 				placement: (popover, parent) => {
 					const distFromRight = $(window).width() - $(parent).offset().left
-					return (distFromRight < 350) ? "left" : "right"
+					side = (distFromRight < 350) ? "left" : "right"
+					return side
 				},
 				content: getLoading(slug)
 			})
 
 			if ($element.find('h2.headline a').toArray().length === 0) {
 				if ($element.find('h2.headline').toArray().length > 0) {
-					$btm_button.appendTo($element.find('h2.headline').toArray()[0])
+					$btmButton.appendTo($element.find('h2.headline').toArray()[0])
 				} else if (!$element.next().is('a') && $element.attr('class') !== 'popup-link') {
-					$btm_button.insertAfter($element);
+					$btmButton.insertAfter($element);
 				}
 			}
 
 			function initPopover() {
-				$('.btm-close').on('click', () => { $btm_button.popover('hide') });
+				$('.btm-close').on('click', () => { $btmButton.popover('hide') });
 				Promise.all(siteSearches(spectrumSites[domain], slug))
 					.then(results => { // this is the promise part of the site
 						$(`#btm-loading-${slug}`).hide();
 						$(`#btm-popover-body-${slug}`).after(createPopup(results, slug));
+						reposition(slug, side);
 						$('.collapse-link').on('click', toggleSummary);
 						$('.popup-link').on('click', (event) => openArticleLink(event, source, startTime));
 					})
@@ -158,7 +161,7 @@ $(() => {
 				});
 			}
 
-			$btm_button.on('shown.bs.popover', () => initPopover(slug, href));
+			$btmButton.on('shown.bs.popover', () => initPopover(slug, href));
 		})
 	}
 
