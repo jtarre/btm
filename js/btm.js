@@ -36,7 +36,8 @@ $(() => {
 				, $newsfeedPost = $element.closest('.fbUserPost').first()
 				, $postText = $newsfeedPost.find('.userContent')
 				, $btmButton = getBTMIcon(btmIcon, slug)
-				, publisher = getPublisher(href)
+				, publisher = getPublisher(href);
+			let side = "right";
 
 			$btmButton.popover({
 				trigger: "click",
@@ -45,7 +46,8 @@ $(() => {
 				template: getPopoverHtml(slug),
 				placement: (popover, parent) => {
 					const distFromRight = $(window).width() - $(parent).offset().left
-					return (distFromRight < 350) ? "left" : "right"
+					side = (distFromRight < 350) ? "left" : "right";
+					return side;
 				},
 				title: getPopoverTitle(btmBg, btmIcon),
 				content: getLoading(slug)
@@ -59,6 +61,7 @@ $(() => {
 					.then(results => {
 						$(`#btm-loading-${slug}`).hide();
 						$(`#btm-popover-body-${slug}`).after(createPopup(results, slug));
+						reposition(slug, side);
 						$('.collapse-link').on('click', toggleSummary);
 						$('.popup-link').on('click', (event) => openArticleLink(event, 'Facebook'));
 					})
@@ -121,7 +124,7 @@ $(() => {
 				, href = $element.attr('href')
 				, slug = getSlug(href)
 				, $btmButton = getBTMIcon(btmIcon, slug);
-			let	side = "right";
+			let side = "right";
 
 			$btmButton.popover({
 				trigger: "click",

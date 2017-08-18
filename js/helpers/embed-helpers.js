@@ -5,7 +5,8 @@ export const reposition = (slug, side) => {
 	if (side === 'right') {
 		newOffset.left += 40;
 	} else {
-		newOffset.left -= 40;
+		const oldLeft = $(`[data-slug='${slug}']`).offset().left;
+		newOffset.left = oldLeft - 20;
 	}
 	$(`[data-slug='${slug}']`).offset(newOffset)
 	$(`[data-slug='${slug}'].popover-content`).css("top", "0")
