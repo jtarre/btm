@@ -1,67 +1,39 @@
-.btm-popover-title {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
-  align-items: center; }
-
-/* ---------- BTM close button ---------- */
-.btm-close {
-  color: black;
-  font-size: 2em;
-  font-weight: bold; }
-
-.btm-close:hover,
-.btm-close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer; }
-
 /* ---------- BTM custom styles ---------- */
 .btm-popover {
   width: 250px;
   max-width: 276px;
   color: black;
   padding: 1px;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: normal;
-  line-height: 1.42857143;
-  text-align: left;
-  text-align: start;
-  text-decoration: none;
-  text-shadow: none;
-  text-transform: none;
-  letter-spacing: normal;
-  word-break: normal;
-  word-spacing: normal;
-  word-wrap: normal;
-  white-space: normal;
-  background-color: #fff;
+  line-height: 1em;
+  background-color: white;
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
-  border: 1px solid #ccc;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 6px;
   -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  line-break: auto;
   z-index: 25; }
 
 .btm-popover-title {
-  color: black;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
   font-family: Josefin Sans, serif;
   font-size: 16px;
-  font-style: normal;
-  font-weight: bolder;
-  line-height: 1.42857143;
-  text-align: left;
-  text-align: start;
-  padding: 8px 14px;
+  padding: 1em;
   margin: 0;
   background-color: #f7f7f7;
   border-bottom: 1px solid #ebebeb;
   border-radius: 5px 5px 0 0; }
+  .btm-popover-title .btm-close {
+    font-size: 1em;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer; }
+  .btm-popover-title i.fa::before {
+    width: 100%;
+    height: 100%; }
 
 .btm-header {
   color: black;
@@ -69,7 +41,7 @@
   font-size: 16px;
   font-style: normal;
   font-weight: bolder;
-  line-height: 1.42857143;
+  line-height: 1em;
   text-align: left;
   text-align: start; }
 
