@@ -41,4 +41,5 @@ export const embedIcons = (url) => {
 	let siteSections = getSitesSections(links)
 	links = sitesSectionsFilter(links, siteSections)
 	drawIcons(links, hostname, startTime)
+
 }
