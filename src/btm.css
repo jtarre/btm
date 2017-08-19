@@ -50,18 +50,26 @@
   .btm-popover-title .btm-header-bg {
     visibility: hidden;
     z-index: 26; }
-  .btm-popover-title .btm-header, .btm-popover-title .btm-header-icon, .btm-popover-title .btm-close {
+  .btm-popover-title .btm-header, .btm-popover-title .btm-article-header, .btm-popover-title .btm-header-icon, .btm-popover-title .btm-close {
     position: absolute;
     z-index: 27; }
   .btm-popover-title .btm-header-icon {
     top: 0.5em;
     left: 0.5em;
     width: 3em; }
-  .btm-popover-title .btm-header {
+  .btm-popover-title .btm-header, .btm-popover-title .btm-article-header {
     top: 1.5em;
     left: 4em;
     font-size: 16px;
     font-family: Josefin Sans, serif !important; }
+  .btm-popover-title .btm-article-header .show-alts, .btm-popover-title .btm-article-header .btm-head {
+    display: none; }
+  .btm-popover-title .btm-article-header .show-alts.visible, .btm-popover-title .btm-article-header .btm-head.visible {
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    top: 0;
+    left: 0; }
   .btm-popover-title .btm-close {
     top: 1.3em;
     right: 1em;

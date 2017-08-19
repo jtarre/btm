@@ -4,7 +4,7 @@ export const getLoading = (slug) => (`<div id="btm-popover-body-${slug}"><div id
 
 export const getPopoverTitle = (btmBg, btmIcon) => (`<div class="btm-popover-title">
   <img src=${btmBg} class="btm-header-bg" />
-  <img src=${btmIcon} class="btm-header-icon" ></img>
+  <img src=${btmIcon} class="btm-header-icon" />
   <h3 class="btm-header">BRIDGE THE MEDIA</h3>
   <span class='btm-close'><i class="fa fa-times" aria-hidden="true"></i></span>
 </div>`)
@@ -21,29 +21,42 @@ export const getPopoverHtml = (slug, side) => (`<div
       class="popover-content"/>
   </div>`)
 
-const getAltsBtns = (slug) => (`<a
-	  id="btm-btn-${slug}"
-    class="collapse-link show-alts visible"
-    data-toggle='collapse'
-	  href="javascript:void(0);"
-    data-slug=${slug}>
-      Show Alternatives <i class="fa fa-caret-down" aria-hidden="true"></i>
-    </a>
-    <a
-	  id="btm-btn-${slug}"
-    class="collapse-link hide-alts"
-    data-toggle='collapse'
-	  href="javascript:void(0);"
-    data-slug=${slug}>
-      Hide Alternatives <i class="fa fa-caret-up" aria-hidden="true"></i>
-    </a>`
+const getShowAlts = (slug) => (`<a
+  id="btm-btn-${slug}"
+  class="collapse-link show-alts visible"
+  data-toggle='collapse'
+  href="javascript:void(0);"
+  data-slug=${slug}>
+    Show Alternatives <i class="fa fa-caret-down" aria-hidden="true"></i>
+  </a>`)
+
+const getHideAlts = (slug) => (`<a
+  id="btm-btn-${slug}"
+  class="collapse-link hide-alts"
+  data-toggle='collapse'
+  href="javascript:void(0);"
+  data-slug=${slug}>
+    Hide Alternatives <i class="fa fa-caret-up" aria-hidden="true"></i>
+  </a>`
 )
+
+const getArticlePagePopoverTitle = (slug, btmBg, btmIcon) => (`<div class="btm-popover-title">
+  <img src="${btmBg}" class="btm-header-bg" />
+  <img src="${btmIcon}" class="btm-header-icon" />
+  <div class="btm-article-header">
+    ${getShowAlts(slug)}
+    <h3 class="btm-header btm-head">
+      BRIDGE THE MEDIA
+    </h3>
+  </div>
+  <span class='btm-close'><i class="fa fa-times" aria-hidden="true"></i></span>
+</div>`)
 
 export const getArticlePagePopover = (slug, side, btmBg, btmIcon) => (`<div
     class="btm-popover ${side} btm-article-popover"
     data-slug=${slug}>
-	  ${getPopoverTitle(btmBg, btmIcon)}
+	  ${getArticlePagePopoverTitle(slug, btmBg, btmIcon)}
     <div class="btm-article-popover-body">
-      ${getAltsBtns(slug)}
-    </div></div>`
-)
+    ${getHideAlts(slug)}
+    </div>
+</div>`)

@@ -78,6 +78,19 @@ $box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
     font-size: 16px;
     font-family: Josefin Sans, serif !important;
   }
+  .btm-article-header {
+    @extend .btm-header;
+    .show-alts, .btm-head {
+      display: none;
+    }
+    .show-alts.visible, .btm-head.visible {
+      display: inline-block;
+      width: 100%;
+      position: relative;
+      top: 0;
+      left: 0;
+    }
+  }
   .btm-close {
     top: 1.3em;
     right: 1em;

@@ -54,11 +54,13 @@ $(() => {
 			const popoverSlug = $(event.target).attr('data-slug')
 			$(`#ul-${popoverSlug}`).collapse('toggle')
 			$('.hide-alts').removeClass('visible')
+			$('.btm-head').removeClass('visible')
 			$('.show-alts').addClass('visible')
 		})
 		$('.show-alts').on('click', (event) => {
 			const popoverSlug = $(event.target).attr('data-slug')
 			$('.show-alts').removeClass('visible')
+			$('.btm-head').addClass('visible')
 			chrome.runtime.sendMessage({
 				source,
 				type: "Show Alternatives Click"
