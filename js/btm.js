@@ -50,19 +50,25 @@ $(() => {
 		$('.btm-close').on('click', () => {
 			$('.btm-popover').fadeOut()
 		});
-		$('.google-search').on('click', () => {
-			$('.google-search').fadeOut()
-			$(`#btm-popover-body-${slug}`).append(getLoading(slug));
+		$('.hide-alts').on('click', (event) => {
+			$('.btm-popover-body').fadeOut()
+			$('.show-alts').css('display', 'inline-block')
+			$(event.target).css('display', 'none')
+		})
+		$('.show-alts').on('click', (event) => {
+			$(event.target).css('display', 'none')
+			$(getLoading(slug)).insertBefore($('.hide-alts'))
+			$('.hide-alts').css('display', 'inline-block')
 			chrome.runtime.sendMessage({
 				source,
 				type: "Show Alternatives Click"
 			})
 			Promise.all(siteSearches(spectrumSites[domain], slug))
 				.then(results => {
-					$(`#btm-loading-${slug}`).hide()
-					$(`#btm-popover-body-${slug}`).append(createPopup(results, slug));
+					$('.btm-loading').fadeOut()
+					$(createPopup(results, slug)).insertBefore($('.hide-alts'))
 					$('.collapse-link').on('click', toggleSummary);
-					$('.popup-link').on('click', (event) => openArticleLink(event, window.location, startTime));
+					$('.popup-link').on('click', (evt) => openArticleLink(evt, window.location, startTime));
 				})
 		});
 	}

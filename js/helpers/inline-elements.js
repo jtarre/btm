@@ -21,26 +21,32 @@ export const getPopoverHtml = (slug, side) => (`<div
       class="popover-content"/>
   </div>`)
 
-const getAltsBtn = (slug) => (`<button
+const getAltsBtns = (slug) => (`<a
 	  id="btm-btn-${slug}"
-	  style="margin: 1em;"
-	  class="google-search btn btn-primary btm-btn"
+	  class="show-alts"
 	  href="javascript:void(0);"
-	  data-slug=${slug}>
-	  	SHOW ALTERNATIVES
-	  </button>`
+    data-slug=${slug}>
+      Show Alternatives <i class="fa fa-caret-down" aria-hidden="true"></i>
+    </a>
+    <a
+	  id="btm-btn-${slug}"
+	  class="hide-alts"
+	  href="javascript:void(0);"
+    data-slug=${slug}>
+      Hide Alternatives <i class="fa fa-caret-up" aria-hidden="true"></i>
+    </a>`
 )
 
 export const getArticlePagePopover = (slug, side, btmBg, btmIcon) => (`<div
     class="btm-popover ${side} btm-article-popover"
     data-slug=${slug}>
 	  ${getPopoverTitle(btmBg, btmIcon)}
-    <div id="btm-hover-${slug}">
+    <div class="btm-article-popover-body">
 	  	<div
         style="max-height: 450px; overflow: scroll;"
         id="btm-popover-body-${slug}"
 	  	/>
-      	${getAltsBtn(slug)}
+      	${getAltsBtns(slug)}
     	</div>
     </div>`
 )
