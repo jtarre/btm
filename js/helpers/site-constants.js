@@ -84,7 +84,7 @@ const itemTemplate = (publisher, item, slug) => {
 }
 
 export const createPopup = (results, slug) => {
-	let html = `<div class="btm-popover-body"><ul class='list-unstyled'>`;
+	let html = `<div class="btm-popover-body"><ul class='list-unstyled collapse in' id="ul-${slug}">`;
 	results.forEach(result => {
 		const site = result["queries"]["request"][0]["siteSearch"];
 		if (result.items) {

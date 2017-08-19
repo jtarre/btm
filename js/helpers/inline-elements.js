@@ -23,14 +23,16 @@ export const getPopoverHtml = (slug, side) => (`<div
 
 const getAltsBtns = (slug) => (`<a
 	  id="btm-btn-${slug}"
-	  class="show-alts"
+    class="collapse-link show-alts visible"
+    data-toggle='collapse'
 	  href="javascript:void(0);"
     data-slug=${slug}>
       Show Alternatives <i class="fa fa-caret-down" aria-hidden="true"></i>
     </a>
     <a
 	  id="btm-btn-${slug}"
-	  class="hide-alts"
+    class="collapse-link hide-alts"
+    data-toggle='collapse'
 	  href="javascript:void(0);"
     data-slug=${slug}>
       Hide Alternatives <i class="fa fa-caret-up" aria-hidden="true"></i>
@@ -42,11 +44,6 @@ export const getArticlePagePopover = (slug, side, btmBg, btmIcon) => (`<div
     data-slug=${slug}>
 	  ${getPopoverTitle(btmBg, btmIcon)}
     <div class="btm-article-popover-body">
-	  	<div
-        style="max-height: 450px; overflow: scroll;"
-        id="btm-popover-body-${slug}"
-	  	/>
-      	${getAltsBtns(slug)}
-    	</div>
+      ${getAltsBtns(slug)}
     </div>`
 )

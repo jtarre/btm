@@ -29,10 +29,12 @@
   justify-content: center;
   align-items: center; }
   .btm-article-popover-body .show-alts, .btm-article-popover-body .hide-alts {
+    display: none;
     text-align: center;
-    margin-bottom: 1em; }
-  .btm-article-popover-body .hide-alts {
-    display: none; }
+    margin-bottom: 1em;
+    transition: display 1s; }
+  .btm-article-popover-body .visible {
+    display: inline-block; }
 
 .btm-popover-title {
   display: inline-block;
