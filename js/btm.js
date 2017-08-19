@@ -53,6 +53,7 @@ $(() => {
 		$('.hide-alts').on('click', (event) => {
 			const popoverSlug = $(event.target).attr('data-slug')
 			$(`#ul-${popoverSlug}`).collapse('toggle')
+			$('.btm-article-popover-body').removeClass('visible')
 			$('.hide-alts').removeClass('visible')
 			$('.btm-head').removeClass('visible')
 			$('.show-alts').addClass('visible')
@@ -61,6 +62,7 @@ $(() => {
 			const popoverSlug = $(event.target).attr('data-slug')
 			$('.show-alts').removeClass('visible')
 			$('.btm-head').addClass('visible')
+			$('.btm-article-popover-body').addClass('visible')
 			chrome.runtime.sendMessage({
 				source,
 				type: "Show Alternatives Click"

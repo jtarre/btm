@@ -1,0 +1,48 @@
+.btm-article-popover {
+  position: fixed;
+  top: 3em;
+}
+.btm-article-popover.right {
+  right: 1em;
+}
+.btm-article-popover.left {
+  left: 1em;
+}
+
+.btm-article-popover-title {
+  @extend .btm-popover-title;
+  background-position: bottom center;
+  background-size: 100%;
+  height: 4em;
+  padding: 0;
+  .btm-article-header {
+    @extend .btm-header;
+    .show-alts, .btm-head {
+      display: none;
+    }
+    .show-alts.visible, .btm-head.visible {
+      display: inline-block;
+      width: 100%;
+      position: relative;
+      top: 0;
+      left: 0;
+    }
+  }
+}
+
+.btm-article-popover-body {
+  position: relative;
+  top: -0.5em;
+  width: -webkit-fill-available;
+  background-color: $body-color;
+  .hide-alts {
+    display: none;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0.5em;
+    transition: display 1s;
+  }
+  .hide-alts.visible {
+    display: inline-block
+  }
+}

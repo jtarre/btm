@@ -40,7 +40,7 @@ const getHideAlts = (slug) => (`<a
   </a>`
 )
 
-const getArticlePagePopoverTitle = (slug, btmBg, btmIcon) => (`<div class="btm-popover-title">
+const getArticlePagePopoverTitle = (slug, btmBg, btmIcon) => (`<div class="btm-article-popover-title">
   <img src="${btmBg}" class="btm-header-bg" />
   <img src="${btmIcon}" class="btm-header-icon" />
   <div class="btm-article-header">

@@ -1,5 +1,5 @@
 $text-color: black;
-$bg-color: white;
+$body-color: white;
 $border: 1px solid rgba(0, 0, 0, .2);
 $box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
 
@@ -9,8 +9,7 @@ $box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
   width: 250px;
 	max-width: 276px;
 	color: $text-color;
-	line-height: 1em;
-	background-color: $bg-color;
+	background-color: $body-color;
 	-webkit-background-clip: padding-box;
 	background-clip: padding-box;
 	-webkit-box-shadow: $box-shadow;
@@ -18,35 +17,6 @@ $box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
   position: absolute;
 	z-index: 1000
 }
-
-.btm-article-popover {
-  position: fixed;
-  top: 3em;
-}
-.btm-article-popover.right {
-  right: 1em;
-}
-.btm-article-popover.left {
-  left: 1em;
-}
-
-.btm-article-popover-body {
-  width: -webkit-fill-available;
-  display: inline-flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center;
-  .show-alts, .hide-alts {
-    display: none;
-    text-align: center;
-    margin-bottom: 1em;
-    transition: display 1s;
-  }
-  .visible {
-    display: inline-block;
-  }
-}
-
 
 .btm-popover-title {
   display: inline-block;
@@ -77,19 +47,6 @@ $box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
     left: 4em;
     font-size: 16px;
     font-family: Josefin Sans, serif !important;
-  }
-  .btm-article-header {
-    @extend .btm-header;
-    .show-alts, .btm-head {
-      display: none;
-    }
-    .show-alts.visible, .btm-head.visible {
-      display: inline-block;
-      width: 100%;
-      position: relative;
-      top: 0;
-      left: 0;
-    }
   }
   .btm-close {
     top: 1.3em;
@@ -168,3 +125,4 @@ $box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
 @import 'btn';
 @import 'custom-bs.scss';
 @import 'arrow';
+@import 'btm-article';
