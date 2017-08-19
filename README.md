@@ -6,16 +6,18 @@ Our Google Chrome Extension encourages citizens to be more informed participants
 
 Current [production version](https://chrome.google.com/webstore/detail/bridge-the-media/cbjilbjbnknaboggkkdficoholohdcco): v.2.0.7
 
-Dev version:
+Dev version: 2.0.9
 
 - BTM popover redesign
+  - Headers standardized
 - Expansion to more news publications
+  - /us/ and /world/ added
 
 ## Important files in production
 
 - btm.js - Responsible for placing BTM icons and Show Alternatives Button
 - popup.js - Google Analytics logic lives here
-- List of content scripts and css files injected into facebook, nytimes, or fox is listed in manifest.json
+- manifest.json - Entry point for Chrome; list of content scripts and css injections
 
 ## Development
 
@@ -38,7 +40,7 @@ Dev version:
 
 ## Linting
 
-- BTM uses ESlint with Airbnb style guide
+- BTM uses ESlint with a modified Airbnb style guide
 - To lint against a file: ```./node_modules/.bin/eslint <yourfile.js>```
 
 ## Contributing Guidelines

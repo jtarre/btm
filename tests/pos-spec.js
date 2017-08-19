@@ -8,7 +8,7 @@ Tests for the slug extraction using npm module pos
 */
 
 const expect = require('chai').expect
-	, { getSlug } = require('../src/helpers/site-constants');
+	, { getSlug } = require('../js/helpers/site-constants');
 
 describe('getSlug', () => {
 	const exampleSlug = 'russia-hacked-america'
@@ -24,4 +24,3 @@ describe('getSlug', () => {
 		expect(exampleExtraction).to.equal('russia-america')
 	})
 })
-
