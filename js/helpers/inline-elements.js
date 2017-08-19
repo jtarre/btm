@@ -45,5 +45,5 @@ export const getArticlePagePopover = (slug, side, btmBg, btmIcon) => (`<div
 	  ${getPopoverTitle(btmBg, btmIcon)}
     <div class="btm-article-popover-body">
       ${getAltsBtns(slug)}
-    </div>`
+    </div></div>`
 )
