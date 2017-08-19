@@ -1,11 +1,8 @@
 import uniqBy from 'lodash.uniqby'
 
 import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches, getPublisher } from './helpers/site-constants'
-
 import { getLinks, checkIsArticleHead, checkLinkSection, checkIsProperSource } from './helpers/getLinks-helpers'
-
 import { getBTMIcon, getLoading, getArticlePagePopover } from './helpers/inline-elements'
-
 import { getPopoverSide, toggleSummary, openArticleLink, placePopover } from './helpers/embed-helpers'
 
 $(() => {
@@ -18,7 +15,7 @@ $(() => {
 	$('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');</style>")
 
 	const hrefs = {}
-		, startTime = new Date(); // this is initialized at the current time
+		, startTime = new Date();
 
 	function checkFacebookLinks() {
 		let $links = $('a').toArray().filter(link => link.href && !Object.prototype.hasOwnProperty.call(hrefs, link.href) && checkIsProperSource(link) && checkIsArticleHead(link) && checkLinkSection(link.href))
@@ -47,29 +44,12 @@ $(() => {
 	}
 
 	function initPageHover() {
-		const pathnameArr = pathname.split('/');
-		let slug, side;
-		if (pathnameArr.length > 5) {
-			switch (domain) { // currently hard-coded for NYT and FOX
-				case 'foxnews.com':
-					slug = pathnameArr[pathnameArr.length - 1].replace('.html', '');
-					side = 'right';
-					break;
-				case 'nytimes.com':
-					slug = pathnameArr[pathnameArr.length - 1].replace('.html', '');
-					side = 'right';
-					break;
-				default:
-					side = 'right';
-					break;
-			}
-		}
-
-		$('body').append($(getArticlePagePopover(slug, side)));
+		const slug = getSlug(window.location.href)
+			, side = 'right'
+		$('body').append($(getArticlePagePopover(slug, side, btmBg, btmIcon)));
 		$('.btm-close').on('click', () => {
 			$('.btm-popover').fadeOut()
 		});
-
 		$('.google-search').on('click', () => {
 			$('.google-search').fadeOut()
 			$(`#btm-popover-body-${slug}`).append(getLoading(slug));

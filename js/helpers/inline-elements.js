@@ -31,10 +31,10 @@ const getAltsBtn = (slug) => (`<button
 	  </button>`
 )
 
-export const getArticlePagePopover = (slug) => (`<div
-    class="btm-popover"
+export const getArticlePagePopover = (slug, side, btmBg, btmIcon) => (`<div
+    class="btm-popover ${side} btm-article-popover"
     data-slug=${slug}>
-	  ${getPopoverTitle()}
+	  ${getPopoverTitle(btmBg, btmIcon)}
     <div id="btm-hover-${slug}">
 	  	<div
         style="max-height: 450px; overflow: scroll;"

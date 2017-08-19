@@ -19,6 +19,17 @@ $box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
 	z-index: 1000
 }
 
+.btm-article-popover {
+  position: fixed;
+  top: 3em;
+}
+.btm-article-popover.right {
+  right: 1em;
+}
+.btm-article-popover.left {
+  left: 1em;
+}
+
 .btm-popover-title {
   display: inline-block;
   width: -webkit-fill-available;
@@ -125,4 +136,4 @@ $box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
 
 @import 'btn';
 @import 'custom-bs.scss';
-@import 'popover';
+@import 'arrow';
