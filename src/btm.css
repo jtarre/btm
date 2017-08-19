@@ -58,7 +58,7 @@
   margin: 10px; }
 
 .btm-popover-body {
-  padding: 0 1em;
+  padding: 0 1em 1em 1em;
   font-family: 'Helvetica Neue', sans-serif; }
 
 .btm-result {
@@ -612,6 +612,9 @@ fieldset[disabled] .btn-link:focus {
   border-left: 1em solid #E6E7E8;
   border-top: 1em solid transparent;
   border-bottom: 1em solid transparent; }
+
+.btm-arrow.loading {
+  display: none; }
 
 .well {
   min-height: 20px;

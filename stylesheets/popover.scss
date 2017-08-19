@@ -18,6 +18,9 @@ $arrow-color: #E6E7E8;
   border-top: 1em solid transparent;
   border-bottom: 1em solid transparent;
 }
+.btm-arrow.loading {
+  display: none;
+}
 
 .well {
   min-height: 20px;

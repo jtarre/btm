@@ -12,10 +12,10 @@ export const getPopoverTitle = (btmBg, btmIcon) => (`<div class="btm-popover-tit
 export const getPopoverHtml = (slug, side) => (`<div
     data-slug="${slug}"
     class="popover btm-popover"
-    role="tooltip">
-    <div class="btm-arrow ${side}" />
-    <h3 class="popover-title">
-    </h3>
+    role="tooltip"
+    >
+    <div class="btm-arrow ${side} loading" />
+    <div class="popover-title" />
     <div
       data-slug="${slug}"
       class="popover-content"/>
