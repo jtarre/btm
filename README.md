@@ -6,10 +6,12 @@ Our Google Chrome Extension encourages citizens to be more informed participants
 
 Current [production version](https://chrome.google.com/webstore/detail/bridge-the-media/cbjilbjbnknaboggkkdficoholohdcco): v.2.0.7
 
-Dev version: 2.0.8
+Dev version: 2.0.9
 
 - BTM popover redesign
+  - Headers standardized
 - Expansion to more news publications
+  - /us/ and /world/ added
 
 ## Important files in production
 

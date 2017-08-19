@@ -4,7 +4,8 @@ export const getLoading = (slug) => (`<div id="btm-popover-body-${slug}"><div id
 
 export const getPopoverTitle = () => (`<div class="btm-popover-title">
 <span class="btm-header">BRIDGE THE MEDIA</span>
-<span class='btm-close'>&times;</span>
+<span class='btm-close'><i class="fa fa-times" aria-hidden="true"></i>
+</span>
 </div>`)
 
 export const getPopoverHtml = (slug) => (`<div
@@ -12,8 +13,7 @@ export const getPopoverHtml = (slug) => (`<div
     class="popover btm-popover"
     role="tooltip">
     <div class="arrow" />
-    <h3 class="popover-title btm-popover-title">
-      <span>&times;</span>
+    <h3 class="popover-title">
     </h3>
     <div
       data-slug="${slug}"
@@ -34,10 +34,7 @@ export const getArticlePagePopover = (slug, side) => (`<div
     class="btm-popover"
     data-slug=${slug}
     style="position: fixed; ${side}: 50px; top: 100px; z-index: 1000">
-	  <div class="btm-popover-title">
-	  	BRIDGE THE MEDIA
-	  	<span class='btm-close btm-pull-right'>&times;</span>
-	  </div>
+	  ${getPopoverTitle()}
     <div id="btm-hover-${slug}">
 	  	<div
         style="max-height: 450px; overflow: scroll;"
