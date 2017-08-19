@@ -65,6 +65,7 @@ $(() => {
 			})
 			if ($(`#ul-${popoverSlug}`).length) {
 				$(`#ul-${popoverSlug}`).collapse('toggle')
+				$('.hide-alts').addClass('visible')
 			} else {
 				$(getLoading(slug)).insertBefore($('.hide-alts'))
 				Promise.all(siteSearches(spectrumSites[domain], slug))
