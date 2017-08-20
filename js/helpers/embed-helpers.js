@@ -113,6 +113,5 @@ export const drawIcons = (links, hostname, startTime) => {
 				const side = getPopoverSide($(event.target).offset());
 				placePopover(side, $btmIcon, slug, btmBg, btmIcon, source, hostnameOfLink, startTime)
 		})
-
 	})
 }
