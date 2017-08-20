@@ -3,7 +3,6 @@ import uniqBy from 'lodash.uniqby'
 import { siteConfigurations } from './site-configs'
 import { getHostname } from './site-constants'
 
-
 export const checkIsArticleHead = (link) => (link.href &&
 	!link.href.includes('/comments/') &&
 	!link.href.includes('/video/') &&
@@ -12,7 +11,6 @@ export const checkIsArticleHead = (link) => (link.href &&
 
 export const checkIsProperSource = (link) => link.href !== undefined &&
 		siteConfigurations[getHostname(link)] !== undefined
-
 
 const checkUndefinedDescendants = (descendants) => (descendants[0] === undefined)
 

@@ -67,14 +67,14 @@ export const placePopover = (side, $btmButton, slug, btmBg, btmIcon, source, hos
 }
 
 export const toggleSummary = (event) => {
-	event.preventDefault();
-	let $link = $(event.target);
+	event.preventDefault()
+	let $link = $(event.target)
 	if ($link.hasClass('fa-caret-down') || $link.hasClass('fa-caret-up')) {
-		$link = $link.parent();
+		$link = $link.parent()
 	}
 	const cache = $link.data('cache')
 		, $cache = $(`#${cache}`)
-		, $caret = $(`#btm-span-${cache}`).attr("style", "font-family: FontAwesome; margin-left: 0.5em");
+		, $caret = $(`#btm-span-${cache}`).attr("style", "font-family: FontAwesome; margin-left: 0.5em")
 	$cache.collapse('toggle');
 	if ($caret.hasClass('fa-caret-up')) {
 		$caret.addClass('fa-caret-down').removeClass('fa-caret-up')
@@ -100,6 +100,7 @@ export const drawIcons = (links, hostname, startTime) => {
 	const btmImg = chrome.runtime.getURL('icons/btm_logo.png')
 		, btmBg = chrome.runtime.getURL('assets/header-bg.svg')
 	const source = hostname.includes("facebook.com") ? "Facebook" : siteConfigurations[hostname].title
+
 	links.forEach(link => {
 		const $element = $(link)
 			, $btmIcon = getBTMIcon(btmImg)
