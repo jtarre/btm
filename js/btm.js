@@ -91,27 +91,20 @@ $(() => {
 				, href = $element.attr('href')
 				, slug = getSlug(href)
 				, $btmButton = getBTMIcon(btmIcon, slug)
-				, publisher = getPublisher(href)
-				, placeButton = new Promise((resolve, reject) => {
-					if ($element.find('h2.headline a').toArray().length === 0) {
-						if ($element.find('h2.headline').toArray().length > 0) {
-							$btmButton.appendTo($element.find('h2.headline').toArray()[0])
-							resolve($btmButton.offset())
-						} else if (!$element.next().is('a') && $element.attr('class') !== 'popup-link') {
-							$btmButton.insertAfter($element);
-							resolve($btmButton.offset())
-						} else {
-							reject('Not placeable')
-						}
-					} else {
-						reject('Not placeable')
-					}
-				})
+				, publisher = getPublisher(href);
 
-			placeButton
-				.then(offset => getPopoverSide(offset))
-				.then(side => placePopover(side, $btmButton, slug, btmBg, btmIcon, source, publisher, startTime))
-				.catch(console.error)
+			if ($element.find('h2.headline a').toArray().length === 0) {
+				if ($element.find('h2.headline').toArray().length > 0) {
+					$btmButton.appendTo($element.find('h2.headline').toArray()[0])
+				} else if (!$element.next().is('a') && $element.attr('class') !== 'popup-link') {
+					$btmButton.insertAfter($element);
+				}
+			}
+
+			$('body').on('click', 'a.btm-icon', (event) => {
+				const side = getPopoverSide($(event.target).offset());
+				placePopover(side, $btmButton, slug, btmBg, btmIcon, source, publisher, startTime)
+			})
 		})
 	}
 
