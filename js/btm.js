@@ -36,6 +36,7 @@ $(() => {
 			$postText.append($btmButton);
 
 			$('body').on('click', 'a.btm-icon', (event) => {
+				event.preventDefault()
 				const side = getPopoverSide($(event.target).offset());
 				placePopover(side, $btmButton, slug, btmBg, btmIcon, source, publisher, startTime)
 			})
@@ -102,6 +103,7 @@ $(() => {
 			}
 
 			$('body').on('click', 'a.btm-icon', (event) => {
+				event.preventDefault()
 				const side = getPopoverSide($(event.target).offset());
 				placePopover(side, $btmButton, slug, btmBg, btmIcon, source, publisher, startTime)
 			})
