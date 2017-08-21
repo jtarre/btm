@@ -5,7 +5,3 @@ node_modules/
 secrets.js
 */*.bundle.js
 */*.bundle.js.map
-
-# Vanity linguist ignores
-~/*.css linguist-vendored
-stylesheets/*.scss linguist-vendored
