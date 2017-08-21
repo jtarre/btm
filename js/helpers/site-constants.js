@@ -83,10 +83,8 @@ const itemTemplate = (publisher, item, slug) => {
 	return createItemHtml(siteTitle, link, headline, description, date, slug);
 }
 
-// css and html for each news snippet
-export const createPopup = (results, slug, styleAddition = "") => {
-	let html = `<div style='margin:10px;font-family: Helvetica Neue, Helvetica, Arial, sans-serif; ${styleAddition}'><ul class='list-unstyled'>`;
-
+export const createPopup = (results, slug) => {
+	let html = `<div class="btm-popover-body"><ul class='list-unstyled collapse in' id="ul-${slug}">`;
 	results.forEach(result => {
 		const site = result["queries"]["request"][0]["siteSearch"];
 		if (result.items) {

@@ -27,7 +27,7 @@ export const checkDescendants = (descendants) =>
 
 /* ------ getLinks() ------ */
 
-import _ from 'lodash';
+import uniqBy from 'lodash.uniqby'
 
 export const getLinks = () => {
 	const allLinks = $('a').not('.button').toArray()
@@ -35,5 +35,5 @@ export const getLinks = () => {
 			const descendants = $(link).find('*').toArray();
 			return link.href && checkIsArticleHead(link) && checkLinkSection(link.href) && checkDescendants(descendants)
 		})
-	return _.uniqBy(allLinks, link => link.href)
+	return uniqBy(allLinks, link => link.href)
 }

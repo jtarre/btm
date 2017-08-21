@@ -1,30 +1,26 @@
 import uniqBy from 'lodash.uniqby'
 
 import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches, getPublisher } from './helpers/site-constants'
-
 import { getLinks, checkIsArticleHead, checkLinkSection, checkIsProperSource } from './helpers/getLinks-helpers'
-
-import { getPopoverHtml, getBTMIcon, getLoading, getPopoverTitle, getArticlePagePopover } from './helpers/inline-elements'
-
-import { toggleSummary, openArticleLink } from './helpers/embed-helpers'
+import { getBTMIcon, getLoading, getArticlePagePopover } from './helpers/inline-elements'
+import { getPopoverSide, toggleSummary, openArticleLink, placePopover } from './helpers/embed-helpers'
 
 $(() => {
 	const domain = window.location.hostname.split('www.')[1]
-		, originTitle = siteTitles[domain] || domain
 		, pathname = window.location.pathname
 		, source = siteTitles[domain] || domain
-		, btmImg = chrome.runtime.getURL('icons/btm_logo.png');
+		, btmIcon = chrome.runtime.getURL('assets/btm_logo.png')
+		, btmBg = chrome.runtime.getURL('assets/header-bg.svg')
+		, MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
+		, hrefs = {}
+		, startTime = new Date();
 
 	$('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');</style>")
 
-	const hrefs = {}
-		, startTime = new Date(); // this is initialized at the current time
-
 	function checkFacebookLinks() {
-		/* eslint no-prototype-builtins: "error" */
 		let $links = $('a').toArray().filter(link => link.href && !Object.prototype.hasOwnProperty.call(hrefs, link.href) && checkIsProperSource(link) && checkIsArticleHead(link) && checkLinkSection(link.href))
 
-		$links = uniqBy($links, link => link.href) // filters out duplicates
+		$links = uniqBy($links, link => link.href)
 
 		$links.forEach(element => {
 			hrefs[element.href] = true;
@@ -33,131 +29,84 @@ $(() => {
 				, href = $element.attr('href')
 				, slug = getSlug(href)
 				, $newsfeedPost = $element.closest('.fbUserPost').first()
-				, $postText = $newsfeedPost.find('.userContent')
-				, $btmButton = getBTMIcon(btmImg)
-				, publisher = getPublisher(href)
+				, $postText = $newsfeedPost.find('.userContent').first()
+				, $btmButton = getBTMIcon(btmIcon, slug)
+				, publisher = getPublisher(href);
 
-			$btmButton.popover({
-				trigger: "click",
-				container: "body",
-				html: "true",
-				template: getPopoverHtml(slug),
-				placement: (popover, parent) => {
-					const distFromRight = $(window).width() - $(parent).offset().left
-					return (distFromRight < 350) ? "left" : "right"
-				},
-				title: getPopoverTitle(),
-				content: getLoading(slug)
+			$postText.append($btmButton);
+
+			$('body').on('click', 'a.btm-icon', (event) => {
+				event.preventDefault()
+				const side = getPopoverSide($(event.target).offset());
+				placePopover(side, $btmButton, slug, btmBg, btmIcon, source, publisher, startTime)
 			})
-
-			$postText.first().append($btmButton);
-
-			function initPopover() {
-				$('.btm-close').on('click', () => { $btmButton.popover('hide') });
-				Promise.all(siteSearches(spectrumSites[publisher], slug))
-					.then(results => {
-						$(`#btm-loading-${slug}`).hide();
-						$(`#btm-popover-body-${slug}`).after(createPopup(results, slug));
-						$('.collapse-link').on('click', toggleSummary);
-						$('.popup-link').on('click', (event) => openArticleLink(event, 'Facebook'));
-					})
-				chrome.runtime.sendMessage({
-					source: originTitle,
-					type: "BTM Icon Click"
-				});
-			}
-
-			$btmButton.on('shown.bs.popover', () => initPopover(slug));
 		})
 	}
 
 	function initPageHover() {
-		const pathnameArr = pathname.split('/');
-		let slug, side;
-		if (pathnameArr.length > 5) {
-			switch (domain) { // currently hard-coded for NYT and FOX
-				case 'foxnews.com':
-					slug = pathnameArr[pathnameArr.length - 1].replace('.html', '');
-					side = 'right';
-					break;
-				case 'nytimes.com':
-					slug = pathnameArr[pathnameArr.length - 1].replace('.html', '');
-					side = 'right';
-					break;
-				default:
-					side = 'right';
-					break;
-			}
-		}
-
-		$('body').append($(getArticlePagePopover(slug, side)));
+		const slug = getSlug(window.location.href)
+			, side = 'right'
+		$('body').append($(getArticlePagePopover(slug, side, btmBg, btmIcon)));
 		$('.btm-close').on('click', () => {
 			$('.btm-popover').fadeOut()
 		});
-
-		$('.google-search').on('click', () => {
-			$('.google-search').fadeOut()
-			$(`#btm-popover-body-${slug}`).append(getLoading(slug));
+		$('.hide-alts').on('click', (event) => {
+			const popoverSlug = $(event.target).attr('data-slug')
+			$(`#ul-${popoverSlug}`).collapse('toggle')
+			$('.btm-article-popover-body').removeClass('visible')
+			$('.hide-alts').removeClass('visible')
+			$('.btm-head').removeClass('visible')
+			$('.show-alts').addClass('visible')
+		})
+		$('.show-alts').on('click', (event) => {
+			const popoverSlug = $(event.target).attr('data-slug')
+			$('.show-alts').removeClass('visible')
+			$('.btm-head').addClass('visible')
+			$('.btm-article-popover-body').addClass('visible')
 			chrome.runtime.sendMessage({
 				source,
 				type: "Show Alternatives Click"
 			})
-			Promise.all(siteSearches(spectrumSites[domain], slug))
-				.then(results => {
-					$(`#btm-loading-${slug}`).hide()
-					$(`#btm-popover-body-${slug}`).append(createPopup(results, slug));
-					$('.collapse-link').on('click', toggleSummary);
-					$('.popup-link').on('click', (event) => openArticleLink(event, window.location, startTime));
-				})
+			if ($(`#ul-${popoverSlug}`).length) {
+				$(`#ul-${popoverSlug}`).collapse('toggle')
+				$('.hide-alts').addClass('visible')
+			} else {
+				$(getLoading(slug)).insertBefore($('.hide-alts'))
+				Promise.all(siteSearches(spectrumSites[domain], slug))
+					.then(results => {
+						$('.btm-loading').fadeOut()
+						$('.hide-alts').addClass('visible')
+						$(createPopup(results, slug)).insertBefore($('.hide-alts'))
+						$('.collapse-link').on('click', toggleSummary);
+						$('.popup-link').on('click', (evt) => openArticleLink(evt, window.location, startTime));
+					})
+			}
 		});
 	}
 
 	function embedIcons() {
 		const $links = getLinks()
 
-		$links.forEach(element => { // this is for nytimes only. not general
+		$links.forEach(element => {
 			const $element = $(element)
 				, href = $element.attr('href')
 				, slug = getSlug(href)
-				, $btm_button = getBTMIcon(btmImg)
-
-			$btm_button.popover({
-				trigger: "click",
-				container: "body",
-				html: "true",
-				template: getPopoverHtml(slug),
-				title: getPopoverTitle(),
-				placement: (popover, parent) => {
-					const distFromRight = $(window).width() - $(parent).offset().left
-					return (distFromRight < 350) ? "left" : "right"
-				},
-				content: getLoading(slug)
-			})
+				, $btmButton = getBTMIcon(btmIcon, slug)
+				, publisher = getPublisher(href);
 
 			if ($element.find('h2.headline a').toArray().length === 0) {
 				if ($element.find('h2.headline').toArray().length > 0) {
-					$btm_button.appendTo($element.find('h2.headline').toArray()[0])
+					$btmButton.appendTo($element.find('h2.headline').toArray()[0])
 				} else if (!$element.next().is('a') && $element.attr('class') !== 'popup-link') {
-					$btm_button.insertAfter($element);
+					$btmButton.insertAfter($element);
 				}
 			}
 
-			function initPopover() {
-				$('.btm-close').on('click', () => { $btm_button.popover('hide') });
-				Promise.all(siteSearches(spectrumSites[domain], slug))
-					.then(results => { // this is the promise part of the site
-						$(`#btm-loading-${slug}`).hide();
-						$(`#btm-popover-body-${slug}`).after(createPopup(results, slug));
-						$('.collapse-link').on('click', toggleSummary);
-						$('.popup-link').on('click', (event) => openArticleLink(event, source, startTime));
-					})
-				chrome.runtime.sendMessage({
-					source,
-					type: "BTM Icon Click"
-				});
-			}
-
-			$btm_button.on('shown.bs.popover', () => initPopover(slug, href));
+			$('body').on('click', 'a.btm-icon', (event) => {
+				event.preventDefault()
+				const side = getPopoverSide($(event.target).offset());
+				placePopover(side, $btmButton, slug, btmBg, btmIcon, source, publisher, startTime)
+			})
 		})
 	}
 

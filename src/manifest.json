@@ -2,14 +2,14 @@
   "manifest_version": 2,
   "name": "Bridge the Media",
   "description": "Get outside your bubble. Expand your horizons. Read across the political spectrum.",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "icons": {
-    "16": "icons/btm_logo.png",
-    "48": "icons/btm_logo.png",
-    "128": "icons/btm_logo.png"
+    "16": "assets/btm_logo.png",
+    "48": "assets/btm_logo.png",
+    "128": "assets/btm_logo.png"
   },
   "browser_action": {
-    "default_icon": "icons/btm_logo_32.png",
+    "default_icon": "assets/btm_logo_32.png",
     "default_popup": "popup/popup.html",
     "default_title": "Bridge the Media"
   },
@@ -33,8 +33,8 @@
       ],
       "js": [
         "external/jquery-3.2.0.js",
-        "btm.bundle.js",
-        "external/bootstrap-3.3.7-dist/js/bootstrap.min.js"
+        "external/bootstrap-3.3.7-dist/js/bootstrap.min.js",
+        "btm.bundle.js"
       ]
     }
   ],
@@ -46,7 +46,8 @@
   ],
   "web_accessible_resources": [
     "external/font-awesome-4.7.0/fonts/fontawesome*",
-    "icons/*.png",
+    "assets/*.png",
+    "assets/*.svg",
     "btm.css"
   ],
   "content_security_policy": "script-src 'self' https://cse.google.com https://www.google.com https://code.jquery.com https://ssl.google-analytics.com; object-src 'self'"
