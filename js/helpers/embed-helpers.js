@@ -66,7 +66,9 @@ export const placePopover = (side, $btmButton, slug, btmBg, btmIcon, source, pub
 		Promise.all(siteSearches(spectrumSites[publisher], slug))
 			.then(results => {
 				$(`#btm-loading-${slug}`).hide();
-				$(`#btm-popover-body-${slug}`).after(createPopup(results, slug));
+				if ($(`.btm-popover-body`).length === 0) {
+					$(`#btm-popover-body-${slug}`).after(createPopup(results, slug));
+				}
 				reposition(slug, side);
 				$('.collapse-link').on('click', toggleSummary);
 				$('.popup-link').on('click', (event) => openArticleLink(event, source, startTime));

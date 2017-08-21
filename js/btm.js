@@ -10,12 +10,12 @@ $(() => {
 		, pathname = window.location.pathname
 		, source = siteTitles[domain] || domain
 		, btmIcon = chrome.runtime.getURL('assets/btm_logo.png')
-		, btmBg = chrome.runtime.getURL('assets/header-bg.svg');
+		, btmBg = chrome.runtime.getURL('assets/header-bg.svg')
+		, MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
+		, hrefs = {}
+		, startTime = new Date();
 
 	$('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');</style>")
-
-	const hrefs = {}
-		, startTime = new Date();
 
 	function checkFacebookLinks() {
 		let $links = $('a').toArray().filter(link => link.href && !Object.prototype.hasOwnProperty.call(hrefs, link.href) && checkIsProperSource(link) && checkIsArticleHead(link) && checkLinkSection(link.href))
@@ -29,17 +29,16 @@ $(() => {
 				, href = $element.attr('href')
 				, slug = getSlug(href)
 				, $newsfeedPost = $element.closest('.fbUserPost').first()
-				, $postText = $newsfeedPost.find('.userContent')
+				, $postText = $newsfeedPost.find('.userContent').first()
 				, $btmButton = getBTMIcon(btmIcon, slug)
-				, publisher = getPublisher(href)
-				, placeButton = new Promise((resolve, reject) => {
-					$postText.first().append($btmButton) ? resolve($btmButton.offset()) : reject('Not placed')
-				})
+				, publisher = getPublisher(href);
 
-			placeButton
-				.then(offset => getPopoverSide(offset))
-				.then(side => placePopover(side, $btmButton, slug, btmBg, btmIcon, source, publisher, startTime))
-				.catch(console.error)
+			$postText.append($btmButton);
+
+			$('body').on('click', 'a.btm-icon', (event) => {
+				const side = getPopoverSide($(event.target).offset());
+				placePopover(side, $btmButton, slug, btmBg, btmIcon, source, publisher, startTime)
+			})
 		})
 	}
 
