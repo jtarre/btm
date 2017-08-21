@@ -4,6 +4,7 @@ import { getFacebookLinks, getLinks, getSitesSections } from './getLinks-helpers
 import { drawIcons } from './embed-helpers'
 
 export const isSectionPage = (url) => {
+	console.log(url);
 	const hostname = getHostname(url)
 	if (hostname.includes("facebook.com")) {
 		return true
