@@ -8,3 +8,4 @@ secrets.js
 
 # Vanity linguist ignores
 ~/*.css linguist-vendored
+stylesheets/*.scss linguist-vendored
