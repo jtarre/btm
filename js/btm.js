@@ -8,4 +8,5 @@ $(() => {
 		setTimeout(embedIcons(url), 3000)
 	} else if (isValidArticle(url)) {
 		initPageHover(url)
+	}
 })

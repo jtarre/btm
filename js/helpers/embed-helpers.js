@@ -62,8 +62,7 @@ export const placePopover = (side, $btmButton, slug, btmBg, btmIcon, source, hos
 			source,
 			type: "BTM Icon Click"
 		});
-	}
-	$btmButton.on('shown.bs.popover', () => initPopover());
+	});
 }
 
 export const toggleSummary = (event) => {
