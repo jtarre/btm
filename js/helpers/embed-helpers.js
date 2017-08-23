@@ -1,4 +1,3 @@
-import { getPopoverHtml, getPopoverTitle, getLoading } from './inline-elements'
 import { siteSearches, spectrumSites, createPopup } from './site-constants'
 
 export const getPopoverSide = (iconOffset) => {
@@ -52,17 +51,10 @@ export const toggleSummary = (event) => {
 }
 
 export const placePopover = (side, $btmButton, slug, btmBg, btmIcon, source, publisher, startTime) => {
-	$btmButton.popover({
-		trigger: "click",
-		container: "body",
-		html: "true",
-		template: getPopoverHtml(slug, side),
-		placement: side,
-		title: getPopoverTitle(btmBg, btmIcon),
-		content: getLoading(slug)
-	})
-	function initPopover() {
-		$('.btm-close').on('click', () => { $btmButton.popover('hide') });
+	$btmButton.on('shown.bs.popover', () => {
+		$('.btm-close').on('click', () => {
+			$btmButton.popover('hide');
+		});
 		Promise.all(siteSearches(spectrumSites[publisher], slug))
 			.then(results => {
 				$(`#btm-loading-${slug}`).hide();
@@ -77,6 +69,5 @@ export const placePopover = (side, $btmButton, slug, btmBg, btmIcon, source, pub
 			source,
 			type: "BTM Icon Click"
 		});
-	}
-	$btmButton.on('shown.bs.popover', () => initPopover());
+	});
 }

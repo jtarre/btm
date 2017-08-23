@@ -2,7 +2,7 @@ import uniqBy from 'lodash.uniqby'
 
 import { spectrumSites, siteTitles, getSlug, createPopup, siteSearches, getPublisher } from './helpers/site-constants'
 import { getLinks, checkIsArticleHead, checkLinkSection, checkIsProperSource } from './helpers/getLinks-helpers'
-import { getBTMIcon, getLoading, getArticlePagePopover } from './helpers/inline-elements'
+import { getBTMIcon, getLoading, getArticlePagePopover, getPopoverHtml, getPopoverTitle } from './helpers/inline-elements'
 import { getPopoverSide, toggleSummary, openArticleLink, placePopover } from './helpers/embed-helpers'
 
 $(() => {
@@ -11,7 +11,6 @@ $(() => {
 		, source = siteTitles[domain] || domain
 		, btmIcon = chrome.runtime.getURL('assets/btm_logo.png')
 		, btmBg = chrome.runtime.getURL('assets/header-bg.svg')
-		, MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
 		, hrefs = {}
 		, startTime = new Date();
 
@@ -35,9 +34,19 @@ $(() => {
 
 			$postText.append($btmButton);
 
-			$('body').on('click', 'a.btm-icon', (event) => {
-				event.preventDefault()
-				const side = getPopoverSide($(event.target).offset());
+			const side = getPopoverSide($btmButton);
+			$btmButton.popover({
+				trigger: "click",
+				container: "body",
+				html: "true",
+				template: getPopoverHtml(slug, side),
+				placement: side,
+				title: getPopoverTitle(btmBg, btmIcon),
+				content: getLoading(slug)
+			})
+
+			$('body').on('click', `a#btm-icon-${slug}.btm-icon`, (event) => {
+				event.stopImmediatePropagation()
 				placePopover(side, $btmButton, slug, btmBg, btmIcon, source, publisher, startTime)
 			})
 		})
@@ -94,17 +103,29 @@ $(() => {
 				, $btmButton = getBTMIcon(btmIcon, slug)
 				, publisher = getPublisher(href);
 
+			let side;
+
 			if ($element.find('h2.headline a').toArray().length === 0) {
 				if ($element.find('h2.headline').toArray().length > 0) {
-					$btmButton.appendTo($element.find('h2.headline').toArray()[0])
+					$btmButton.appendTo($element.find('h2.headline').toArray()[0]);
 				} else if (!$element.next().is('a') && $element.attr('class') !== 'popup-link') {
 					$btmButton.insertAfter($element);
 				}
+				side = getPopoverSide($btmButton.offset())
 			}
 
-			$('body').on('click', 'a.btm-icon', (event) => {
-				event.preventDefault()
-				const side = getPopoverSide($(event.target).offset());
+			$btmButton.popover({
+				trigger: "click",
+				container: "body",
+				html: "true",
+				template: getPopoverHtml(slug, side),
+				placement: side,
+				title: getPopoverTitle(btmBg, btmIcon),
+				content: getLoading(slug)
+			})
+
+			$('body').on('click', `a#btm-icon-${slug}.btm-icon`, (event) => {
+				event.stopImmediatePropagation()
 				placePopover(side, $btmButton, slug, btmBg, btmIcon, source, publisher, startTime)
 			})
 		})
