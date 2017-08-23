@@ -2,7 +2,7 @@
 
 # Dependencies
 node_modules/*
-!noodlejs/*
+!node_modules/noodlejs/
 secrets.js
 */*.bundle.js
 */*.bundle.js.map
