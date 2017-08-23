@@ -1,7 +1,8 @@
 .DS_Store*
 
 # Dependencies
-node_modules/
+node_modules/*
+!noodlejs/*
 secrets.js
 */*.bundle.js
 */*.bundle.js.map
