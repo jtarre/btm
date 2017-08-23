@@ -1,6 +1,6 @@
 {
   "name": "bridge-the-media",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "description": "",
   "main": "./src/btm-facebook.js",
   "dependencies": {

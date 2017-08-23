@@ -20,12 +20,19 @@
     .show-alts, .btm-head {
       display: none;
     }
-    .show-alts.visible, .btm-head.visible {
+    .show-alts.visible {
+      @extend .btm-article-header;
       display: inline-block;
       width: 100%;
       position: relative;
-      top: 0;
+      top: -2px;
       left: 0;
+      font-size: 18px;
+    }
+    .btm-head.visible {
+      @extend .show-alts.visible;
+      top: 0;
+      font-size: 16px;
     }
   }
 }
@@ -37,12 +44,13 @@
   background-color: $body-color;
   .hide-alts {
     display: none;
+  }
+  .hide-alts.visible {
+    font-family: $font-josefin;
+    display: inline-block;
     width: 100%;
     text-align: center;
     margin-bottom: 0.5em;
     transition: display 1s;
-  }
-  .hide-alts.visible {
-    display: inline-block
   }
 }
