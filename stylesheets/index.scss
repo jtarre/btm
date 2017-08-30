@@ -75,6 +75,7 @@ $font-josefin: Josefin Sans, serif;
 .btm-popover-body {
   padding: 0 1em;
   font-family: 'Helvetica Neue', sans-serif;
+  display:inline-block;
 }
 
 .btm-result {
@@ -96,7 +97,8 @@ $font-josefin: Josefin Sans, serif;
   font-weight: normal;
   line-height: 1.42857143;
   text-align: left;
-  text-align: start
+  text-align: start;
+  margin: 0 0 1em 0;
 }
 
 .btm-loading {
