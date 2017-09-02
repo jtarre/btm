@@ -29,10 +29,11 @@
     "mocha": "^3.4.2"
   },
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register --reporter=nyan */*-spec.js",
-    "test-watch": "mocha -w --compilers js:babel-core/register --reporter=nyan */*-spec.js",
+    "test": "mocha --compilers js:babel-core/register --reporter=nyan */*/*-spec.js",
+    "test-watch": "mocha -w --compilers js:babel-core/register --reporter=nyan */*/*-spec.js",
     "build": "webpack",
-    "build-watch": "webpack -w"
+    "build-watch": "webpack -w",
+    "linter": "./node_modules/.bin/eslint js"
   },
   "repository": {
     "type": "git",

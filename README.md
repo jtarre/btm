@@ -42,6 +42,7 @@ Dev version: 2.0.9
 
 - BTM uses ESlint with a modified Airbnb style guide
 - To lint against a file: ```./node_modules/.bin/eslint <yourfile.js>```
+- To lint against whole project: ```npm run linter```
 
 ## Contributing Guidelines
 
