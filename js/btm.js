@@ -5,7 +5,7 @@ $(() => {
 	const url = window.location.href
 	$('head').append("<style>@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');</style>")
 	if (isSectionPage(url)) {
-		embedIcons(url)
+		setTimeout(embedIcons(url), 3000)
 	} else if (isValidArticle(url)) {
 		initPageHover(url)
 	}

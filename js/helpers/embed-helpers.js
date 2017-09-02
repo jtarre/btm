@@ -1,5 +1,6 @@
-import { getPopoverHtml, getPopoverTitle, getLoading } from './inline-elements'
-import { siteSearches, spectrumSites, createPopup } from './site-constants'
+import { getSlug, getHostname, siteSearches, createPopup } from './site-constants'
+import { getPopoverHtml, getBTMIcon, getLoading, getPopoverTitle } from './inline-elements'
+import { siteConfigurations } from './site-configs'
 
 export const getPopoverSide = (iconOffset) => {
 	const distFromRight = $(window).width() - iconOffset.left
@@ -34,6 +35,37 @@ export const openArticleLink = (event, source, startTime) => {
 	window.open(targetUrl)
 }
 
+export const placePopover = (side, $btmButton, slug, btmBg, btmIcon, source, hostnameOfLink, startTime) => {
+	$btmButton.popover({
+		trigger: "click",
+		container: "body",
+		html: "true",
+		template: getPopoverHtml(slug, side),
+		placement: side,
+		title: getPopoverTitle(btmBg, btmIcon),
+		content: getLoading(slug)
+	})
+
+	function initPopover() {
+		$('.btm-close').on('click', () => { $btmButton.popover('hide') });
+		Promise.all(siteSearches(siteConfigurations[hostnameOfLink].spectrumSites, slug))
+			.then(results => {
+				$(`#btm-loading-${slug}`).hide();
+				if ($(`.btm-popover-body`).length === 0) {
+					$(`#btm-popover-body-${slug}`).after(createPopup(results, slug));
+				}
+				reposition(slug, side);
+				$('.collapse-link').on('click', toggleSummary);
+				$('.popup-link').on('click', (event) => openArticleLink(event, source, startTime));
+			})
+		chrome.runtime.sendMessage({
+			source,
+			type: "BTM Icon Click"
+		});
+	}
+	$btmButton.on('shown.bs.popover', () => initPopover());
+}
+
 export const toggleSummary = (event) => {
 	event.preventDefault();
 	let $link = $(event.target);
@@ -51,32 +83,36 @@ export const toggleSummary = (event) => {
 	}
 }
 
-export const placePopover = (side, $btmButton, slug, btmBg, btmIcon, source, publisher, startTime) => {
-	$btmButton.popover({
-		trigger: "click",
-		container: "body",
-		html: "true",
-		template: getPopoverHtml(slug, side),
-		placement: side,
-		title: getPopoverTitle(btmBg, btmIcon),
-		content: getLoading(slug)
-	})
-	function initPopover() {
-		$('.btm-close').on('click', () => { $btmButton.popover('hide') });
-		Promise.all(siteSearches(spectrumSites[publisher], slug))
-			.then(results => {
-				$(`#btm-loading-${slug}`).hide();
-				if ($(`.btm-popover-body`).length === 0) {
-					$(`#btm-popover-body-${slug}`).after(createPopup(results, slug));
-				}
-				reposition(slug, side);
-				$('.collapse-link').on('click', toggleSummary);
-				$('.popup-link').on('click', (event) => openArticleLink(event, source, startTime));
-			})
-		chrome.runtime.sendMessage({
-			source,
-			type: "BTM Icon Click"
-		});
+const placeBtmIcon = ($element, $btmIcon, site) => {
+	if (site.includes("facebook.com")) {
+		const $postText = $element.closest('.fbUserPost').first().find('.userContent');
+		$postText.first().append($btmIcon)
+	} else if ($element.find('h2.headline a').toArray().length === 0) {
+		if ($element.find('h2.headline').toArray().length > 0) {
+			$btmIcon.appendTo($element.find('h2.headline').toArray()[0])
+		} else if (!$element.next().is('a') && $element.attr('class') !== 'popup-link') {
+			$btmIcon.insertAfter($element)
+		}
 	}
-	$btmButton.on('shown.bs.popover', () => initPopover());
+}
+
+export const drawIcons = (links, hostname, startTime) => {
+	const btmImg = chrome.runtime.getURL('icons/btm_logo.png')
+		, btmBg = chrome.runtime.getURL('assets/header-bg.svg')
+	const source = hostname.includes("facebook.com") ? "Facebook" : siteConfigurations[hostname].title
+	links.forEach(link => {
+		const $element = $(link)
+			, $btmIcon = getBTMIcon(btmImg)
+			, href = $element.attr('href')
+			, slug = getSlug(href)
+			, hostnameOfLink = getHostname(href)
+
+		placeBtmIcon($element, $btmIcon, currentSite)
+		$('body').on('click', 'a.btm-icon', (event) => {
+				event.preventDefault()
+				const side = getPopoverSide($(event.target).offset());
+				placePopover(side, $btmIcon, slug, btmBg, btmIcon, source, hostnameOfLink, startTime)
+		})
+
+	})
 }

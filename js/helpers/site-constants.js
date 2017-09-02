@@ -1,7 +1,9 @@
 import getPopupDetails from './getPopupDetails'
+import siteConfigurations from './site-configs'
 
 const { Tagger, Lexer } = require('pos')
 	, allowedPOSTags = ["NN", "NNP", "NNPS", "NNS", "JJ"];
+
 
 const extractWordsWithAllowedPOSTags = (slug) => {
 	const spaces = slug.split("-").join(" ")
@@ -58,12 +60,13 @@ const itemTemplate = (publisher, item, slug) => {
 export const createPopup = (results, slug) => {
 	let html = `<div class="btm-popover-body"><ul class='list-unstyled collapse in' id="ul-${slug}">`;
 	results.forEach(result => {
-		const site = result["queries"]["request"][0]["siteSearch"];
+		const site = result.queries.request[0].siteSearch;
+		const siteTitle = siteConfigurations[site].title;
 		if (result.items) {
 			const item = result.items[0]
 			html += `<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>${itemTemplate(site, item, slug)}</li>`
 		} else {
-			html += `<li><p class="btm-result"><strong class="btm-anchor">${siteTitles[site]}</strong></br><span class="btm-anchor">No Results</span></li>`
+			html += `<li><p class="btm-result"><strong class="btm-anchor">${siteTitle}</strong></br><span class="btm-anchor">No Results</span></li>`
 		}
 	});
 	return `${html}</ul></div>`;
@@ -77,4 +80,4 @@ const siteSearch = (site, slug) => $.ajax({
 
 export const siteSearches = (sites, slug) => sites.map(site => siteSearch(site, slug))
 
-export const getPublisher = (url) => url.substring(url.indexOf("www.") + 4, url.indexOf(".com") + 4)
+export const getHostname = (url) => url.substring(url.indexOf("www.") + 4, url.indexOf(".com") + 4)
