@@ -1,7 +1,7 @@
-import { siteTitles } from './site-constants'
+import { siteConfigurations } from './site-configs'
 
 export default (publisher, item) => {
-	const siteTitle = siteTitles[publisher];
+	const siteTitle = siteConfigurations[publisher]["title"];
 	let link, headline, description, date;
 
 	switch (publisher) {
