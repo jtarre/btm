@@ -1,4 +1,4 @@
-export const getBTMIcon = (btmImg, slug) => ($(`<a href="javascript:void(0);" class="btm-icon" id="btm-icon-${slug}"><img src=${btmImg} style="height: 20px; width: 20px; vertical-align: middle; margin-left: 0.1em"></a>`))
+export const getBTMIcon = (btmImg, slug) => ($(`<a href="javascript:void(0)" class="btm-icon" id="btm-icon-${slug}"><img src=${btmImg} style="height: 20px; width: 20px; vertical-align: middle; margin-left: 0.1em"></a>`))
 
 export const getLoading = (slug) => (`<div id="btm-popover-body-${slug}"><div id="btm-loading-${slug}" class="btm-loading"><p>Loading...</p></div></div>`)
 
@@ -25,7 +25,7 @@ const getShowAlts = (slug) => (`<a
   id="btm-btn-${slug}"
   class="collapse-link show-alts visible"
   data-toggle='collapse'
-  href="javascript:void(0);"
+  href="javascript:void(0)"
   data-slug=${slug}>
     Show Alternatives <i class="fa fa-caret-down" aria-hidden="true"></i>
   </a>`)
@@ -34,7 +34,7 @@ const getHideAlts = (slug) => (`<a
   id="btm-btn-${slug}"
   class="collapse-link hide-alts"
   data-toggle='collapse'
-  href="javascript:void(0);"
+  href="javascript:void(0)"
   data-slug=${slug}>
     Hide Alternatives <i class="fa fa-caret-up" aria-hidden="true"></i>
   </a>`

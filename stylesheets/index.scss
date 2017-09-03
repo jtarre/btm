@@ -2,6 +2,7 @@ $text-color: black;
 $body-color: white;
 $border: 1px solid rgba(0, 0, 0, .2);
 $box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+$font-josefin: Josefin Sans, serif;
 
 /* ---------- BTM custom styles ---------- */
 
@@ -44,7 +45,7 @@ $box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
   }
   .btm-header {
     top: 1.5em;
-    left: 4em;
+    left: 3.75em;
     font-size: 16px;
     font-family: Josefin Sans, serif !important;
   }
@@ -74,6 +75,7 @@ $box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
 .btm-popover-body {
   padding: 0 1em;
   font-family: 'Helvetica Neue', sans-serif;
+  display:inline-block;
 }
 
 .btm-result {
@@ -95,7 +97,8 @@ $box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
   font-weight: normal;
   line-height: 1.42857143;
   text-align: left;
-  text-align: start
+  text-align: start;
+  margin: 0 0 1em 0;
 }
 
 .btm-loading {

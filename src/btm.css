@@ -25,16 +25,16 @@
   .btm-popover-title .btm-header-bg, .btm-article-popover-title .btm-header-bg {
     visibility: hidden;
     z-index: 26; }
-  .btm-popover-title .btm-header, .btm-article-popover-title .btm-header, .btm-article-popover-title .btm-article-header, .btm-popover-title .btm-header-icon, .btm-article-popover-title .btm-header-icon, .btm-popover-title .btm-close, .btm-article-popover-title .btm-close {
+  .btm-popover-title .btm-header, .btm-article-popover-title .btm-header, .btm-article-popover-title .btm-article-header, .btm-article-popover-title .btm-article-header .show-alts.visible, .btm-article-popover-title .btm-article-header .btm-head.visible, .btm-popover-title .btm-header-icon, .btm-article-popover-title .btm-header-icon, .btm-popover-title .btm-close, .btm-article-popover-title .btm-close {
     position: absolute;
     z-index: 27; }
   .btm-popover-title .btm-header-icon, .btm-article-popover-title .btm-header-icon {
     top: 0.5em;
     left: 0.5em;
     width: 3em; }
-  .btm-popover-title .btm-header, .btm-article-popover-title .btm-header, .btm-article-popover-title .btm-article-header {
+  .btm-popover-title .btm-header, .btm-article-popover-title .btm-header, .btm-article-popover-title .btm-article-header, .btm-article-popover-title .btm-article-header .show-alts.visible, .btm-article-popover-title .btm-article-header .btm-head.visible {
     top: 1.5em;
-    left: 4em;
+    left: 3.75em;
     font-size: 16px;
     font-family: Josefin Sans, serif !important; }
   .btm-popover-title .btm-close, .btm-article-popover-title .btm-close {
@@ -58,7 +58,8 @@
 
 .btm-popover-body {
   padding: 0 1em;
-  font-family: 'Helvetica Neue', sans-serif; }
+  font-family: 'Helvetica Neue', sans-serif;
+  display: inline-block; }
 
 .btm-result {
   color: black;
@@ -78,7 +79,8 @@
   font-weight: normal;
   line-height: 1.42857143;
   text-align: left;
-  text-align: start; }
+  text-align: start;
+  margin: 0 0 1em 0; }
 
 .btm-loading {
   display: flex;
@@ -638,7 +640,7 @@ tbody.collapse.in {
 
 .btm-article-popover {
   position: fixed;
-  top: 3em; }
+  top: 170px; }
 
 .btm-article-popover.right {
   right: 1em; }
@@ -651,14 +653,17 @@ tbody.collapse.in {
   background-size: 100%;
   height: 4em;
   padding: 0; }
-  .btm-article-popover-title .btm-article-header .show-alts, .btm-article-popover-title .btm-article-header .btm-head {
+  .btm-article-popover-title .btm-article-header .show-alts, .btm-article-popover-title .btm-article-header .show-alts.visible .show-alts, .btm-article-popover-title .btm-article-header .btm-head.visible .show-alts, .btm-article-popover-title .btm-article-header .btm-head, .btm-article-popover-title .btm-article-header .show-alts.visible .btm-head, .btm-article-popover-title .btm-article-header .btm-head.visible .btm-head {
     display: none; }
   .btm-article-popover-title .btm-article-header .show-alts.visible, .btm-article-popover-title .btm-article-header .btm-head.visible {
     display: inline-block;
     width: 100%;
     position: relative;
-    top: 0;
+    top: -2px;
     left: 0; }
+  .btm-article-popover-title .btm-article-header .btm-head.visible {
+    top: 0;
+    font-size: 16px; }
 
 .btm-article-popover-body {
   position: relative;
@@ -666,12 +671,13 @@ tbody.collapse.in {
   width: -webkit-fill-available;
   background-color: white; }
   .btm-article-popover-body .hide-alts {
-    display: none;
+    display: none; }
+  .btm-article-popover-body .hide-alts.visible {
+    font-family: Josefin Sans, serif;
+    display: inline-block;
     width: 100%;
     text-align: center;
     margin-bottom: 0.5em;
     transition: display 1s; }
-  .btm-article-popover-body .hide-alts.visible {
-    display: inline-block; }
 
 /*# sourceMappingURL=btm.css.map*/
