@@ -29,7 +29,9 @@ const checkHasProperTextElements = (descendants) => {
 export const checkDescendants = (descendants) =>
 	(checkUndefinedDescendants(descendants) || checkHasProperTextElements(descendants))
 
-const linkAlreadySeen = (hrefs, link) => Object.prototype.hasOwnProperty.call(hrefs, link.href)
+const linkAlreadySeen = (hrefs, link) => {
+		Object.prototype.hasOwnProperty.call(hrefs, link.href)
+	}
 
 // TODO: Revisit this once backend is setup
 const getSiteSection = (url, hostname) => {

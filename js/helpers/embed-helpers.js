@@ -94,9 +94,9 @@ export const drawIcons = (links, hostname, startTime) => {
 
 	links.forEach(link => {
 		const $element = $(link)
-			, $btmIcon = getBTMIcon(btmImg, slug)
 			, href = $element.attr('href')
 			, slug = getSlug(href)
+			, $btmIcon = getBTMIcon(btmImg, slug)
 			, hostnameOfLink = getHostname(href)
 
 		let side
@@ -116,7 +116,7 @@ export const drawIcons = (links, hostname, startTime) => {
 
 		$('body').on('click', `a#btm-icon-${slug}.btm-icon`, (event) => {
 				event.stopImmediatePropagation()
-				placePopover(side, $btmIcon, slug, btmBg, btmIcon, source, hostnameOfLink, startTime)
+				placePopover(side, $btmIcon, slug, btmBg, btmImg, source, hostnameOfLink, startTime)
 		})
 	})
 }
