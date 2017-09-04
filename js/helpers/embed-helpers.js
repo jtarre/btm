@@ -9,13 +9,13 @@ export const getPopoverSide = (iconOffset) => {
 
 export const reposition = (slug, side) => {
 	const iconOffset = $(`#btm-icon-${slug}`).offset()
-		, newOffset = Object.assign({}, iconOffset);
-	newOffset.top -= 20;
+		, newOffset = Object.assign({}, iconOffset)
+	newOffset.top -= 20
 	if (side === 'right') {
-		newOffset.left += 40;
+		newOffset.left += 40
 	} else {
-		const oldLeft = $(`[data-slug='${slug}']`).offset().left;
-		newOffset.left = oldLeft - 20;
+		const oldLeft = $(`[data-slug='${slug}']`).offset().left
+		newOffset.left = oldLeft - 20
 	}
 	$(`[data-slug='${slug}']`).offset(newOffset)
 	$(`[data-slug='${slug}'].popover-content`).css("top", "0")
@@ -35,35 +35,27 @@ export const openArticleLink = (event, source, startTime) => {
 	window.open(targetUrl)
 }
 
-<<<<<<< HEAD
 export const placePopover = (side, $btmButton, slug, btmBg, btmIcon, source, hostnameOfLink, startTime) => {
-	$btmButton.popover({
-		trigger: "click",
-		container: "body",
-		html: "true",
-		template: getPopoverHtml(slug, side),
-		placement: side,
-		title: getPopoverTitle(btmBg, btmIcon),
-		content: getLoading(slug)
-	})
+	$btmButton.on('shown.bs.popover', () => {
+		$('.btm-close').on('click', () => {
+			$btmButton.popover('hide')
+		})
 
-	function initPopover() {
-		$('.btm-close').on('click', () => { $btmButton.popover('hide') });
 		Promise.all(siteSearches(siteConfigurations[hostnameOfLink].spectrumSites, slug))
 			.then(results => {
-				$(`#btm-loading-${slug}`).hide();
+				$(`#btm-loading-${slug}`).hide()
 				if ($(`.btm-popover-body`).length === 0) {
-					$(`#btm-popover-body-${slug}`).after(createPopup(results, slug));
+					$(`#btm-popover-body-${slug}`).after(createPopup(results, slug))
 				}
-				reposition(slug, side);
-				$('.collapse-link').on('click', toggleSummary);
-				$('.popup-link').on('click', (event) => openArticleLink(event, source, startTime));
+				reposition(slug, side)
+				$('.collapse-link').on('click', toggleSummary)
+				$('.popup-link').on('click', (event) => openArticleLink(event, source, startTime))
 			})
 		chrome.runtime.sendMessage({
 			source,
 			type: "BTM Icon Click"
-		});
-	});
+		})
+	})
 }
 
 export const toggleSummary = (event) => {
@@ -103,15 +95,28 @@ export const drawIcons = (links, hostname, startTime) => {
 
 	links.forEach(link => {
 		const $element = $(link)
-			, $btmIcon = getBTMIcon(btmImg)
+			, $btmIcon = getBTMIcon(btmImg, slug)
 			, href = $element.attr('href')
 			, slug = getSlug(href)
 			, hostnameOfLink = getHostname(href)
 
+		let side
+
 		placeBtmIcon($element, $btmIcon, currentSite)
-		$('body').on('click', 'a.btm-icon', (event) => {
-				event.preventDefault()
-				const side = getPopoverSide($(event.target).offset());
+
+		side = getPopoverSide($btmIcon.offset())
+		$btmButton.popover({
+			trigger: "click",
+			container: "body",
+			html: "true",
+			template: getPopoverHtml(slug, side),
+			placement: side,
+			title: getPopoverTitle(btmBg, btmIcon),
+			content: getLoading(slug)
+		})
+
+		$('body').on('click', `a#btm-icon-${slug}.btm-icon`, (event) => {
+				event.stopImmediatePropagation()
 				placePopover(side, $btmIcon, slug, btmBg, btmIcon, source, hostnameOfLink, startTime)
 		})
 	})
