@@ -1,6 +1,6 @@
 .btm-article-popover {
   position: fixed;
-  top: 3em;
+  top: 170px;
 }
 .btm-article-popover.right {
   right: 1em;
@@ -28,6 +28,11 @@
       top: -2px;
       left: 0;
       font-size: 18px;
+    }
+    .btm-head.visible {
+      @extend .show-alts.visible;
+      top: 0;
+      font-size: 16px;
     }
     .btm-head.visible {
       @extend .show-alts.visible;

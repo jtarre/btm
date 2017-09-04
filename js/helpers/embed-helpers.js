@@ -35,6 +35,7 @@ export const openArticleLink = (event, source, startTime) => {
 	window.open(targetUrl)
 }
 
+<<<<<<< HEAD
 export const placePopover = (side, $btmButton, slug, btmBg, btmIcon, source, hostnameOfLink, startTime) => {
 	$btmButton.popover({
 		trigger: "click",
