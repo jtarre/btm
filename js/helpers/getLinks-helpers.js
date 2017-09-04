@@ -10,7 +10,7 @@ export const checkIsArticleHead = (link) => (link.href &&
 
 
 export const checkIsProperSource = (link) => link.href !== undefined &&
-		siteConfigurations[getHostname(link)] !== undefined
+		siteConfigurations[getHostname(link.href)] !== undefined
 
 const checkUndefinedDescendants = (descendants) => (descendants[0] === undefined)
 
@@ -29,7 +29,7 @@ const checkHasProperTextElements = (descendants) => {
 export const checkDescendants = (descendants) =>
 	(checkUndefinedDescendants(descendants) || checkHasProperTextElements(descendants))
 
-const linkAlreadySeen = (link, hrefs) => Object.prototype.hasOwnProperty.call(hrefs, link.href)
+const linkAlreadySeen = (hrefs, link) => Object.prototype.hasOwnProperty.call(hrefs, link.href)
 
 // TODO: Revisit this once backend is setup
 const getSiteSection = (url, hostname) => {
@@ -64,7 +64,7 @@ export const getLinks = (hrefs) => {
 
 export const getFacebookLinks = (hrefs) => {
 	const links = $('a').toArray()
-		.filter(link => link.href && !linkAlreadySeen(hrefs, link.href) &&
+		.filter(link => link.href && !linkAlreadySeen(hrefs, link) &&
 			checkIsProperSource(link) &&
 			checkIsArticleHead(link))
 	return uniqBy(links, link => link.href)

@@ -74,8 +74,8 @@ export const toggleSummary = (event) => {
 	}
 }
 
-const placeBtmIcon = ($element, $btmIcon, site) => {
-	if (site.includes("facebook.com")) {
+const placeBtmIcon = ($element, $btmIcon) => {
+	if (window.location.hostname === "www.facebook.com") {
 		const $postText = $element.closest('.fbUserPost').first().find('.userContent');
 		$postText.first().append($btmIcon)
 	} else if ($element.find('h2.headline a').toArray().length === 0) {
@@ -101,7 +101,7 @@ export const drawIcons = (links, hostname, startTime) => {
 
 		let side
 
-		placeBtmIcon($element, $btmIcon, hostnameOfLink)
+		placeBtmIcon($element, $btmIcon)
 
 		side = getPopoverSide($btmIcon.offset())
 		$btmIcon.popover({
