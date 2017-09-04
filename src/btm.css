@@ -660,7 +660,11 @@ tbody.collapse.in {
     width: 100%;
     position: relative;
     top: -2px;
-    left: 0; }
+    left: 0;
+    font-size: 18px; }
+  .btm-article-popover-title .btm-article-header .btm-head.visible {
+    top: 0;
+    font-size: 16px; }
   .btm-article-popover-title .btm-article-header .btm-head.visible {
     top: 0;
     font-size: 16px; }

@@ -16,7 +16,8 @@ export const siteConfigurations = {
 			"/section/science",
 			"/section/health",
 			"/section/reader-center",
-			"/section/upshot"
+			"/section/upshot",
+			"/"
 		]
 	},
 	"foxnews.com": {
@@ -32,7 +33,8 @@ export const siteConfigurations = {
 			"/opinion.html",
 			"/tech.html",
 			"/science.html",
-			"/health.html"
+			"/health.html",
+			"/"
 		]
 	},
 	"nationalreview.com": {

@@ -40,7 +40,6 @@ export const placePopover = (side, $btmButton, slug, btmBg, btmIcon, source, hos
 		$('.btm-close').on('click', () => {
 			$btmButton.popover('hide')
 		})
-
 		Promise.all(siteSearches(siteConfigurations[hostnameOfLink].spectrumSites, slug))
 			.then(results => {
 				$(`#btm-loading-${slug}`).hide()
@@ -89,7 +88,7 @@ const placeBtmIcon = ($element, $btmIcon, site) => {
 }
 
 export const drawIcons = (links, hostname, startTime) => {
-	const btmImg = chrome.runtime.getURL('icons/btm_logo.png')
+	const btmImg = chrome.runtime.getURL('assets/btm_logo.png')
 		, btmBg = chrome.runtime.getURL('assets/header-bg.svg')
 	const source = hostname.includes("facebook.com") ? "Facebook" : siteConfigurations[hostname].title
 
@@ -102,16 +101,16 @@ export const drawIcons = (links, hostname, startTime) => {
 
 		let side
 
-		placeBtmIcon($element, $btmIcon, currentSite)
+		placeBtmIcon($element, $btmIcon, hostnameOfLink)
 
 		side = getPopoverSide($btmIcon.offset())
-		$btmButton.popover({
+		$btmIcon.popover({
 			trigger: "click",
 			container: "body",
 			html: "true",
 			template: getPopoverHtml(slug, side),
 			placement: side,
-			title: getPopoverTitle(btmBg, btmIcon),
+			title: getPopoverTitle(btmBg, btmImg),
 			content: getLoading(slug)
 		})
 

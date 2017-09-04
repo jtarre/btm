@@ -1,6 +1,5 @@
 /* ------ Helpers ------ */
 import uniqBy from 'lodash.uniqby'
-import noodlejs from 'noodlejs'
 import { siteConfigurations } from './site-configs'
 import { getHostname } from './site-constants'
 
@@ -36,7 +35,7 @@ const linkAlreadySeen = (link, hrefs) => Object.prototype.hasOwnProperty.call(hr
 const getSiteSection = (url, hostname) => {
 	let sections = siteConfigurations[hostname].sections
 	for (let section of sections){
-		if (url.includes(`/${section}`){
+		if (url.includes(`/${section}/`)){
 			return section
 		}
 	}
@@ -46,8 +45,8 @@ const getSiteSection = (url, hostname) => {
 export const getSitesSections = (urls) => {
 	let hostname
 	return urls.map((url) => {
-		hostname = getHostname(url)
-		return getSiteSection(url, hostname)
+		hostname = getHostname(url.href)
+		return getSiteSection(url.href, hostname)
 	})
 }
 /* ------ getLinks() ------ */
