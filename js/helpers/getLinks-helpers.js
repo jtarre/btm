@@ -29,10 +29,6 @@ const checkHasProperTextElements = (descendants) => {
 export const checkDescendants = (descendants) =>
 	(checkUndefinedDescendants(descendants) || checkHasProperTextElements(descendants))
 
-const linkAlreadySeen = (hrefs, link) => {
-		Object.prototype.hasOwnProperty.call(hrefs, link.href)
-	}
-
 // TODO: Revisit this once backend is setup
 const getSiteSection = (url, hostname) => {
 	let sections = siteConfigurations[hostname].sections
@@ -53,20 +49,19 @@ export const getSitesSections = (urls) => {
 }
 /* ------ getLinks() ------ */
 
-export const getLinks = (hrefs) => {
+export const getLinks = () => {
 	const links = $('a').not('.button').toArray()
 		.filter(link => {
 			const descendants = $(link).find('*').toArray()
 			return link.href && checkIsArticleHead(link) &&
-				checkDescendants(descendants) &&
-				!linkAlreadySeen(hrefs, link)
+				checkDescendants(descendants)
 		})
 	return uniqBy(links, link => link.href)
 }
 
-export const getFacebookLinks = (hrefs) => {
+export const getFacebookLinks = () => {
 	const links = $('a').toArray()
-		.filter(link => link.href && !linkAlreadySeen(hrefs, link) &&
+		.filter(link => link.href &&
 			checkIsProperSource(link) &&
 			checkIsArticleHead(link))
 	return uniqBy(links, link => link.href)

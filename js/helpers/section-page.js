@@ -36,12 +36,17 @@ const sitesSectionsFilter = (links, siteSections) => {
 	return validLinks
 }
 
+const linkAlreadySeen = (hrefs, link) => {
+	return Object.prototype.hasOwnProperty.call(hrefs, link.href)
+}
+
 
 export const embedIcons = (url) => {
 	const hostname = getHostname(url)
-	let links = hostname.includes("facebook.com") ? getFacebookLinks(seenLinks) : getLinks(seenLinks)
+	let links = hostname.includes("facebook.com") ? getFacebookLinks() : getLinks()
 	links = links.filter(link => siteConfigurations[getHostname(link.href)] !== undefined)
 	links = links.filter(link => !isSectionPage(link.href))
+	links = links.filter(link => !linkAlreadySeen(seenLinks, link))
 	let siteSections = getSitesSections(links)
 	links = sitesSectionsFilter(links, siteSections)
 	drawIcons(links, hostname, startTime)

@@ -17,7 +17,12 @@ export const siteConfigurations = {
 			"/section/health",
 			"/section/reader-center",
 			"/section/upshot",
-			"/"
+			"/",
+			"/pages/world/index.html",
+			"/pages/politics/index.html",
+			"/pages/business/index.html",
+			"/pages/technology/index.html",
+			"/pages/health/index.html"
 		]
 	},
 	"foxnews.com": {
@@ -54,5 +59,13 @@ export const siteConfigurations = {
 	},
 	"slate.com": {
 		title: "Slate"
+	},
+	"thehill.com": {
+		title: "The Hill",
+		spectrumSites: ["cnn.com", "bloomberg.com", "theweek.com"],
+		whitelist: false
+		sections: ["around the nation", "international", "politics", "business",
+								"america", "health", "code switch podcast", "code switch",
+								"technology","npr ed", "analysis"]
 	}
 }

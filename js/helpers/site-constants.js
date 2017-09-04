@@ -80,4 +80,6 @@ const siteSearch = (site, slug) => $.ajax({
 
 export const siteSearches = (sites, slug) => sites.map(site => siteSearch(site, slug))
 
-export const getHostname = (url) => url.substring(url.indexOf("www.") + 4, url.indexOf(".com") + 4)
+export const getHostname = (url) => {
+	return url.includes('www.') ? url.split('www.')[1].split("/")[0] : ""
+}

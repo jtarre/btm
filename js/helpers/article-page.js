@@ -7,8 +7,16 @@ export const isValidArticle = (url) => {
 	const hostname = getHostname(url)
 	const selector = siteConfigurations[hostname].selector
 	const attribute = siteConfigurations[hostname].attribute
-	return siteConfigurations[hostname].sections
-		.filter(section => $(selector).attr(attribute) === section).length > 0
+	const sections = siteConfigurations[hostname].sections
+	const shouldWhiteList = siteConfigurations[hostname].whitelist
+	const sectionInDocument = $(selector).attr(attribute).toLowerCase()
+	if (shouldWhiteList && sections.indexOf(sectionInDocument) > -1){
+		return true
+	} else if (!shouldWhiteList && sections.indexOf(sectionInDocument) === -1){
+		return true
+	} else {
+		return false
+	}
 }
 
 export const initPageHover = (url) => {
