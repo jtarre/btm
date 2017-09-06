@@ -652,7 +652,8 @@ tbody.collapse.in {
   background-position: bottom center;
   background-size: 100%;
   height: 4em;
-  padding: 0; }
+  padding: 0;
+  margin-bottom: 1em; }
   .btm-article-popover-title .btm-article-header .show-alts, .btm-article-popover-title .btm-article-header .show-alts.visible .show-alts, .btm-article-popover-title .btm-article-header .btm-head.visible .show-alts, .btm-article-popover-title .btm-article-header .btm-head, .btm-article-popover-title .btm-article-header .show-alts.visible .btm-head, .btm-article-popover-title .btm-article-header .btm-head.visible .btm-head {
     display: none; }
   .btm-article-popover-title .btm-article-header .show-alts.visible, .btm-article-popover-title .btm-article-header .btm-head.visible {
