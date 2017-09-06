@@ -10,13 +10,8 @@ export const isValidArticle = (url) => {
 	const sections = siteConfigurations[hostname].sections
 	const shouldWhiteList = siteConfigurations[hostname].whitelist
 	const sectionInDocument = $(selector).attr(attribute).toLowerCase()
-	if (shouldWhiteList && sections.indexOf(sectionInDocument) > -1){
-		return true
-	} else if (!shouldWhiteList && sections.indexOf(sectionInDocument) === -1){
-		return true
-	} else {
-		return false
-	}
+	return ((shouldWhiteList && sections.indexOf(sectionInDocument > -1)) ||
+		(!shouldWhiteList && sections.indexOf(sectionInDocument) === -1))
 }
 
 export const initPageHover = (url) => {

@@ -60,10 +60,10 @@ const itemTemplate = (publisher, item, slug) => {
 export const createPopup = (results, slug) => {
 	let html = `<div class="btm-popover-body"><ul class='list-unstyled collapse in' id="ul-${slug}">`;
 	results.forEach(result => {
-		let site = result.queries.request[0].siteSearch;
-		let siteTitle = siteConfigurations[site].title;
+		const site = result.queries.request[0].siteSearch;
+		const siteTitle = siteConfigurations[site].title;
 		if (result.items) {
-			let item = result.items[0]
+			const item = result.items[0]
 			html += `<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>${itemTemplate(site, item, slug)}</li>`
 		} else {
 			html += `<li><p class="btm-result"><strong class="btm-anchor">${siteTitle}</strong></br><span class="btm-anchor">No Results</span></li>`
