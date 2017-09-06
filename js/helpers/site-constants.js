@@ -1,7 +1,9 @@
 import getPopupDetails from './getPopupDetails'
+import { siteConfigurations } from './site-configs'
 
 const { Tagger, Lexer } = require('pos')
 	, allowedPOSTags = ["NN", "NNP", "NNPS", "NNS", "JJ"];
+
 
 const extractWordsWithAllowedPOSTags = (slug) => {
 	const spaces = slug.split("-").join(" ")
@@ -20,34 +22,6 @@ const banana = 'CRQkZe76Sgs3SBySazIA'
 	, chipmunk = 'A7LZZG82AFeyBt8FW8'
 
 const searcher = `&key=${banana.split('').reverse().join().replace(/,/g, '')}_${chipmunk}`
-
-export const spectrumSites = {
-	"nytimes.com": ["foxnews.com", "nationalreview.com", "wsj.com", "nypost.com"],
-	"cnn.com": ["thehill.com", "thefiscaltimes.com", "forbes.com", "economist.com"],
-	"foxnews.com": ["theatlantic.com", "vice.com", "slate.com"],
-	"politico.com": ["nypost.com", "foxnews.com", "washingtontimes.com"],
-	"vox.com": ["nypost.com", "foxnews.com", "washingtontimes.com"],
-	"nbcnews.com": ["nypost.com", "foxnews.com", "washingtontimes.com"]
-}
-
-export const siteTitles = {
-	"foxnews.com": "Fox News",
-	"nationalreview.com": "National Review",
-	"wsj.com": "Wall Street Journal",
-	"nypost.com": "New York Post",
-	"thehill.com": "The Hill",
-	"thefiscaltimes.com": "The Fiscal Times",
-	"forbes.com": "Forbes",
-	"economist.com": "The Economist",
-	"theatlantic.com": "The Atlantic",
-	"vice.com": "Vice",
-	"slate.com": "Slate",
-	"huffingtonpost.com": "Huffington Post",
-	"thedailybeast.com": "Daily Beast",
-	"reason.com": "Reason",
-	"telegraph.co.uk": "The Telegraph",
-	"nytimes.com": "NY Times"
-}
 
 const createItemHtml = (site, link, title, description, date, slug) => {
 	const siteName = site.replace(/\s/g, "")
@@ -86,12 +60,13 @@ const itemTemplate = (publisher, item, slug) => {
 export const createPopup = (results, slug) => {
 	let html = `<div class="btm-popover-body"><ul class='list-unstyled collapse in' id="ul-${slug}">`;
 	results.forEach(result => {
-		const site = result["queries"]["request"][0]["siteSearch"];
+		const site = result.queries.request[0].siteSearch;
+		const siteTitle = siteConfigurations[site].title;
 		if (result.items) {
 			const item = result.items[0]
 			html += `<li style='font-family: Helvetica Neue, Helvetica, Arial, sans-serif;'>${itemTemplate(site, item, slug)}</li>`
 		} else {
-			html += `<li><p class="btm-result"><strong class="btm-anchor">${siteTitles[site]}</strong></br><span class="btm-anchor">No Results</span></li>`
+			html += `<li><p class="btm-result"><strong class="btm-anchor">${siteTitle}</strong></br><span class="btm-anchor">No Results</span></li>`
 		}
 	});
 	return `${html}</ul></div>`;
@@ -105,4 +80,6 @@ const siteSearch = (site, slug) => $.ajax({
 
 export const siteSearches = (sites, slug) => sites.map(site => siteSearch(site, slug))
 
-export const getPublisher = (url) => url.substring(url.indexOf("www.") + 4, url.indexOf(".com") + 4)
+export const getHostname = (url) => {
+	return url.includes('www.') ? url.split('www.')[1].split("/")[0] : ""
+}

@@ -27,6 +27,12 @@
       position: relative;
       top: -2px;
       left: 0;
+      font-size: 18px;
+    }
+    .btm-head.visible {
+      @extend .show-alts.visible;
+      top: 0;
+      font-size: 16px;
     }
     .btm-head.visible {
       @extend .show-alts.visible;
