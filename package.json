@@ -37,9 +37,8 @@
     "build": "webpack",
     "build-watch": "webpack -w",
     "linter": "./node_modules/.bin/eslint js",
-    "start": "nodemon lib/app.js --exec babel-node",
-    "build-server": "babel lib -d dist",
-    "serve": "node dist/app.js"
+    "serve-watch": "nodemon lib/app.js --exec babel-node",
+    "serve": "babel-node lib/app.js"
   },
   "repository": {
     "type": "git",
