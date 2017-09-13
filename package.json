@@ -1,6 +1,7 @@
 {
   "name": "bridge-the-media",
   "version": "3.0.0",
+  "main": "lib/app.js",
   "description": "News recommendations for the well-rounded reader",
   "dependencies": {
     "babel-core": "^6.25.0",
@@ -27,14 +28,18 @@
     "eslint": "^4.3.0",
     "eslint-config-airbnb-base": "^11.3.1",
     "eslint-plugin-import": "^2.7.0",
-    "mocha": "^3.4.2"
+    "mocha": "^3.4.2",
+    "nodemon": "^1.12.0"
   },
   "scripts": {
     "test": "mocha --compilers js:babel-core/register --reporter=nyan */*/*-spec.js",
     "test-watch": "mocha -w --compilers js:babel-core/register --reporter=nyan */*/*-spec.js",
     "build": "webpack",
     "build-watch": "webpack -w",
-    "linter": "./node_modules/.bin/eslint js"
+    "linter": "./node_modules/.bin/eslint js",
+    "start": "nodemon lib/app.js --exec babel-node",
+    "build-server": "babel lib -d dist",
+    "serve": "node dist/app.js"
   },
   "repository": {
     "type": "git",
@@ -45,5 +50,8 @@
   "bugs": {
     "url": "https://github.com/bridge-the-media/btm/issues"
   },
-  "homepage": "https://www.bridgethemedia.com/"
+  "homepage": "https://www.bridgethemedia.com/",
+  "engines": {
+    "node": "8.4.0"
+  }
 }
