@@ -24,6 +24,7 @@
     "webpack-livereload-plugin": "^0.11.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "chai": "^4.0.2",
     "eslint": "^4.3.0",
     "eslint-config-airbnb-base": "^11.3.1",
