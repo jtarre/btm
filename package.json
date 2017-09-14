@@ -1,7 +1,7 @@
 {
   "name": "bridge-the-media",
   "version": "3.0.0",
-  "main": "lib/app.js",
+  "main": "app.js",
   "description": "News recommendations for the well-rounded reader",
   "dependencies": {
     "babel-cli": "^6.26.0",
@@ -38,8 +38,8 @@
     "build": "webpack",
     "build-watch": "webpack -w",
     "linter": "./node_modules/.bin/eslint js",
-    "serve-watch": "nodemon lib/app.js --exec babel-node",
-    "serve": "./node_modules/.bin/babel-node lib/app.js"
+    "start-watch": "nodemon app.js --exec babel-node",
+    "start": "./node_modules/.bin/babel-node app.js"
   },
   "repository": {
     "type": "git",
