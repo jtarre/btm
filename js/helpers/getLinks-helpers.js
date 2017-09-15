@@ -31,21 +31,20 @@ export const checkDescendants = (descendants) =>
 
 export const getSitesSections = (urls) => {
 	let hostname
-	let sections
-	const request = urls.map((url) => {
+	const articles = urls.map((url) => {
 		hostname = getHostname(url.href)
 		return {"url": url.href,
 			"selector": siteConfigurations[hostname].selector,
 			"attribute": siteConfigurations[hostname].attribute}
 	})
-	$.ajax({
+	const requestBody = {"articles": articles}
+	return $.ajax({
 		type: 'post',
 		url: 'https://bridge-the-media.herokuapp.com/article-sections',
-		data: {"articles": request},
-		dataType: 'json',
-		success: function(results) { sections = results }
+		data: JSON.stringify(requestBody),
+		contentType: 'application/json',
+		dataType: 'json'
 	})
-	return sections
 }
 /* ------ getLinks() ------ */
 

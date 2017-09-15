@@ -47,7 +47,11 @@ export const embedIcons = (url) => {
 	links = links.filter(link => siteConfigurations[getHostname(link.href)] !== undefined)
 	.filter(link => !isSectionPage(link.href))
 	.filter(link => !linkAlreadySeen(seenLinks, link))
-	let siteSections = getSitesSections(links)
-	links = sitesSectionsFilter(links, siteSections)
-	drawIcons(links, hostname, startTime)
+	getSitesSections(links.slice(0, 100))
+		.then(result => {
+			const siteSections = result.article_sections.map(section => section.section)
+				.map(section => section !== "" ? section : "placeholder")
+			links = sitesSectionsFilter(links.slice(0, 100), siteSections)
+			drawIcons(links, hostname, startTime)
+		})
 }
