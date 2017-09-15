@@ -29,23 +29,23 @@ const checkHasProperTextElements = (descendants) => {
 export const checkDescendants = (descendants) =>
 	(checkUndefinedDescendants(descendants) || checkHasProperTextElements(descendants))
 
-// TODO: Revisit this once backend is setup
-const getSiteSection = (url, hostname) => {
-	let sections = siteConfigurations[hostname].sections
-	for (let section of sections){
-		if (url.includes(`/${section}/`)){
-			return section
-		}
-	}
-	return "N/A"
-}
-
 export const getSitesSections = (urls) => {
 	let hostname
-	return urls.map((url) => {
+	let sections
+	const request = urls.map((url) => {
 		hostname = getHostname(url.href)
-		return getSiteSection(url.href, hostname)
+		return {"url": url.href,
+			"selector": siteConfigurations[hostname].selector,
+			"attribute": siteConfigurations[hostname].attribute}
 	})
+	$.ajax({
+		type: 'post',
+		url: 'https://bridge-the-media.herokuapp.com/article-sections',
+		data: {"articles": request},
+		dataType: 'json',
+		success: function(results) { sections = results }
+	})
+	return sections
 }
 /* ------ getLinks() ------ */
 
