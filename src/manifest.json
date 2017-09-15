@@ -25,7 +25,9 @@
         "http://www.foxnews.com/*",
         "https://www.foxnews.com/*",
         "https://www.facebook.com/*",
-        "http://www.facebook.com/*"
+        "http://www.facebook.com/*",
+        "http://www.npr.org/*",
+        "https://www.npr.org/*"
       ],
       "css": [
         "external/font-awesome-4.7.0/css/font-awesome.css",

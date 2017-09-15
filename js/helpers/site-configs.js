@@ -23,7 +23,8 @@ export const siteConfigurations = {
 			"/pages/business/index.html",
 			"/pages/technology/index.html",
 			"/pages/health/index.html"
-		]
+		],
+		postProcess: undefined
 	},
 	"foxnews.com": {
 		spectrumSites: ["theatlantic.com", "vice.com", "slate.com"],
@@ -40,7 +41,37 @@ export const siteConfigurations = {
 			"/science.html",
 			"/health.html",
 			"/"
-		]
+		],
+		postProcess: undefined
+	},
+	"npr.org":{
+		title: "NPR",
+		spectrumSites: ["economist.com", "thehill.com", "www.forbes.com"],
+		whitelist: true,
+		sections: ["international", "politics", "business", "america", "the two-way",
+			"code switch podcast", "technology", "around the nation", "npr ed"],
+		selector: "header.contentheader",
+		attribute: "data-metrics",
+		sectionPages: [
+			"/",
+			"",
+			"/sections/news/",
+			"/sections/us/",
+			"/sections/politics/",
+			"/sections/business/",
+			"/sections/impact-of-war/",
+			"/sections/investigations/",
+			"/sections/national-security/",
+			"/sections/technology/",
+			"/sections/health/",
+			"/sections/thetwo-way/"
+		],
+		postProcess: (section) => {
+			if (section === "{\"category\":null}"){
+				return "placeholder"
+			}
+			return JSON.parse(section.replace(/"/g, "\"")).category
+		}
 	},
 	"nationalreview.com": {
 		title: "National Review"

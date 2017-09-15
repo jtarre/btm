@@ -25,10 +25,10 @@ const sitesSectionsFilter = (links, siteSections) => {
 		sections = siteConfigurations[hostname].sections
 		siteSection = siteSections[index]
 		shouldWhiteList = siteConfigurations[hostname].whitelist
+		seenLinks[link.href] = true
 		if ((sections.includes(siteSection.toLowerCase()) && shouldWhiteList) ||
 				(!sections.includes(siteSection.toLowerCase()) && !shouldWhiteList))
 				{
-					seenLinks[link.href] = true
 					return true
 				}
 		return false
@@ -49,8 +49,14 @@ export const embedIcons = (url) => {
 	.filter(link => !linkAlreadySeen(seenLinks, link))
 	getSitesSections(links.slice(0, 100))
 		.then(result => {
+			console.log(result)
 			const siteSections = result.article_sections.map(section => section.section)
-				.map(section => section !== "" ? section : "placeholder")
+				.map(section => {
+					section = section !== "" ? section : "placeholder"
+					const postProcess = siteConfigurations[hostname].postProcess
+					return postProcess !== undefined && section !== "placeholder" ? postProcess(section) : section
+				})
+			console.log(siteSections)
 			links = sitesSectionsFilter(links.slice(0, 100), siteSections)
 			drawIcons(links, hostname, startTime)
 		})
