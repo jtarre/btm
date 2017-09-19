@@ -43,20 +43,20 @@ const linkAlreadySeen = (hrefs, link) => {
 
 export const embedIcons = (url) => {
 	const hostname = getHostname(url)
+	let postProcess
+	let index
 	let links = hostname.includes("facebook.com") ? getFacebookLinks() : getLinks()
 	links = links.filter(link => siteConfigurations[getHostname(link.href)] !== undefined)
 	.filter(link => !isSectionPage(link.href))
 	.filter(link => !linkAlreadySeen(seenLinks, link))
 	getSitesSections(links.slice(0, 100))
 		.then(result => {
-			console.log(result)
 			const siteSections = result.article_sections.map(section => section.section)
-				.map(section => {
-					section = section !== "" ? section : "placeholder"
-					const postProcess = siteConfigurations[hostname].postProcess
-					return postProcess !== undefined && section !== "placeholder" ? postProcess(section) : section
+				.map((section, index) => {
+					section = section !== "" ? section : "N/A"
+					postProcess = siteConfigurations[getHostname(result.article_sections[index].url)].postProcess
+					return postProcess !== undefined && section !== "N/A" ? postProcess(section) : section
 				})
-			console.log(siteSections)
 			links = sitesSectionsFilter(links.slice(0, 100), siteSections)
 			drawIcons(links, hostname, startTime)
 		})

@@ -3,7 +3,7 @@ export const siteConfigurations = {
 		spectrumSites: ["foxnews.com", "nationalreview.com", "wsj.com", "nypost.com"],
 		title: "NY Times",
 		whitelist: true,
-		sections: ["world", "us", "business", "opinion", "technology", "health",
+		sections: ["world", "us", "u.s.", "business", "opinion", "technology", "health",
 			"science", "upshot", "reader-center", "politics"],
 		selector: 'meta[property=\"article:section\"]',
 		attribute: "content",
@@ -46,7 +46,7 @@ export const siteConfigurations = {
 	},
 	"npr.org":{
 		title: "NPR",
-		spectrumSites: ["economist.com", "thehill.com", "www.forbes.com"],
+		spectrumSites: ["economist.com", "thehill.com"],
 		whitelist: true,
 		sections: ["international", "politics", "business", "america", "the two-way",
 			"code switch podcast", "technology", "around the nation", "npr ed"],
@@ -68,7 +68,7 @@ export const siteConfigurations = {
 		],
 		postProcess: (section) => {
 			if (section === "{\"category\":null}"){
-				return "placeholder"
+				return "N/A"
 			}
 			return JSON.parse(section.replace(/"/g, "\"")).category
 		}
@@ -90,5 +90,31 @@ export const siteConfigurations = {
 	},
 	"slate.com": {
 		title: "Slate"
+	},
+	"economist.com": {
+		title: "The Economist",
+		getPopupDetails: (item) => {
+			try {
+				return {
+					description: item.pagemap.metatags[0]["og:description"],
+					date: item.snippet(" ... ")[0]
+				}
+			} catch (e) {
+					return {}
+				}
+		}
+	},
+	"thehill.com": {
+		title: "The Hill",
+		getPopupDetails: (item) => {
+			try {
+				return {
+					description: item.pagemap.metatags[0]["dcterms.description"],
+					date: new Date(item.pagemap.metatags[0]["dcterms.date"]).toDateString()
+				}
+			} catch (e) {
+					return {}
+				}
+			}
+		}
 	}
-}
