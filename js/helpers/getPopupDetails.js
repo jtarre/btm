@@ -67,8 +67,8 @@ export default (publisher, item) => {
 		case "thehill.com":
 			link = item.link
 			headline = item.title
-			description = siteConfigurations[publisher].getPopupDetails()["description"]
-			date = siteConfigurations[publisher].getPopupDetails()["date"]
+			description = siteConfigurations[publisher].getPopupDetails(item)["description"]
+			date = siteConfigurations[publisher].getPopupDetails(item)["date"]
 		case "thefiscaltimes.com":
 			break;
 		case "forbes.com":
@@ -76,8 +76,8 @@ export default (publisher, item) => {
 		case "economist.com":
 			link = item.link
 			headline = item.title
-			description = siteConfigurations[publisher].getPopupDetails()["description"]
-			date = siteConfigurations[publisher].getPopupDetails()["date"]
+			description = siteConfigurations[publisher].getPopupDetails(item)["description"]
+			date = siteConfigurations[publisher].getPopupDetails(item)["date"]
 		case "theatlantic.com":
 			link = item.link;
 			headline = item.title;

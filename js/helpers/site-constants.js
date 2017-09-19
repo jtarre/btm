@@ -13,7 +13,7 @@ const extractWordsWithAllowedPOSTags = (slug) => {
 }
 
 export const getSlug = (href) => {
-	const hrefSegments = href.split("/")
+	let hrefSegments = href.split("?")[0].split("/")
 		, slug = hrefSegments[hrefSegments.length - 1].replace(/\d+/g, "").split(".", 1)[0];
 	return extractWordsWithAllowedPOSTags(slug);
 }

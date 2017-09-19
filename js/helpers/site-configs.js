@@ -97,7 +97,7 @@ export const siteConfigurations = {
 			try {
 				return {
 					description: item.pagemap.metatags[0]["og:description"],
-					date: item.snippet(" ... ")[0]
+					date: item.snippet.split(" ... ")[0]
 				}
 			} catch (e) {
 					return {}

@@ -8,8 +8,12 @@ export const isSectionPage = (url) => {
 	if (hostname.includes("facebook.com")) {
 		return true
 	}
-	return siteConfigurations[hostname].sectionPages
-		.filter(sectionPage => url.endsWith(`${hostname}${sectionPage}`)).length > 0
+
+	if (siteConfigurations[hostname].sectionPages !== undefined){
+		return siteConfigurations[hostname].sectionPages
+			.filter(sectionPage => url.endsWith(`${hostname}${sectionPage}`)).length > 0
+	}
+	return false
 }
 
 const seenLinks = {}
