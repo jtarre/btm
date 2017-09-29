@@ -76,7 +76,7 @@ export const toggleSummary = (event) => {
 
 const placeBtmIcon = ($element, $btmIcon) => {
 	if (window.location.hostname === "www.facebook.com") {
-		const $postText = $element.closest('.fbUserPost').first().find('.userContent');
+		const $postText = $element.closest('.fbUserStory').first().find('.userContent');
 		$postText.first().append($btmIcon)
 	} else if ($element.find('h2.headline a').toArray().length === 0) {
 		if ($element.find('h2.headline').toArray().length > 0) {
@@ -93,6 +93,7 @@ export const drawIcons = (links, hostname, startTime) => {
 	const source = hostname.includes("facebook.com") ? "Facebook" : siteConfigurations[hostname].title
 
 	links.forEach(link => {
+		console.log(link)
 		const $element = $(link)
 			, href = $element.attr('href')
 			, slug = getSlug(href)

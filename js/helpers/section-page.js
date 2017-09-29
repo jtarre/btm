@@ -29,10 +29,10 @@ const sitesSectionsFilter = (links, siteSections) => {
 		sections = siteConfigurations[hostname].sections
 		siteSection = siteSections[index]
 		shouldWhiteList = siteConfigurations[hostname].whitelist
-		seenLinks[link.href] = true
 		if ((sections.includes(siteSection.toLowerCase()) && shouldWhiteList) ||
 				(!sections.includes(siteSection.toLowerCase()) && !shouldWhiteList))
 				{
+					seenLinks[link.href] = true
 					return true
 				}
 		return false
