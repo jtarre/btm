@@ -30,6 +30,13 @@ const getAltsBtn = (slug) => (`<button
 	  </button>`
 )
 
+/**
+ * The btm popover opens when the user clicks the btm-icon
+ * It houses the articles related to the article the user is looking at
+ * @param slug
+ * @param side
+ * @returns {string}
+ */
 export const getArticlePagePopover = (slug, side) => (`<div
     class="btm-popover"
     data-slug=${slug}

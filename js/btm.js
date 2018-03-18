@@ -9,6 +9,7 @@ import { getPopoverHtml, getBTMIcon, getLoading, getPopoverTitle, getArticlePage
 import { toggleSummary, openArticleLink } from './helpers/embed-helpers'
 
 $(() => {
+		// first thing we do is get the site we're on
 	const domain = window.location.hostname.split('www.')[1]
 		, originTitle = siteTitles[domain] || domain
 		, pathname = window.location.pathname
@@ -20,6 +21,9 @@ $(() => {
 	const hrefs = {}
 		, startTime = new Date(); // this is initialized at the current time
 
+		/**
+		 * check facebook links && append the btm button where appropriate
+		 */
 	function checkFacebookLinks() {
 		/* eslint no-prototype-builtins: "error" */
 		let $links = $('a').toArray().filter(link => link.href && !Object.prototype.hasOwnProperty.call(hrefs, link.href) && checkIsProperSource(link) && checkIsArticleHead(link) && checkLinkSection(link.href))
@@ -71,6 +75,10 @@ $(() => {
 		})
 	}
 
+	// we use this to determine where the popover shows up
+		// each site has slightly different styling so we want
+		// to make sure to account for situations where
+		// we need to change where the popover shows up
 	function initPageHover() {
 		const pathnameArr = pathname.split('/');
 		let slug, side;
@@ -90,6 +98,8 @@ $(() => {
 			}
 		}
 
+		// we add the article popover to the body
+			// then reposition it next to the btm icon
 		$('body').append($(getArticlePagePopover(slug, side)));
 		$('.btm-close').on('click', () => {
 			$('.btm-popover').fadeOut()
@@ -133,10 +143,15 @@ $(() => {
 				},
 				content: getLoading(slug)
 			})
-
+		// 	console.log('element', $element);
 			if ($element.find('h2.headline a').toArray().length === 0) {
 				if ($element.find('h2.headline').toArray().length > 0) {
 					$btm_button.appendTo($element.find('h2.headline').toArray()[0])
+				} else if ($element.attr('class') === 'post-link-mask') {
+					// this is a specific section of the nytimes homepage
+				//		we don't want to place btm icons here because
+				//		we're unable to make it clickable, the actual nytimes article takes precedence
+						// @see https://user-images.githubusercontent.com/1143894/37568531-b1e51380-2aac-11e8-86db-dbeb5eb10291.png
 				} else if (!$element.next().is('a') && $element.attr('class') !== 'popup-link') {
 					$btm_button.insertAfter($element);
 				}
