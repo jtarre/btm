@@ -143,7 +143,6 @@ $(() => {
 				},
 				content: getLoading(slug)
 			})
-		// 	console.log('element', $element);
 			if ($element.find('h2.headline a').toArray().length === 0) {
 				if ($element.find('h2.headline').toArray().length > 0) {
 					$btm_button.appendTo($element.find('h2.headline').toArray()[0])
